@@ -1,0 +1,45 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const graphql_1 = require("graphql");
+// const test = {
+//     scope: [ENUMS.USER_TYPE.ADMIN.key, ENUMS.USER_TYPE.USER.key],
+//     type: RelationshipType,
+//     args: {
+//       message: {
+//         type: new GraphQLNonNull(GraphQLString)
+//       },
+//       userId: {
+//         type: new GraphQLNonNull(GraphQLInt)
+//       },
+//       friendId: {
+//         type: new GraphQLNonNull(GraphQLInt)
+//       },
+//       email: {
+//         type: new GraphQLNonNull(GraphQLString)
+//       }
+//     },
+//     resolve: (root, { userId, friendId, email }, context: Credential) => {
+//       return Relationship.create({
+//         userId: userId,
+//         friendId: friendId,
+//         lastEditedBy: context.user.id,
+//         status: ENUMS.STATUS.PENDING.key,
+//         email: email || ''
+//       });
+//     }
+//   };
+// ;
+function Type(type) {
+    type = { type: new graphql_1.GraphQLObjectType(type) };
+    return (t, propertyName, descriptor) => {
+        const target = t;
+        const originalMethod = descriptor.value;
+        descriptor.value = function (...args) {
+            let result = originalMethod.apply(this, args);
+            result = Object.assign({}, type, result);
+            return result;
+        };
+        return descriptor;
+    };
+}
+exports.Type = Type;
