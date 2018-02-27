@@ -1,6 +1,6 @@
 import Container from "typedi";
-import { GapiServerModule } from "../../../server/server.module";
 import { GapiModuleArguments } from "../../../decorators/gql-module/gql-module.decorator.interface";
+import { GapiServerModule } from "../../../modules/server/server.module";
 
 export const ApplyServicesHook = (self, options: GapiModuleArguments) => {
     if (options.imports) {
@@ -9,14 +9,20 @@ export const ApplyServicesHook = (self, options: GapiModuleArguments) => {
             // Object.assign(self, { [currentModule.constructor.name]: currentModule});
             if (currentModule instanceof GapiServerModule) {
                 Object.assign(self, {start: currentModule.start});
-                Object.assign(self, {config: currentModule.config});
             }
         });
     }
     if (options.services) {
         options.services.forEach(m => {
-            const currentModule = Container.get(m);
-            Object.assign(self, { [currentModule.constructor.name]: currentModule});
+            const currentService = Container.get(m);
+            // Object.assign(self, { [currentService.constructor.name]: currentService});
+        });
+    }
+
+    if (options.controllers) {
+        options.controllers.forEach(m => {
+            const currentService = Container.get(m);
+            // Object.assign(self, { [currentService.constructor.name]: currentService});
         });
     }
 }

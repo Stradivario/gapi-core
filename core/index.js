@@ -4,5 +4,5 @@ function __export(m) {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./decorators/index"));
-__export(require("./server/server.module"));
+__export(require("./modules/server/server.module"));
 __export(require("./utils/index"));

@@ -1,23 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
-class TestenClass2 {
-    constructor() {
-        // console.log(this);
-    }
-    get() {
-        console.log('get');
-    }
-    set() {
-    }
-}
-exports.TestenClass2 = TestenClass2;
-function GapiController(options) {
+const typedi_1 = require("typedi");
+const mutation_service_1 = require("../../utils/services/mutation/mutation.service");
+const query_service_1 = require("../../utils/services/query/query.service");
+const controller_config_service_1 = require("../../utils/services/controller-config/controller-config.service");
+function GapiController(opt) {
+    const controllerConfigService = typedi_1.default.get(controller_config_service_1.ControllerConfigService);
+    const options = opt;
     return (target) => {
         const original = target;
+        controllerConfigService.set(original.prototype.name, options);
         function construct(constructor, args) {
             const c = function () {
-                // this.testenClass2 = new TestenClass2();
                 return constructor.apply(this, args);
             };
             c.prototype = constructor.prototype;
@@ -28,7 +23,10 @@ function GapiController(options) {
             return construct(original, args);
         };
         f.prototype = original.prototype;
-        console.log(f.prototype);
+        f.prototype.Gquery = typedi_1.default.get(query_service_1.GapiQueryService).get(original.prototype.name);
+        f.prototype.Gmutation = typedi_1.default.get(mutation_service_1.GapiMutationsService).get(original.prototype.name);
+        f.prototype.Gconfig = controllerConfigService.get(original.prototype.name);
+        f.prototype.Gconfig.scope = f.prototype.Gconfig.scope || ['ADMIN'];
         // Reflect.defineMetadata(GapiControllerSymbol, options, f);
         return f;
     };

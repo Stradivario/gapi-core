@@ -1,1 +1,5 @@
-export declare function Query<T>(target: Object, propertyKey: string, descriptor: TypedPropertyDescriptor<(id: T) => T>): TypedPropertyDescriptor<(id: T) => T>;
+export declare function Query<T>(options?: {
+    [key: string]: {
+        [key: string]: any;
+    };
+}): (target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<any>) => TypedPropertyDescriptor<any>;

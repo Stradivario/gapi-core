@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const graphql_1 = require("graphql");
 // const test = {
 //     scope: [ENUMS.USER_TYPE.ADMIN.key, ENUMS.USER_TYPE.USER.key],
 //     type: RelationshipType,
@@ -30,7 +29,7 @@ const graphql_1 = require("graphql");
 //   };
 // ;
 function Type(type) {
-    type = { type: new graphql_1.GraphQLObjectType(type) };
+    type = { type: type };
     return (t, propertyName, descriptor) => {
         const target = t;
         const originalMethod = descriptor.value;

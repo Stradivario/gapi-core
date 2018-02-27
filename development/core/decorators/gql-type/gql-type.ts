@@ -31,7 +31,7 @@ import { GraphQLObjectType } from 'graphql';
 // ;
 
 export function Type<T>(type): Function {
-    type = {type: new GraphQLObjectType(type)};
+    type = {type: type};
     return (t: any, propertyName: string, descriptor: TypedPropertyDescriptor<(id: T) => T>) => {
         const target = t;
         const originalMethod = descriptor.value;

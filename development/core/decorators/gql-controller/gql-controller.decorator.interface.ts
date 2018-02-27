@@ -1,3 +1,4 @@
 export interface GapiControllerArguments {
-    imports: Array<any>;
+    type?: any;
+    scope?: Array<string>;
 }

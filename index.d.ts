@@ -1,2 +1,3 @@
 export * from './core/index';
-export * from 'typedi';
+export { Container, Service } from 'typedi';
+export * from 'graphql';

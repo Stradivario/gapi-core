@@ -1,9 +1,6 @@
 {
   "name": "gapi",
   "version": "0.0.0",
-  "scripts": {
-    "preinstall": "tsc"
-  },
   "repository": {
     "type": "git",
     "url": "http://gitlab.youvolio.com/open-source/gapi.git"
@@ -23,12 +20,75 @@
   },
   "module": "gapi-module.js",
   "typings": "gapi-module.d.ts",
+  "devDependencies": {
+    "@types/graphql": "^0.11.2",
+    "@types/jest": "^22.1.0",
+    "@types/node": "^8.0.28",
+    "@types/sequelize": "github:types/sequelize",
+    "graphql-tester": "0.0.5",
+    "jest": "^22.1.4",
+    "jest-cli": "^22.1.4",
+    "pm2": "^2.6.1",
+    "require-all": "^2.2.0",
+    "sequelize-cli": "^3.0.0",
+    "ts-jest": "^22.0.1",
+    "ts-node": "^3.3.0",
+    "typescript": "^2.6.2",
+    "web3-typescript-typings": "^0.7.2",
+    "yargs": "^10.0.3"
+  },
   "dependencies": {
+    "@cdm-logger/server": "^3.0.2",
+    "@types/hapi": "^16.1.9",
+    "apollo-codegen": "^0.18.3",
+    "apollo-errors": "^1.5.1",
+    "apollo-server-hapi": "^1.3.2",
+    "apollo-upload-server": "^4.0.2",
+    "boom": "^5.2.0",
+    "bunyan": "^1.8.12",
+    "gql2ts": "^1.4.0",
+    "graphql": "^0.13.1",
+    "graphql-rabbitmq-subscriptions": "^1.1.0",
+    "graphql-subscriptions": "^0.5.6",
+    "graphql-tools": "^2.14.1",
+    "hapi": "^16.6.2",
+    "jsonwebtoken": "^8.1.0",
+    "lodash": "^4.17.4",
+    "moment": "^2.18.1",
+    "pg": "6.4.2",
+    "pm2-docker": "^2.1.0",
     "reflect-metadata": "^0.1.12",
     "rxjs": "^5.5.6",
+    "sequelize": "^4.32.2",
+    "sequelize-typescript": "^0.6.2",
+    "socket.io": "^2.0.3",
+    "subscriptions-transport-ws": "^0.9.4",
+    "tslint": "^5.8.0",
+    "tslint-language-service": "^0.9.8",
     "typedi": "^0.7.0"
   },
-  "peerDependencies": {
-    "graphql": "^0.12.3"
+  "jest": {
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "coverageReporters": [
+      "lcov",
+      "html"
+    ],
+    "rootDir": "./",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "json",
+      "node"
+    ],
+    "transform": {
+      "\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "/graphql/.*\\.spec.(ts|tsx|js)$",
+    "verbose": true,
+    "collectCoverage": true
   }
 }

@@ -2,7 +2,7 @@
   "compilerOptions": {
     "declaration": true,
     "module": "commonjs",
-    "target": "es2015",
+    "target": "es6",
     "baseUrl": ".",
     "stripInternal": true,
     "emitDecoratorMetadata": true,
