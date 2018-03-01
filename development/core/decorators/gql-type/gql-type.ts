@@ -1,45 +1,20 @@
-import { GraphQLObjectType } from 'graphql';
+import { ControllerContainerService } from "../../utils/new_services/controller-service/controller.service";
 
-
-// const test = {
-//     scope: [ENUMS.USER_TYPE.ADMIN.key, ENUMS.USER_TYPE.USER.key],
-//     type: RelationshipType,
-//     args: {
-//       message: {
-//         type: new GraphQLNonNull(GraphQLString)
-//       },
-//       userId: {
-//         type: new GraphQLNonNull(GraphQLInt)
-//       },
-//       friendId: {
-//         type: new GraphQLNonNull(GraphQLInt)
-//       },
-//       email: {
-//         type: new GraphQLNonNull(GraphQLString)
-//       }
-//     },
-//     resolve: (root, { userId, friendId, email }, context: Credential) => {
-//       return Relationship.create({
-//         userId: userId,
-//         friendId: friendId,
-//         lastEditedBy: context.user.id,
-//         status: ENUMS.STATUS.PENDING.key,
-//         email: email || ''
-//       });
-//     }
-//   };
-// ;
+import Container from "typedi";
 
 export function Type<T>(type): Function {
-    type = {type: type};
-    return (t: any, propertyName: string, descriptor: TypedPropertyDescriptor<(id: T) => T>) => {
-        const target = t;
+    type = { type: type };
+    return (t: any, propKey: string, descriptor: TypedPropertyDescriptor<(id: T) => T>) => {
+        const self = t;
         const originalMethod = descriptor.value;
+        const propertyKey = propKey;
         descriptor.value = function (...args: any[]) {
-            let result = originalMethod.apply(this, args);
-            result = {...type, ...result};
-            return result;
+            let returnValue = originalMethod.apply(this, args);
+            Object.assign(returnValue, type);
+            console.log('TYPE');
+            Container.get(ControllerContainerService).createController(self.constructor.name).setQuery(propertyKey, returnValue);
+            return returnValue;
         };
         return descriptor;
     };
-  }
+}

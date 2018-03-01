@@ -18,12 +18,12 @@ export class ConfigFactory {
         this.config = config;
     }
 }
-
+const utilService: ServerUtilService = Container.get(ServerUtilService);
 @Service()
 export class GapiServerModule {
 
     start() {
-        const utilService:ServerUtilService = Container.get(ServerUtilService);
+    
         return utilService.startServer();
     }
 
@@ -33,3 +33,17 @@ export class GapiServerModule {
     }
 
 }
+
+process.on(<any>'cleanup', () => {
+    utilService.stopServer();
+});
+process.on('exit', function () {
+    process.emit(<any>'cleanup');
+});
+process.on('SIGINT', function () {
+    process.exit(2);
+});
+process.on('uncaughtException', function (e) {
+    console.log(e.stack);
+    process.exit(99);
+});

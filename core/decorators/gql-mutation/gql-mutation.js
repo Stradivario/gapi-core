@@ -1,33 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const typedi_1 = require("typedi");
+const controller_service_1 = require("../../utils/new_services/controller-service/controller.service");
 function Mutation(options) {
-    return (target, propertyKey, descriptor) => {
+    return (target, propKey, descriptor) => {
         const originalMethod = descriptor.value || {};
         const self = target;
+        const propertyKey = propKey;
+        const currentController = typedi_1.default.get(controller_service_1.ControllerContainerService).createController(self.constructor.name);
         descriptor.value = function (...args) {
-            let result = originalMethod.apply(this, args);
-            if (options) {
-                let mockArgs = {};
-                Object.keys(options).forEach(a => {
-                    mockArgs[a] = {};
-                    mockArgs[a].type = options[a];
-                });
-                result = Object.assign({ args: mockArgs }, result);
-            }
-            if (result.scope) {
-                result = Object.assign({ scope: result.scope }, result);
-            }
-            else {
-                if (self.Gconfig.scope) {
-                    result = Object.assign({ scope: self.Gconfig.scope }, result);
-                }
-            }
-            if (self.Gconfig.type) {
-                result = Object.assign({ type: self.Gconfig.type }, result);
-            }
-            result.resolve = originalMethod;
-            return result;
+            let returnValue = Object.create({});
+            returnValue.resolve = originalMethod.bind(self);
+            returnValue.args = options ? options : null;
+            currentController.setQuery(propertyKey, returnValue);
+            return returnValue;
         };
+        descriptor.value();
         return descriptor;
     };
 }

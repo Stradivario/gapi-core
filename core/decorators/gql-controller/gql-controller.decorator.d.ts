@@ -1,3 +1,3 @@
 import 'reflect-metadata';
-import { GapiControllerArguments } from "./gql-controller.decorator.interface";
-export declare function GapiController(opt?: GapiControllerArguments): (target: any) => any;
+import { ControllerMappingSettings } from '../../utils/new_services/controller-service/controller.service';
+export declare function GapiController(settings?: ControllerMappingSettings): (target: any) => any;

@@ -1,34 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const controller_service_1 = require("../../utils/new_services/controller-service/controller.service");
+const typedi_1 = require("typedi");
 function Query(options) {
-    return (target, propertyKey, descriptor) => {
+    return (target, propKey, descriptor) => {
         const originalMethod = descriptor.value || {};
         const self = target;
+        const propertyKey = propKey;
+        const currentController = typedi_1.default.get(controller_service_1.ControllerContainerService).createController(self.constructor.name);
         descriptor.value = function (...args) {
-            let result = originalMethod.apply(this, args);
-            let mockArgs = {};
-            if (options) {
-                Object.keys(options).forEach(a => {
-                    mockArgs[a] = {};
-                    mockArgs[a].type = options[a];
-                });
-                result.args = mockArgs;
-            }
-            if (result.scope) {
-                result.scope = result.scope;
-            }
-            else {
-                if (self.Gconfig.scope) {
-                    result.scope = self.Gconfig.scope;
-                }
-            }
-            if (self.Gconfig.type) {
-                result.type = self.Gconfig.type;
-            }
-            // result.resolve = originalMethod.bind(self);
-            console.log(result);
-            return result;
+            let returnValue = Object.create({});
+            returnValue.resolve = originalMethod.bind(self);
+            returnValue.args = options ? options : null;
+            currentController.setQuery(propertyKey, returnValue);
+            return returnValue;
         };
+        descriptor.value();
         return descriptor;
     };
 }

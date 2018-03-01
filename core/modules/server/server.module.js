@@ -19,9 +19,9 @@ ConfigFactory = __decorate([
     typedi_1.Service()
 ], ConfigFactory);
 exports.ConfigFactory = ConfigFactory;
+const utilService = typedi_1.default.get(server_service_1.ServerUtilService);
 let GapiServerModule = GapiServerModule_1 = class GapiServerModule {
     start() {
-        const utilService = typedi_1.default.get(server_service_1.ServerUtilService);
         return utilService.startServer();
     }
     static forRoot(config) {
@@ -33,4 +33,17 @@ GapiServerModule = GapiServerModule_1 = __decorate([
     typedi_1.Service()
 ], GapiServerModule);
 exports.GapiServerModule = GapiServerModule;
+process.on('cleanup', () => {
+    utilService.stopServer();
+});
+process.on('exit', function () {
+    process.emit('cleanup');
+});
+process.on('SIGINT', function () {
+    process.exit(2);
+});
+process.on('uncaughtException', function (e) {
+    console.log(e.stack);
+    process.exit(99);
+});
 var GapiServerModule_1;

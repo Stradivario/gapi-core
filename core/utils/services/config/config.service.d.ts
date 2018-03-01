@@ -7,4 +7,5 @@ export declare class ConfigService {
     getSequelize(): SequelizeConfigInterface;
     getAmqp(): AmqpConfigInterface;
     setAppConfig(config: AppConfigInterface): void;
+    syncSchema(): Promise<void>;
 }

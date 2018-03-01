@@ -1,1 +1,1 @@
-export declare function Scope(...arg: string[]): Function;
+export declare function Scope<T>(...arg: string[]): Function;

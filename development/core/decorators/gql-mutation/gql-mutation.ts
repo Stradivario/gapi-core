@@ -1,34 +1,20 @@
+import Container from "typedi";
+import { ControllerContainerService } from "../../utils/new_services/controller-service/controller.service";
 
 export function Mutation(options?: { [key: string]: { [key: string]: any } }) {
-    return (target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<any>) => {
-        const originalMethod = <any>descriptor.value || {};
+    return (target: any, propKey: string, descriptor: TypedPropertyDescriptor<any>) => {
+        const originalMethod = descriptor.value || {};
         const self = target;
+        const propertyKey = propKey;
+        const currentController = Container.get(ControllerContainerService).createController(self.constructor.name);
         descriptor.value = function (...args: any[]) {
-            let result = originalMethod.apply(this, args);
-           
-            if (options) {
-                let mockArgs = {};
-                Object.keys(options).forEach(a => {
-                    mockArgs[a] = {};
-                    mockArgs[a].type = options[a];
-                });
-                result = { ...{ args: mockArgs }, ...result };
-            }
-
-            if (result.scope) {
-                result = { ...{ scope: result.scope }, ...result };
-            } else {
-                if (self.Gconfig.scope) {
-                    result = { ...{ scope: self.Gconfig.scope }, ...result };
-                }
-            }
-
-            if (self.Gconfig.type) {
-                result = { ...{ type: self.Gconfig.type }, ...result };
-            }
-            result.resolve = originalMethod;
-            return result;
+            let returnValue = Object.create({});
+            returnValue.resolve = originalMethod.bind(self);
+            returnValue.args = options ? options : null;
+            currentController.setQuery(propertyKey, returnValue);
+            return returnValue;
         };
+        descriptor.value();
         return descriptor;
     }
 }

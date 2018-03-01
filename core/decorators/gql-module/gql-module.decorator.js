@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const apply_service_1 = require("../../utils/services/apply/apply.service");
 require("reflect-metadata");
+const typedi_1 = require("typedi");
 function GapiModule(options) {
     return (target) => {
         const original = target;
@@ -11,7 +12,10 @@ function GapiModule(options) {
                 return constructor.apply(this, args);
             };
             c.prototype = constructor.prototype;
-            return new c();
+            typedi_1.default.set({ id: c.prototype.name, value: new c() });
+            // return new c();
+            // console.log(t);
+            // return new c();
         }
         const f = function (...args) {
             console.log('Loaded Module: ' + original.name);
@@ -19,6 +23,7 @@ function GapiModule(options) {
         };
         f.prototype = original.prototype;
         // Reflect.defineMetadata(GapiModuleSymbol, options, f);
+        // Container.set(f);
         return f;
     };
 }

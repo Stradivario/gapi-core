@@ -7,9 +7,9 @@ export const ApplyServicesHook = (self, options: GapiModuleArguments) => {
         options.imports.forEach(module => {
             const currentModule = Container.get(module);
             // Object.assign(self, { [currentModule.constructor.name]: currentModule});
-            if (currentModule instanceof GapiServerModule) {
-                Object.assign(self, {start: currentModule.start});
-            }
+            // if (currentModule instanceof GapiServerModule) {
+            //     // Object.assign(self, {start: currentModule.start});
+            // }
         });
     }
     if (options.services) {

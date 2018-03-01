@@ -9,8 +9,9 @@ export declare class ServerUtilService {
         };
     }>;
     registerEndpoints(endpoints: Array<any>): void;
-    initGraphQl(): void;
+    initGraphQl(): Promise<void>;
     connect(options: any): void;
     onRequest(): void;
     startServer(): Promise<{}>;
+    stopServer(): void;
 }

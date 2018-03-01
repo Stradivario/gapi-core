@@ -11,3 +11,4 @@ export * from './services/config/config.service';
 export * from './services/config/config.interface';
 export * from './services/auth/auth.service';
 export * from './services/schema/schema.service';
+export * from './new_services/index';

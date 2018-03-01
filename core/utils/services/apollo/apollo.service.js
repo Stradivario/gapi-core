@@ -50,7 +50,7 @@ const graphqlHapi = function (server, options, next) {
         path: options.path || '/graphql',
         config: options.route || {},
         handler: (request, reply) => __awaiter(this, void 0, void 0, function* () {
-            console.log('111');
+            console.log('Request entered');
             if (request.headers.authorization) {
                 try {
                     options.graphqlOptions.context = yield serviceUtilsService.validateToken(request.headers.authorization);

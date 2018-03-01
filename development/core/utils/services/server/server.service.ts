@@ -49,8 +49,10 @@ export class ServerUtilService {
         }
     }
 
-    initGraphQl() {
+    async initGraphQl() {
         const config = Container.get(ConfigService);
+        // await config.syncSchema();
+        console.log(config.APP_CONFIG.schema);
         const graphqlOptions = {
             register: graphqlHapi,
             options: {
@@ -159,6 +161,7 @@ export class ServerUtilService {
                     reject(err);
                     throw err;
                 }
+                resolve(true);
                 const subscriptionServer = new SubscriptionServer(<any>{
                     execute,
                     subscribe,
@@ -178,8 +181,12 @@ export class ServerUtilService {
                         path: '/subscriptions',
                     });
                 console.log(`Server running at: ${this.server.info.uri}, environment: ${process.env.NODE_ENV}`);
-                resolve(true);
+  
             });
         });
+    }
+
+    stopServer() {
+        this.server.stop();
     }
 }

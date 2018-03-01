@@ -63,55 +63,59 @@ let ServerUtilService = class ServerUtilService {
         }
     }
     initGraphQl() {
-        const config = typedi_1.default.get(__1.ConfigService);
-        const graphqlOptions = {
-            register: apollo_service_1.graphqlHapi,
-            options: {
-                path: '/graphql',
-                graphqlOptions: {
-                    schema: config.APP_CONFIG.schema,
-                    graphiql: true,
-                    formatError: error_service_1.attachErrorHandlers
-                    // context: {},
+        return __awaiter(this, void 0, void 0, function* () {
+            const config = typedi_1.default.get(__1.ConfigService);
+            // await config.syncSchema();
+            console.log(config.APP_CONFIG.schema);
+            const graphqlOptions = {
+                register: apollo_service_1.graphqlHapi,
+                options: {
+                    path: '/graphql',
+                    graphqlOptions: {
+                        schema: config.APP_CONFIG.schema,
+                        graphiql: true,
+                        formatError: error_service_1.attachErrorHandlers
+                        // context: {},
+                    }
                 }
-            }
-        };
-        if (process.env.NODE_ENV !== 'production') {
-            this.registerEndpoints([{
-                    register: apollo_service_1.graphiqlHapi,
-                    options: {
-                        path: '/graphiql',
-                        graphiqlOptions: {
-                            endpointURL: '/graphql',
-                            passHeader: `'Authorization':'${config.APP_CONFIG.graphiqlToken}'`,
-                            subscriptionsEndpoint: `ws://localhost:${config.APP_CONFIG.port}/subscriptions`,
+            };
+            if (process.env.NODE_ENV !== 'production') {
+                this.registerEndpoints([{
+                        register: apollo_service_1.graphiqlHapi,
+                        options: {
+                            path: '/graphiql',
+                            graphiqlOptions: {
+                                endpointURL: '/graphql',
+                                passHeader: `'Authorization':'${config.APP_CONFIG.graphiqlToken}'`,
+                                subscriptionsEndpoint: `ws://localhost:${config.APP_CONFIG.port}/subscriptions`,
+                            },
                         },
-                    },
-                }]);
-        }
-        // this.registerEndpoints([{
-        //   method: 'POST',
-        //   path: '/upload',
-        //   config: {
-        //     payload: {
-        //       maxBytes: 2048576000000,
-        //       output: 'stream',
-        //       parse: true,
-        //       allow: 'multipart/form-data'
-        //     },
-        //     app: {
-        //       tags: ['api', 'shop'],
-        //       description: 'uploadFile',
-        //       endpoint: 'uploadFile',
-        //       scope: [
-        //         ENUMS.USER_TYPE.ADMIN.key
-        //       ]
-        //     },
-        //     auth: false,
-        //     handler: uploadFile,
-        //   }
-        // }]);
-        this.registerEndpoints([graphqlOptions]);
+                    }]);
+            }
+            // this.registerEndpoints([{
+            //   method: 'POST',
+            //   path: '/upload',
+            //   config: {
+            //     payload: {
+            //       maxBytes: 2048576000000,
+            //       output: 'stream',
+            //       parse: true,
+            //       allow: 'multipart/form-data'
+            //     },
+            //     app: {
+            //       tags: ['api', 'shop'],
+            //       description: 'uploadFile',
+            //       endpoint: 'uploadFile',
+            //       scope: [
+            //         ENUMS.USER_TYPE.ADMIN.key
+            //       ]
+            //     },
+            //     auth: false,
+            //     handler: uploadFile,
+            //   }
+            // }]);
+            this.registerEndpoints([graphqlOptions]);
+        });
     }
     connect(options) {
         const serverConnectionOptions = {
@@ -167,6 +171,7 @@ let ServerUtilService = class ServerUtilService {
                     reject(err);
                     throw err;
                 }
+                resolve(true);
                 const subscriptionServer = new subscriptions_transport_ws_1.SubscriptionServer({
                     execute: execution_1.execute,
                     subscribe: subscription_1.subscribe,
@@ -186,9 +191,11 @@ let ServerUtilService = class ServerUtilService {
                     path: '/subscriptions',
                 });
                 console.log(`Server running at: ${this.server.info.uri}, environment: ${process.env.NODE_ENV}`);
-                resolve(true);
             });
         });
+    }
+    stopServer() {
+        this.server.stop();
     }
 };
 ServerUtilService = __decorate([

@@ -1,1 +1,1 @@
-export * from './gql-type';
+export * from './gql-args';

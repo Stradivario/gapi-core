@@ -15,3 +15,4 @@ __export(require("./services/apollo/apollo.service"));
 __export(require("./services/config/config.service"));
 __export(require("./services/auth/auth.service"));
 __export(require("./services/schema/schema.service"));
+__export(require("./new_services/index"));
