@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_typescript_1 = require("sequelize-typescript");
-const typedi_1 = require("typedi");
+const index_1 = require("../../../utils/container/index");
 const config_service_1 = require("../../services/config/config.service");
 let SequelizeService = class SequelizeService extends sequelize_typescript_1.Sequelize {
     constructor(config) {
@@ -25,7 +25,7 @@ let SequelizeService = class SequelizeService extends sequelize_typescript_1.Seq
     }
 };
 SequelizeService = __decorate([
-    typedi_1.Service(),
+    index_1.Service(),
     __metadata("design:paramtypes", [config_service_1.ConfigService])
 ], SequelizeService);
 exports.SequelizeService = SequelizeService;

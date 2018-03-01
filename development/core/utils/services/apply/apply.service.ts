@@ -1,28 +1,15 @@
-import Container from "typedi";
+import Container, {Service} from '../../../utils/container/index';
 import { GapiModuleArguments } from "../../../decorators/gql-module/gql-module.decorator.interface";
 import { GapiServerModule } from "../../../modules/server/server.module";
 
 export const ApplyServicesHook = (self, options: GapiModuleArguments) => {
     if (options.imports) {
-        options.imports.forEach(module => {
-            const currentModule = Container.get(module);
-            // Object.assign(self, { [currentModule.constructor.name]: currentModule});
-            // if (currentModule instanceof GapiServerModule) {
-            //     // Object.assign(self, {start: currentModule.start});
-            // }
-        });
+        options.imports.forEach(m => Container.get(m));
     }
     if (options.services) {
-        options.services.forEach(m => {
-            const currentService = Container.get(m);
-            // Object.assign(self, { [currentService.constructor.name]: currentService});
-        });
+        options.services.forEach(m => Container.get(m));
     }
-
     if (options.controllers) {
-        options.controllers.forEach(m => {
-            const currentService = Container.get(m);
-            // Object.assign(self, { [currentService.constructor.name]: currentService});
-        });
+        options.controllers.forEach(m => Container.get(m));
     }
 }

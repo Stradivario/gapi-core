@@ -4,7 +4,7 @@ function __export(m) {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./core/index"));
-var typedi_1 = require("typedi");
-exports.Container = typedi_1.Container;
-exports.Service = typedi_1.Service;
+var _1 = require("./core/utils/container/");
+exports.Container = _1.Container;
+exports.Service = _1.Service;
 __export(require("graphql"));

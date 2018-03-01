@@ -1,3 +1,3 @@
 import { GapiModuleArguments } from "./gql-module.decorator.interface";
 import 'reflect-metadata';
-export declare function GapiModule(options: GapiModuleArguments): (target: any) => any;
+export declare function GapiModule<T, K extends keyof T>(options: GapiModuleArguments): (target: Function) => any;

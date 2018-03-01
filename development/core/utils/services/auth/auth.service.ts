@@ -2,7 +2,7 @@ import { sign, verify } from 'jsonwebtoken';
 import { readFileSync } from 'fs';
 import { createDecipheriv, createCipheriv, randomBytes, createHash, pseudoRandomBytes } from 'crypto';
 import * as Moment from 'moment';
-import { Service } from 'typedi';
+import Container, {Service} from '../../../utils/container/index';
 import { ConfigService } from '../..';
 
 

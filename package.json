@@ -55,6 +55,7 @@
     "jsonwebtoken": "^8.1.0",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
+    "nodemon": "^1.17.1",
     "pg": "6.4.2",
     "pm2-docker": "^2.1.0",
     "reflect-metadata": "^0.1.12",
@@ -64,8 +65,7 @@
     "socket.io": "^2.0.3",
     "subscriptions-transport-ws": "^0.9.4",
     "tslint": "^5.8.0",
-    "tslint-language-service": "^0.9.8",
-    "typedi": "^0.7.0"
+    "tslint-language-service": "^0.9.8"
   },
   "jest": {
     "testEnvironment": "node",

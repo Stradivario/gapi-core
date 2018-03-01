@@ -1,5 +1,5 @@
 import { Sequelize } from 'sequelize-typescript';
-import { Service } from 'typedi';
+import Container, {Service} from '../../../utils/container/index';
 import { ConfigService } from '../../services/config/config.service';
 
 @Service()

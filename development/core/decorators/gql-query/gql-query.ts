@@ -1,11 +1,12 @@
-import { ControllerContainerService } from "../../utils/new_services/controller-service/controller.service";
-import Container from "typedi";
+import { ControllerContainerService } from "../../utils/services/controller-service/controller.service";
+import Container from '../../utils/container/index';
 
 export function Query<T>(options?: { [key: string]: { [key: string]: any } }) {
     return (target: any, propKey: string, descriptor: TypedPropertyDescriptor<any>) => {
         const originalMethod = descriptor.value || {};
         const self = target;
         const propertyKey = propKey;
+        
         const currentController = Container.get(ControllerContainerService).createController(self.constructor.name);
         descriptor.value = function (...args: any[]) {
             let returnValue = Object.create({});

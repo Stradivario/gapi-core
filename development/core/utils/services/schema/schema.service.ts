@@ -1,5 +1,5 @@
 import { GraphQLSchema } from 'graphql';
-import { Service } from 'typedi';
+import Container, {Service} from '../../../utils/container/index';
 
 @Service()
 export class SchemaService {

@@ -1,17 +1,20 @@
 import 'reflect-metadata';
-import { GapiControllerArguments } from "./gql-controller.decorator.interface";
-import { GapiControllerSymbol } from './gql-controller.symbol';
-import Container, { Service } from 'typedi';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { GapiMutationsService } from '../../utils/services/mutation/mutation.service';
-import { GapiQueryService } from '../../utils/services/query/query.service';
-import { ControllerConfigService } from '../../utils/services/controller-config/controller-config.service';
-import { ControllerContainerService } from '../../utils/new_services/controller-service/controller.service';
-import { ControllerMappingSettings } from '../../utils/new_services/controller-service/controller.service';
+import { ControllerContainerService } from '../../utils/services/controller-service/controller.service';
+import { ControllerMappingSettings, GenericGapiResolversType } from '../../utils/services/controller-service/controller.service';
+import Container from '../../utils/container/index';
 
-export function GapiController(settings?: ControllerMappingSettings) {
+export interface GapiController {
+    _controller_name: string;
+    _settings: ControllerMappingSettings;
+    _queries: Map<string, GenericGapiResolversType>;
+    _subscriptions: Map<string, GenericGapiResolversType>;
+    _mutations: Map<string, GenericGapiResolversType>;
+}
+
+export function GapiController<T, K extends keyof T>(settings?: ControllerMappingSettings) {
     const options = settings;
-    return (target: any) => {
+    return (target) => {
         const original = target;
         const currentController = Container.get(ControllerContainerService).createController(original.prototype.name);
         function construct(constructor, args) {
@@ -26,15 +29,13 @@ export function GapiController(settings?: ControllerMappingSettings) {
                 return constructor.apply(this, args);
             };
             c.prototype = constructor.prototype;
-            // Container.set(f, new c());
-            // return new c();
-            // return new c();
+            Container.set({type: c});
+            return new c();
         }
         const f: any = function (...args) {
-            console.log('Loaded Module: ' + original.name);
+            console.log('Loaded Controller: ' + original.name);
             return construct(original, args);
         };
-        Container.set(f);
         return f;
     };
 }

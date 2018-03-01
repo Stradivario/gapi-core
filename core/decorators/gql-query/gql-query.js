@@ -1,13 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const controller_service_1 = require("../../utils/new_services/controller-service/controller.service");
-const typedi_1 = require("typedi");
+const controller_service_1 = require("../../utils/services/controller-service/controller.service");
+const index_1 = require("../../utils/container/index");
 function Query(options) {
     return (target, propKey, descriptor) => {
         const originalMethod = descriptor.value || {};
         const self = target;
         const propertyKey = propKey;
-        const currentController = typedi_1.default.get(controller_service_1.ControllerContainerService).createController(self.constructor.name);
+        const currentController = index_1.default.get(controller_service_1.ControllerContainerService).createController(self.constructor.name);
         descriptor.value = function (...args) {
             let returnValue = Object.create({});
             returnValue.resolve = originalMethod.bind(self);

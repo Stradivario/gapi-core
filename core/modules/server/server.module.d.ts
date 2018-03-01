@@ -12,4 +12,5 @@ export declare class ConfigFactory {
 export declare class GapiServerModule {
     start(): Promise<{}>;
     static forRoot(config: AppConfigInterface): typeof GapiServerModule;
+    stop(): void;
 }

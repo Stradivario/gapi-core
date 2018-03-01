@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const jsonwebtoken_1 = require("jsonwebtoken");
 const crypto_1 = require("crypto");
 const Moment = require("moment");
-const typedi_1 = require("typedi");
+const index_1 = require("../../../utils/container/index");
 const __1 = require("../..");
 let AuthModule = class AuthModule {
     constructor(config) {
@@ -56,7 +56,7 @@ let AuthModule = class AuthModule {
     }
 };
 AuthModule = __decorate([
-    typedi_1.Service(),
+    index_1.Service(),
     __metadata("design:paramtypes", [__1.ConfigService])
 ], AuthModule);
 exports.AuthModule = AuthModule;

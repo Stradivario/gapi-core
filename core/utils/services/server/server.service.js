@@ -21,7 +21,7 @@ const subscription_1 = require("graphql/subscription");
 const execution_1 = require("graphql/execution");
 // import { Credential } from './models/Credential';
 const error_service_1 = require("../error/error.service");
-const typedi_1 = require("typedi");
+const index_1 = require("../../../utils/container/index");
 const __1 = require("../..");
 let ServerUtilService = class ServerUtilService {
     constructor() {
@@ -64,9 +64,7 @@ let ServerUtilService = class ServerUtilService {
     }
     initGraphQl() {
         return __awaiter(this, void 0, void 0, function* () {
-            const config = typedi_1.default.get(__1.ConfigService);
-            // await config.syncSchema();
-            console.log(config.APP_CONFIG.schema);
+            const config = index_1.default.get(__1.ConfigService);
             const graphqlOptions = {
                 register: apollo_service_1.graphqlHapi,
                 options: {
@@ -162,7 +160,7 @@ let ServerUtilService = class ServerUtilService {
         // });
     }
     startServer() {
-        this.connect(typedi_1.default.get(__1.ConfigService).APP_CONFIG);
+        this.connect(index_1.default.get(__1.ConfigService).APP_CONFIG);
         this.initGraphQl();
         const self = this;
         return new Promise((resolve, reject) => {
@@ -171,11 +169,10 @@ let ServerUtilService = class ServerUtilService {
                     reject(err);
                     throw err;
                 }
-                resolve(true);
                 const subscriptionServer = new subscriptions_transport_ws_1.SubscriptionServer({
                     execute: execution_1.execute,
                     subscribe: subscription_1.subscribe,
-                    schema: typedi_1.default.get(__1.ConfigService).APP_CONFIG.schema,
+                    schema: index_1.default.get(__1.ConfigService).APP_CONFIG.schema,
                     onConnect(connectionParams) {
                         // if (connectionParams.token) {
                         return { id: 1, userId: 1, user: { id: 1, type: 'ADMIN' } };
@@ -191,6 +188,7 @@ let ServerUtilService = class ServerUtilService {
                     path: '/subscriptions',
                 });
                 console.log(`Server running at: ${this.server.info.uri}, environment: ${process.env.NODE_ENV}`);
+                resolve(true);
             });
         });
     }
@@ -199,6 +197,6 @@ let ServerUtilService = class ServerUtilService {
     }
 };
 ServerUtilService = __decorate([
-    typedi_1.Service()
+    index_1.Service()
 ], ServerUtilService);
 exports.ServerUtilService = ServerUtilService;

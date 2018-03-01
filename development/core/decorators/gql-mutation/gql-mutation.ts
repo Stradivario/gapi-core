@@ -1,6 +1,5 @@
-import Container from "typedi";
-import { ControllerContainerService } from "../../utils/new_services/controller-service/controller.service";
-
+import { ControllerContainerService } from "../../utils/services/controller-service/controller.service";
+import Container from '../../utils/container/index';
 export function Mutation(options?: { [key: string]: { [key: string]: any } }) {
     return (target: any, propKey: string, descriptor: TypedPropertyDescriptor<any>) => {
         const originalMethod = descriptor.value || {};
@@ -11,7 +10,7 @@ export function Mutation(options?: { [key: string]: { [key: string]: any } }) {
             let returnValue = Object.create({});
             returnValue.resolve = originalMethod.bind(self);
             returnValue.args = options ? options : null;
-            currentController.setQuery(propertyKey, returnValue);
+            currentController.setMutation(propertyKey, returnValue);
             return returnValue;
         };
         descriptor.value();

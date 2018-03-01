@@ -6,7 +6,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const typedi_1 = require("typedi");
+const index_1 = require("../../utils/container/index");
 const config_service_1 = require("../../utils/services/config/config.service");
 const server_service_1 = require("../../utils/services/server/server.service");
 ;
@@ -16,34 +16,24 @@ let ConfigFactory = class ConfigFactory {
     }
 };
 ConfigFactory = __decorate([
-    typedi_1.Service()
+    index_1.Service()
 ], ConfigFactory);
 exports.ConfigFactory = ConfigFactory;
-const utilService = typedi_1.default.get(server_service_1.ServerUtilService);
+const utilService = index_1.default.get(server_service_1.ServerUtilService);
 let GapiServerModule = GapiServerModule_1 = class GapiServerModule {
     start() {
         return utilService.startServer();
     }
     static forRoot(config) {
-        typedi_1.default.get(config_service_1.ConfigService).setAppConfig(config);
+        index_1.default.get(config_service_1.ConfigService).setAppConfig(config);
         return GapiServerModule_1;
+    }
+    stop() {
+        return utilService.stopServer();
     }
 };
 GapiServerModule = GapiServerModule_1 = __decorate([
-    typedi_1.Service()
+    index_1.Service()
 ], GapiServerModule);
 exports.GapiServerModule = GapiServerModule;
-process.on('cleanup', () => {
-    utilService.stopServer();
-});
-process.on('exit', function () {
-    process.emit('cleanup');
-});
-process.on('SIGINT', function () {
-    process.exit(2);
-});
-process.on('uncaughtException', function (e) {
-    console.log(e.stack);
-    process.exit(99);
-});
 var GapiServerModule_1;

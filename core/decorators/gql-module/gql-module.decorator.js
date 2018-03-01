@@ -1,29 +1,37 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const apply_service_1 = require("../../utils/services/apply/apply.service");
 require("reflect-metadata");
-const typedi_1 = require("typedi");
+const index_1 = require("../../utils/container/index");
+function importModules(modules) {
+    modules.forEach(m => index_1.default.get(m));
+}
 function GapiModule(options) {
     return (target) => {
         const original = target;
         function construct(constructor, args) {
             const c = function () {
-                apply_service_1.ApplyServicesHook(this, options);
+                Object.assign(this, options);
+                if (options.imports) {
+                    importModules(options.imports);
+                }
+                if (options.services) {
+                    importModules(options.services);
+                }
+                if (options.controllers) {
+                    importModules(options.controllers);
+                }
                 return constructor.apply(this, args);
             };
             c.prototype = constructor.prototype;
-            typedi_1.default.set({ id: c.prototype.name, value: new c() });
-            // return new c();
-            // console.log(t);
-            // return new c();
+            const ret = new c();
+            index_1.default.get(c);
+            return ret;
         }
         const f = function (...args) {
             console.log('Loaded Module: ' + original.name);
             return construct(original, args);
         };
         f.prototype = original.prototype;
-        // Reflect.defineMetadata(GapiModuleSymbol, options, f);
-        // Container.set(f);
         return f;
     };
 }

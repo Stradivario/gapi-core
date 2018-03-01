@@ -12,7 +12,7 @@ const Boom = require("boom");
 const GraphiQL = require("apollo-server-module-graphiql");
 const apollo_server_core_1 = require("apollo-server-core");
 const server_service_1 = require("../server/server.service");
-const typedi_1 = require("typedi");
+const index_1 = require("../../../utils/container/index");
 function runHttpQueryWrapper(options, request, reply) {
     return apollo_server_core_1.runHttpQuery([request], {
         method: request.method.toUpperCase(),
@@ -44,13 +44,12 @@ const graphqlHapi = function (server, options, next) {
     if (arguments.length !== 3) {
         throw new Error(`Apollo Server expects exactly 3 argument, got ${arguments.length}`);
     }
-    const serviceUtilsService = typedi_1.default.get(server_service_1.ServerUtilService);
+    const serviceUtilsService = index_1.default.get(server_service_1.ServerUtilService);
     server.route({
         method: ['GET', 'POST'],
         path: options.path || '/graphql',
         config: options.route || {},
         handler: (request, reply) => __awaiter(this, void 0, void 0, function* () {
-            console.log('Request entered');
             if (request.headers.authorization) {
                 try {
                     options.graphqlOptions.context = yield serviceUtilsService.validateToken(request.headers.authorization);

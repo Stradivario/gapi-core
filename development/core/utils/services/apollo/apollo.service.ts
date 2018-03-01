@@ -3,7 +3,7 @@ import { Server, Response, Request, ReplyNoContinue } from 'hapi';
 import * as GraphiQL from 'apollo-server-module-graphiql';
 import { runHttpQuery, HttpQueryError } from 'apollo-server-core';
 import { ServerUtilService } from '../server/server.service';
-import Container from 'typedi';
+import Container, {Service} from '../../../utils/container/index';
 
 export interface IRegister {
   (server: Server, options: any, next: any): void;
@@ -59,7 +59,6 @@ const graphqlHapi: IRegister = function (server: Server, options: HapiPluginOpti
     path: options.path || '/graphql',
     config: options.route || {},
     handler: async (request, reply) => {
-        console.log('Request entered')
       if (request.headers.authorization) {
         try {
           options.graphqlOptions.context = await serviceUtilsService.validateToken(request.headers.authorization);

@@ -22,25 +22,12 @@ class ControllerMapping {
         this._controller_name = name;
     }
     setMutation(name, value) {
-        if (this._mutations.has(name)) {
-            const currentQuery = this._mutations.get(name);
-            Object.assign(currentQuery, value);
-        }
         this._mutations.set(name, value);
     }
     setSubscription(name, value) {
-        if (this._subscriptions.has(name)) {
-            const currentQuery = this._subscriptions.get(name);
-            Object.assign(currentQuery, value);
-        }
         this._subscriptions.set(name, value);
     }
     setQuery(name, value) {
-        if (this._queries.has(name)) {
-            const currentQuery = this._queries.get(name);
-            Object.assign(currentQuery, value);
-        }
-        console.log(name, value);
         this._queries.set(name, value);
     }
     setSettings(settings) {
@@ -70,8 +57,13 @@ let ControllerContainerService = class ControllerContainerService {
         }
     }
     createController(name) {
-        this.controllers.set(name, new ControllerMapping(name));
-        return this.controllers.get(name);
+        if (this.controllers.has(name)) {
+            return this.controllers.get(name);
+        }
+        else {
+            this.controllers.set(name, new ControllerMapping(name));
+            return this.controllers.get(name);
+        }
     }
 };
 ControllerContainerService = __decorate([

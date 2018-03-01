@@ -1,5 +1,5 @@
-import { ControllerContainerService } from "../../utils/new_services/controller-service/controller.service";
-import Container from "typedi";
+import { ControllerContainerService } from "../../utils/services/controller-service/controller.service";
+import Container from '../../utils/container/index';
 
 export function Scope<T>(...arg: string[]): Function {
     let scope = {scope: arg};

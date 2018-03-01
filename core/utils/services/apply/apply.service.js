@@ -1,26 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const typedi_1 = require("typedi");
+const index_1 = require("../../../utils/container/index");
 exports.ApplyServicesHook = (self, options) => {
     if (options.imports) {
-        options.imports.forEach(module => {
-            const currentModule = typedi_1.default.get(module);
-            // Object.assign(self, { [currentModule.constructor.name]: currentModule});
-            // if (currentModule instanceof GapiServerModule) {
-            //     // Object.assign(self, {start: currentModule.start});
-            // }
-        });
+        options.imports.forEach(m => index_1.default.get(m));
     }
     if (options.services) {
-        options.services.forEach(m => {
-            const currentService = typedi_1.default.get(m);
-            // Object.assign(self, { [currentService.constructor.name]: currentService});
-        });
+        options.services.forEach(m => index_1.default.get(m));
     }
     if (options.controllers) {
-        options.controllers.forEach(m => {
-            const currentService = typedi_1.default.get(m);
-            // Object.assign(self, { [currentService.constructor.name]: currentService});
-        });
+        options.controllers.forEach(m => index_1.default.get(m));
     }
 };

@@ -1,4 +1,4 @@
-import Container, { Service, Token, Inject } from "typedi";
+import Container, {Service} from '../../utils/container/index';
 import { Observable } from 'rxjs/Observable';
 import { AppConfigInterface } from "../../utils/services/config/config.interface";
 import { GraphQLSchema } from "graphql";
@@ -23,7 +23,6 @@ const utilService: ServerUtilService = Container.get(ServerUtilService);
 export class GapiServerModule {
 
     start() {
-    
         return utilService.startServer();
     }
 
@@ -32,18 +31,8 @@ export class GapiServerModule {
         return GapiServerModule;
     }
 
-}
+    stop() {
+        return utilService.stopServer();
+    }
 
-process.on(<any>'cleanup', () => {
-    utilService.stopServer();
-});
-process.on('exit', function () {
-    process.emit(<any>'cleanup');
-});
-process.on('SIGINT', function () {
-    process.exit(2);
-});
-process.on('uncaughtException', function (e) {
-    console.log(e.stack);
-    process.exit(99);
-});
+}

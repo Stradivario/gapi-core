@@ -1,6 +1,5 @@
-import { ControllerContainerService } from "../../utils/new_services/controller-service/controller.service";
-
-import Container from "typedi";
+import { ControllerContainerService } from "../../utils/services/controller-service/controller.service";
+import Container from '../../utils/container/index';
 
 export function Type<T>(type): Function {
     type = { type: type };
@@ -11,7 +10,6 @@ export function Type<T>(type): Function {
         descriptor.value = function (...args: any[]) {
             let returnValue = originalMethod.apply(this, args);
             Object.assign(returnValue, type);
-            console.log('TYPE');
             Container.get(ControllerContainerService).createController(self.constructor.name).setQuery(propertyKey, returnValue);
             return returnValue;
         };

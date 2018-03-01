@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const graphql_1 = require("graphql");
-const typedi_1 = require("typedi");
+const index_1 = require("../../../utils/container/index");
 let SchemaService = class SchemaService {
     generateSchema(Query, Mutation, Subscription) {
         const schema = {};
@@ -24,6 +24,6 @@ let SchemaService = class SchemaService {
     }
 };
 SchemaService = __decorate([
-    typedi_1.Service()
+    index_1.Service()
 ], SchemaService);
 exports.SchemaService = SchemaService;

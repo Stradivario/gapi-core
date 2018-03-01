@@ -1,9 +1,9 @@
-import Container, { Service } from "typedi";
 import { readFileSync } from "fs";
 import { SequelizeConfigInterface, AmqpConfigInterface, AppConfigInterface } from './config.interface';
 import { GraphQLObjectType } from "graphql";
-import { ControllerContainerService } from "../../new_services/controller-service/controller.service";
+import { ControllerContainerService } from "../../services/controller-service/controller.service";
 import { SchemaService } from "../../services/schema/schema.service";
+import { Service } from "../../../../core/utils/container/index";
 
 @Service()
 export class ConfigService {
@@ -79,43 +79,5 @@ export class ConfigService {
         this.APP_CONFIG = config;
     }
 
-    async syncSchema() {
-
-        const test = Container.get(ControllerContainerService);
-        const ticketCtrl = test.getController('TicketController');
-
-        let QueryFields = {};
-        Array.from(ticketCtrl._queries.keys()).forEach((key: string) => Object.assign(QueryFields, { [key]: ticketCtrl.getQuery(key) }));
-
-
-        const Query = new GraphQLObjectType({
-            name: 'Query',
-            description: 'Query type for all get requests which will not change persistent data',
-            fields: {
-                ...QueryFields,
-            }
-        });
-
-        const Mutation = new GraphQLObjectType({
-            name: 'Mutation',
-            description: 'Mutation type for all requests which will change persistent data',
-            fields: {
-                //   ...UserMutation,
-            }
-        });
-
-        const Subscription = new GraphQLObjectType({
-            name: 'Subscription',
-            description: 'Subscription type for all rabbitmq subscriptions via pub sub',
-            fields: {
-                //   ...SignalSubscription,
-            }
-        });
-
-        const schemaService: SchemaService = Container.get(SchemaService);
-        const schema = schemaService.generateSchema(Query);
-        this.APP_CONFIG.schema = schema;
-        return Promise.resolve();
-    }
 }
 

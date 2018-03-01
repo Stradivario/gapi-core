@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const controller_service_1 = require("../../utils/new_services/controller-service/controller.service");
-const typedi_1 = require("typedi");
+const controller_service_1 = require("../../utils/services/controller-service/controller.service");
+const index_1 = require("../../utils/container/index");
 function Scope(...arg) {
     let scope = { scope: arg };
     // TypedPropertyDescriptor<(id: T) => T>
@@ -13,7 +13,7 @@ function Scope(...arg) {
         descriptor.value = function (...args) {
             let returnValue = originalMethod.apply(this, args);
             Object.assign(returnValue, scope);
-            typedi_1.default.get(controller_service_1.ControllerContainerService).createController(self.constructor.name).setQuery(propertyKey, returnValue);
+            index_1.default.get(controller_service_1.ControllerContainerService).createController(self.constructor.name).setQuery(propertyKey, returnValue);
             return returnValue;
         };
         descriptor.value();
