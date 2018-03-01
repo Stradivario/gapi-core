@@ -37,10 +37,10 @@ class ControllerMapping {
         return this._queries.get(name);
     }
     getMutation(name) {
-        return this._queries.get(name);
+        return this._mutations.get(name);
     }
     getSubscription(name) {
-        return this._queries.get(name);
+        return this._subscriptions.get(name);
     }
 }
 exports.ControllerMapping = ControllerMapping;

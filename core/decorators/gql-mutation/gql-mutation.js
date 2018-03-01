@@ -15,7 +15,6 @@ function Mutation(options) {
             currentController.setMutation(propertyKey, returnValue);
             return returnValue;
         };
-        descriptor.value();
         return descriptor;
     };
 }

@@ -53,11 +53,11 @@ export class ControllerMapping implements GapiController {
     }
 
     getMutation(name: string): GenericGapiResolversType {
-        return this._queries.get(name);
+        return this._mutations.get(name);
     }
 
     getSubscription(name: string): GenericGapiResolversType {
-        return this._queries.get(name);
+        return this._subscriptions.get(name);
     }
 
 }

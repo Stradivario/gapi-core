@@ -21,7 +21,6 @@ async function getAllFields() {
                 const queries = Array.from(currentCtrl._queries.keys());
                 const mutations = Array.from(currentCtrl._mutations.keys());
                 const subscriptions = Array.from(currentCtrl._subscriptions.keys());
-                console.log(queries, mutations, subscriptions)
                 Array.from(queries).forEach(key => Fields.query[key] = currentCtrl.getQuery(key))
                 Array.from(mutations).forEach(key => Fields.mutation[key] = currentCtrl.getMutation(key))
                 Array.from(subscriptions).forEach(key => Fields.subscription[key] = currentCtrl.getSubscription(key) )
@@ -34,17 +33,16 @@ async function getAllFields() {
             return new GraphQLObjectType({
                 name: name,
                 description: description,
-                fields: {
-                    ...query,
-                }
+                fields: query
             })
         }
+        
         const schema = schemaService.generateSchema(
             generateType(Fields.query, 'Query', 'Query type for all get requests which will not change persistent data'),
             generateType(Fields.mutation, 'Mutation', 'Mutation type for all requests which will change persistent data'),
             generateType(Fields.subscription, 'Subscription', 'Subscription type for all rabbitmq subscriptions via pub sub')
         );
-        console.log(schema);
+        // console.log(schema);
         resolve(schema);
     })
 }

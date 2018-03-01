@@ -13,7 +13,6 @@ export function Mutation(options?: { [key: string]: { [key: string]: any } }) {
             currentController.setMutation(propertyKey, returnValue);
             return returnValue;
         };
-        descriptor.value();
         return descriptor;
     }
 }

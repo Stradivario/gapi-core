@@ -10,7 +10,13 @@ export function Type<T>(type): Function {
         descriptor.value = function (...args: any[]) {
             let returnValue = originalMethod.apply(this, args);
             Object.assign(returnValue, type);
-            Container.get(ControllerContainerService).createController(self.constructor.name).setQuery(propertyKey, returnValue);
+            if (returnValue._query) {
+                Container.get(ControllerContainerService).createController(self.constructor.name).setQuery(propertyKey, returnValue);
+            } else if (returnValue._mutation) {
+                Container.get(ControllerContainerService).createController(self.constructor.name).setMutation(propertyKey, returnValue);
+            } else if (returnValue._subscription) {
+                Container.get(ControllerContainerService).createController(self.constructor.name).setSubscription(propertyKey, returnValue);
+            }
             return returnValue;
         };
         return descriptor;

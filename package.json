@@ -1,6 +1,6 @@
 {
   "name": "gapi",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "repository": {
     "type": "git",
     "url": "http://gitlab.youvolio.com/open-source/gapi.git"
@@ -31,7 +31,7 @@
     "jest-cli": "^22.1.4",
     "require-all": "^2.2.0",
     "sequelize-cli": "^3.0.0",
-    "ts-jest": "^22.0.",
+    "ts-jest": "^22.0.1",
     "ts-node": "^3.3.0",
     "typescript": "^2.6.2",
     "tslint": "^5.8.0",

@@ -13,9 +13,9 @@ export function Query<T>(options?: { [key: string]: { [key: string]: any } }) {
             returnValue.resolve = originalMethod.bind(self);
             returnValue.args = options ? options : null;
             currentController.setQuery(propertyKey, returnValue);
+            returnValue._query = true;
             return returnValue;
         };
-        descriptor.value();
         return descriptor;
     }
 }
