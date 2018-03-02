@@ -55,9 +55,9 @@ export function Service<T, K extends keyof T>(optionsOrServiceName?: ServiceOpti
 
 export function GapiController<T, K extends keyof T>(optionsOrServiceName?: ControllerMappingSettings): Function {
     return function (target: Function) {
-
+        const original = target;
         const service: ServiceMetadata<T, K> = {
-            type: target
+            type: original
         };
 
         if (typeof optionsOrServiceName === "string" || optionsOrServiceName instanceof Token) {
@@ -75,5 +75,20 @@ export function GapiController<T, K extends keyof T>(optionsOrServiceName?: Cont
         }
      
         Container.set(service);
+
+        function construct(constructor, args) {
+            const c: any = function () {
+          
+                return constructor.apply(this, args);
+            };
+            c.prototype = constructor.prototype;
+            return new c();
+        }
+        const f: any = function (...args) {
+            console.log('Loaded Controller: ' + original.name);
+            return construct(original, args);
+        };
+        f.prototype = original.prototype;
+        return f;
     };
 }

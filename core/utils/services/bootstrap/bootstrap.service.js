@@ -19,11 +19,7 @@ function getAllFields() {
         const controllerContainerService = index_1.default.get(controller_service_1.ControllerContainerService);
         return new Promise((resolve, reject) => {
             const schemaService = index_1.default.get(schema_service_1.SchemaService);
-            let Fields = {
-                query: {},
-                mutation: {},
-                subscription: {}
-            };
+            const Fields = { query: {}, mutation: {}, subscription: {} };
             Array.from(controllerContainerService.controllers.keys())
                 .forEach(controller => {
                 const currentCtrl = controllerContainerService.getController(controller);
@@ -42,7 +38,6 @@ function getAllFields() {
                     fields: query
                 });
             }
-            console.log(Fields);
             const schema = schemaService.generateSchema(generateType(Fields.query, 'Query', 'Query type for all get requests which will not change persistent data'), generateType(Fields.mutation, 'Mutation', 'Mutation type for all requests which will change persistent data'), generateType(Fields.subscription, 'Subscription', 'Subscription type for all rabbitmq subscriptions via pub sub'));
             // console.log(schema);
             resolve(schema);

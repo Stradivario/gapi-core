@@ -23,9 +23,7 @@ function GapiModule(options) {
                 return constructor.apply(this, args);
             };
             c.prototype = constructor.prototype;
-            const ret = new c();
-            index_1.default.get(c);
-            return ret;
+            return index_1.default.get(c);
         }
         const f = function (...args) {
             console.log('Loaded Module: ' + original.name);

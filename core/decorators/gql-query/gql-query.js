@@ -5,18 +5,17 @@ const index_1 = require("../../utils/container/index");
 function Query(options) {
     return (target, propKey, descriptor) => {
         const originalMethod = descriptor.value;
-        const self = target;
         const propertyKey = propKey;
         descriptor.value = function (...args) {
             let returnValue = Object.create({});
-            returnValue.resolve = originalMethod.bind(self);
+            returnValue.resolve = originalMethod.bind(this.constructor.prototype);
             returnValue.args = options ? options : null;
             returnValue.method_type = 'query';
             returnValue.method_name = propertyKey;
             return returnValue;
         };
         index_1.default.get(controller_service_1.ControllerContainerService)
-            .createController(self.constructor.name)
+            .createController(target.constructor.name)
             .setDescriptor(propertyKey, descriptor);
         return descriptor;
     };

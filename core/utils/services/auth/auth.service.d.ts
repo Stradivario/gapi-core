@@ -8,7 +8,7 @@ export interface TokenData {
 export declare class AuthModule {
     private config;
     constructor(config: ConfigService);
-    verifyToken(token: any): TokenData;
+    verifyToken(token: any): TokenData | false;
     decrypt(password: string): string;
     encrypt(password: string): string;
     validate(token: any, callback: any): any;

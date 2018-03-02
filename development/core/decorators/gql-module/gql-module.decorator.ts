@@ -26,9 +26,7 @@ export function GapiModule<T, K extends keyof T>(options: GapiModuleArguments) {
                 return constructor.apply(this, args);
             };
             c.prototype = constructor.prototype;
-            const ret = new c();
-            Container.get(c);
-            return ret;
+            return Container.get(c);
 
         }
         const f: any = function (...args) {

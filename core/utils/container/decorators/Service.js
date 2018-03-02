@@ -29,8 +29,9 @@ function Service(optionsOrServiceName) {
 exports.Service = Service;
 function GapiController(optionsOrServiceName) {
     return function (target) {
+        const original = target;
         const service = {
-            type: target
+            type: original
         };
         if (typeof optionsOrServiceName === "string" || optionsOrServiceName instanceof Token_1.Token) {
             service.id = optionsOrServiceName;
@@ -46,6 +47,19 @@ function GapiController(optionsOrServiceName) {
             service.transient = optionsOrServiceName.transient;
         }
         Container_1.Container.set(service);
+        function construct(constructor, args) {
+            const c = function () {
+                return constructor.apply(this, args);
+            };
+            c.prototype = constructor.prototype;
+            return new c();
+        }
+        const f = function (...args) {
+            console.log('Loaded Controller: ' + original.name);
+            return construct(original, args);
+        };
+        f.prototype = original.prototype;
+        return f;
     };
 }
 exports.GapiController = GapiController;

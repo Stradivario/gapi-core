@@ -10,11 +10,7 @@ async function getAllFields() {
     const controllerContainerService = Container.get(ControllerContainerService);
     return new Promise((resolve, reject) => {
         const schemaService = Container.get(SchemaService)
-        let Fields = {
-            query: {},
-            mutation: {},
-            subscription: {}
-        };
+        const Fields = { query: {}, mutation: {}, subscription: {} };
         Array.from(controllerContainerService.controllers.keys())
             .forEach(controller => {
                 const currentCtrl = controllerContainerService.getController(controller);
@@ -23,7 +19,6 @@ async function getAllFields() {
                     Fields[desc.method_type][desc.method_name] = desc;
                 })
             });
-
         function generateType(query, name, description) {
             if (!Object.keys(query).length) {
                 return;
@@ -34,7 +29,6 @@ async function getAllFields() {
                 fields: query
             })
         }
-        console.log(Fields)
         const schema = schemaService.generateSchema(
             generateType(Fields.query, 'Query', 'Query type for all get requests which will not change persistent data'),
             generateType(Fields.mutation, 'Mutation', 'Mutation type for all requests which will change persistent data'),

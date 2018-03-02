@@ -22,7 +22,7 @@ export class AuthModule {
         this.config.APP_CONFIG.cyper.iv = new Buffer(this.config.APP_CONFIG.cyper.iv);
         this.config.APP_CONFIG.cyper.key = new Buffer(this.config.APP_CONFIG.cyper.privateKey);
     }
-    verifyToken(token): TokenData {
+    verifyToken(token): TokenData | false {
         let result;
         try {
             result = verify(token, this.config.APP_CONFIG.cert, { algorithm: 'HS256' });
