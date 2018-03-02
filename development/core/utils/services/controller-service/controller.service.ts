@@ -1,6 +1,5 @@
 import { GraphQLObjectType, GraphQLNonNull } from "graphql";
 import { Service } from '../../../utils/container/index';
-import { GapiController } from "../../../decorators/gql-controller/gql-controller.decorator";
 
 export class ControllerMappingSettings {
     scope?: string[] = ['ADMIN'];
@@ -9,10 +8,12 @@ export class ControllerMappingSettings {
 }
 
 export interface GenericGapiResolversType {
-    name: string;
+    scope?: string[];
+    method_name?: string;
+    method_type?: 'query' | 'subscription' | 'mutation';
     type: GraphQLObjectType;
-    resolve(root: any, args: Object, context: any)
-    args: {
+    resolve?(root: any, args: Object, context: any)
+    args?: {
         [key: string]: {
             [type: string]: GraphQLObjectType | GraphQLNonNull<any>;
         };
@@ -20,46 +21,30 @@ export interface GenericGapiResolversType {
 }
 
 
-export class ControllerMapping implements GapiController {
-
+export class ControllerMapping {
     _controller_name: string;
     _settings: ControllerMappingSettings = new ControllerMappingSettings();
-    _queries: Map<string, GenericGapiResolversType> = new Map();
-    _subscriptions: Map<string, GenericGapiResolversType> = new Map();
-    _mutations: Map<string, GenericGapiResolversType> = new Map();
+    _descriptors: Map<string, TypedPropertyDescriptor<() => GenericGapiResolversType>> = new Map();
 
     constructor(name: string) {
         this._controller_name = name;
-    }
-
-    setMutation(name, value: GenericGapiResolversType): void {
-        this._mutations.set(name, value);
-    }
-
-    setSubscription(name, value: GenericGapiResolversType): void {
-        this._subscriptions.set(name, value);
-    }
-
-    setQuery(name: string, value: GenericGapiResolversType): void {
-        this._queries.set(name, value);
     }
 
     setSettings(settings: ControllerMappingSettings) {
         this._settings = settings;
     }
 
-    getQuery(name: string): GenericGapiResolversType {
-        return this._queries.get(name);
+    setDescriptor(name: string, descriptor: TypedPropertyDescriptor<() => GenericGapiResolversType>): void {
+        this._descriptors.set(name, descriptor);
     }
 
-    getMutation(name: string): GenericGapiResolversType {
-        return this._mutations.get(name);
+    getDescriptor(name: string): TypedPropertyDescriptor<() => GenericGapiResolversType> {
+        return this._descriptors.get(name);
     }
 
-    getSubscription(name: string): GenericGapiResolversType {
-        return this._subscriptions.get(name);
+    getAllDescriptors(): string[] {
+        return Array.from(this._descriptors.keys());
     }
-
 }
 
 @Service()
@@ -72,7 +57,7 @@ export class ControllerContainerService {
             return this.controllers.get(name);
         }
     }
-    createController(name: string): ControllerMapping {
+    createController(name: any): ControllerMapping {
         if (this.controllers.has(name)) {
             return this.controllers.get(name);
         } else {

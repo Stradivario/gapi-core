@@ -1,4 +1,4 @@
-import Container, {Service} from '../../../utils/container/index';
+import Container, { Service } from '../../../utils/container/index';
 import { ControllerContainerService } from "../../services/controller-service/controller.service";
 import { ServerUtilService } from "../../services/server/server.service";
 import { GraphQLSchema, GraphQLObjectType } from "graphql";
@@ -18,12 +18,10 @@ async function getAllFields() {
         Array.from(controllerContainerService.controllers.keys())
             .forEach(controller => {
                 const currentCtrl = controllerContainerService.getController(controller);
-                const queries = Array.from(currentCtrl._queries.keys());
-                const mutations = Array.from(currentCtrl._mutations.keys());
-                const subscriptions = Array.from(currentCtrl._subscriptions.keys());
-                Array.from(queries).forEach(key => Fields.query[key] = currentCtrl.getQuery(key))
-                Array.from(mutations).forEach(key => Fields.mutation[key] = currentCtrl.getMutation(key))
-                Array.from(subscriptions).forEach(key => Fields.subscription[key] = currentCtrl.getSubscription(key) )
+                currentCtrl.getAllDescriptors().forEach(descriptor => {
+                    const desc = currentCtrl.getDescriptor(descriptor).value();
+                    Fields[desc.method_type][desc.method_name] = desc;
+                })
             });
 
         function generateType(query, name, description) {
@@ -36,7 +34,7 @@ async function getAllFields() {
                 fields: query
             })
         }
-        
+        console.log(Fields)
         const schema = schemaService.generateSchema(
             generateType(Fields.query, 'Query', 'Query type for all get requests which will not change persistent data'),
             generateType(Fields.mutation, 'Mutation', 'Mutation type for all requests which will change persistent data'),

@@ -16,31 +16,20 @@ exports.ControllerMappingSettings = ControllerMappingSettings;
 class ControllerMapping {
     constructor(name) {
         this._settings = new ControllerMappingSettings();
-        this._queries = new Map();
-        this._subscriptions = new Map();
-        this._mutations = new Map();
+        this._descriptors = new Map();
         this._controller_name = name;
-    }
-    setMutation(name, value) {
-        this._mutations.set(name, value);
-    }
-    setSubscription(name, value) {
-        this._subscriptions.set(name, value);
-    }
-    setQuery(name, value) {
-        this._queries.set(name, value);
     }
     setSettings(settings) {
         this._settings = settings;
     }
-    getQuery(name) {
-        return this._queries.get(name);
+    setDescriptor(name, descriptor) {
+        this._descriptors.set(name, descriptor);
     }
-    getMutation(name) {
-        return this._mutations.get(name);
+    getDescriptor(name) {
+        return this._descriptors.get(name);
     }
-    getSubscription(name) {
-        return this._subscriptions.get(name);
+    getAllDescriptors() {
+        return Array.from(this._descriptors.keys());
     }
 }
 exports.ControllerMapping = ControllerMapping;

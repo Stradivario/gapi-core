@@ -27,9 +27,6 @@ function Service(optionsOrServiceName) {
     };
 }
 exports.Service = Service;
-/**
- * Marks class as a service that can be injected using container.
- */
 function GapiController(optionsOrServiceName) {
     return function (target) {
         const service = {

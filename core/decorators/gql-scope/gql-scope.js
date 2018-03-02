@@ -13,18 +13,9 @@ function Scope(...arg) {
         descriptor.value = function (...args) {
             let returnValue = originalMethod.apply(this, args);
             Object.assign(returnValue, scope);
-            if (returnValue._query) {
-                index_1.default.get(controller_service_1.ControllerContainerService).createController(self.constructor.name).setQuery(propertyKey, returnValue);
-            }
-            else if (returnValue._mutation) {
-                index_1.default.get(controller_service_1.ControllerContainerService).createController(self.constructor.name).setMutation(propertyKey, returnValue);
-            }
-            else if (returnValue._subscription) {
-                index_1.default.get(controller_service_1.ControllerContainerService).createController(self.constructor.name).setSubscription(propertyKey, returnValue);
-            }
             return returnValue;
         };
-        descriptor.value();
+        index_1.default.get(controller_service_1.ControllerContainerService).createController(self.constructor.name).setDescriptor(propertyKey, descriptor);
         return descriptor;
     };
 }
