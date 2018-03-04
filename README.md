@@ -10,7 +10,7 @@
 ##### To install this library, run:
 
 ```bash
-$ npm install @Stradivario/gapi --save
+$ npm install Stradivario/gapi --save
 ```
 
 ## Consuming gapi
@@ -28,7 +28,7 @@ npm install gapi-cli -g
 
 
 #### Create AppModule like the example above
-#### Inject this UserModule into imports inside AppModule
+#### Inject UserModule into imports inside AppModule
 ### Folder root/src/app/app.module.ts
 
 ```typescript
@@ -46,8 +46,6 @@ export class AppModule {}
 
 
 ```
-
-
 
 #### Create module UserModule in where we will Inject our created controllers
 ### Folder root/src/app/user/user.module.ts
@@ -84,7 +82,8 @@ export const UserType = new GraphQLObjectType({
 
 @GapiController()
 export class UserQueriesController {
-    @Inject() userService: UserService;
+
+    private userService: UserService = Container.get(UserService);
 
     @Scope('ADMIN')
     @Type(UserType)
@@ -95,7 +94,7 @@ export class UserQueriesController {
     })
     findUser(root, { id }, context) {
         console.log(this);
-        return UserService.findUser(id);
+        return this.userService.findUser(id);
     }
 
 }
@@ -122,6 +121,8 @@ export const UserType = new GraphQLObjectType({
 @GapiController()
 export class UserMutationsController {
 
+    private userService: UserService = Container.get(UserService);
+
     @Scope('ADMIN')
     @Type(UserType)
     @Mutation({
@@ -130,7 +131,7 @@ export class UserMutationsController {
         }
     })
     deleteUser(root, { id }, context) {
-        return UserService.deleteUser(id);
+        return this.userService.deleteUser(id);
     }
 
     @Scope('ADMIN')
@@ -141,7 +142,7 @@ export class UserMutationsController {
         }
     })
     updateUser(root, { id }, context) {
-        return UserService.updateUser(id);
+        return this.userService.updateUser(id);
     }
 
     @Scope('ADMIN')
@@ -152,7 +153,7 @@ export class UserMutationsController {
         }
     })
     addUser(root, { id }, context) {
-        return UserService.addUser(id);
+        return this.userService.addUser(id);
     }
 
 }
@@ -165,25 +166,36 @@ export class UserMutationsController {
 import { Service } from "gapi";
 
 @Service()
+class AnotherService {
+    trimFirstLetter(username: string) {
+        return username.charAt(1);
+    }
+}
+
+@Service()
 export class UserService {
+    constructor(
+        private anotherService: AnotherService
+    ) {}
 
-    public static findUser(id: number) {
+    findUser(id: number) {
         return { id: 1 };
     }
 
-    public static addUser(id: number) {
+    addUser(id: number) {
+        const username = this.anotherService.trimFirstLetter('username');
+        return { id: 1, username };
+    }
+
+    deleteUser(id: number) {
         return { id: 1 };
     }
 
-    public static deleteUser(id: number) {
+    updateUser(id) {
         return { id: 1 };
     }
 
-    public static updateUser(id) {
-        return { id: 1 };
-    }
-
-    public static subscribeToUserUpdates() {
+    subscribeToUserUpdates() {
         return { id: 1 };
     }
 

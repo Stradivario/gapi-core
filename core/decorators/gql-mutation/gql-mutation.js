@@ -3,20 +3,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const controller_service_1 = require("../../utils/services/controller-service/controller.service");
 const index_1 = require("../../utils/container/index");
 function Mutation(options) {
-    return (target, propKey, descriptor) => {
+    return (t, propKey, descriptor) => {
         const originalMethod = descriptor.value;
-        const self = target;
+        const target = t;
         const propertyKey = propKey;
         descriptor.value = function (...args) {
-            let returnValue = Object.create({});
-            returnValue.resolve = originalMethod.bind(self);
-            returnValue.args = options ? options : null;
-            returnValue.method_type = 'mutation';
-            returnValue.method_name = propertyKey;
-            return returnValue;
+            this.resolve = originalMethod.bind(target);
+            this.args = options ? options : null;
+            this.method_type = 'mutation';
+            this.method_name = propertyKey;
+            this.target = target;
+            return this;
         };
         index_1.default.get(controller_service_1.ControllerContainerService)
-            .createController(self.constructor.name)
+            .createController(target.constructor.name)
             .setDescriptor(propertyKey, descriptor);
         return descriptor;
     };

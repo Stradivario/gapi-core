@@ -8,7 +8,7 @@ export function Type<T>(type): Function {
         const originalMethod = descriptor.value;
         const propertyKey = propKey;
         descriptor.value = function (...args: any[]) {
-            let returnValue = originalMethod.apply(this, args);
+            let returnValue = originalMethod.apply(self, args);
             Object.assign(returnValue, type);
             return returnValue;
         };

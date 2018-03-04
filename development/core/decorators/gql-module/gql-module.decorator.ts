@@ -13,7 +13,7 @@ export function GapiModule<T, K extends keyof T>(options: GapiModuleArguments) {
         const original = target;
         function construct(constructor, args) {
             const c: any = function () {
-                Object.assign(this, options);
+
                 if (options.imports) {
                     importModules(options.imports);
                 }
@@ -26,6 +26,7 @@ export function GapiModule<T, K extends keyof T>(options: GapiModuleArguments) {
                 return constructor.apply(this, args);
             };
             c.prototype = constructor.prototype;
+            c.prototype.name = constructor.name;
             return Container.get(c);
 
         }
@@ -34,6 +35,7 @@ export function GapiModule<T, K extends keyof T>(options: GapiModuleArguments) {
             return construct(original, args);
         };
         f.prototype = original.prototype;
+        f.prototype.name = original.name;
         return f;
     };
 }

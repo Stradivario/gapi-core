@@ -10,7 +10,6 @@ function GapiModule(options) {
         const original = target;
         function construct(constructor, args) {
             const c = function () {
-                Object.assign(this, options);
                 if (options.imports) {
                     importModules(options.imports);
                 }
@@ -23,6 +22,7 @@ function GapiModule(options) {
                 return constructor.apply(this, args);
             };
             c.prototype = constructor.prototype;
+            c.prototype.name = constructor.name;
             return index_1.default.get(c);
         }
         const f = function (...args) {
@@ -30,6 +30,7 @@ function GapiModule(options) {
             return construct(original, args);
         };
         f.prototype = original.prototype;
+        f.prototype.name = original.name;
         return f;
     };
 }

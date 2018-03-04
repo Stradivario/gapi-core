@@ -2,20 +2,20 @@ import { ControllerContainerService } from "../../utils/services/controller-serv
 import Container from '../../utils/container/index';
 import { GenericGapiResolversType } from "../../utils/services/controller-service/controller.service";
 export function Mutation(options) {
-    return (target: any, propKey: string, descriptor: TypedPropertyDescriptor<any>) => {
+    return (t: any, propKey: string, descriptor: TypedPropertyDescriptor<any>) => {
         const originalMethod = descriptor.value;
-        const self = target;
+        const target = t;
         const propertyKey = propKey;
         descriptor.value = function (...args: any[]) {
-            let returnValue: GenericGapiResolversType = Object.create({});
-            returnValue.resolve = originalMethod.bind(self);
-            returnValue.args = options ? options : null;
-            returnValue.method_type = 'mutation';
-            returnValue.method_name = propertyKey;
-            return returnValue;
+            this.resolve = originalMethod.bind(target);
+            this.args = options ? options : null;
+            this.method_type = 'mutation';
+            this.method_name = propertyKey;
+            this.target = target;
+            return this;
         };
         Container.get(ControllerContainerService)
-            .createController(self.constructor.name)
+            .createController(target.constructor.name)
             .setDescriptor(propertyKey, descriptor);
         return descriptor;
     }

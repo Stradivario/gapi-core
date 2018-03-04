@@ -7,4 +7,9 @@ export declare class ConfigService {
     getSequelize(): SequelizeConfigInterface;
     getAmqp(): AmqpConfigInterface;
     setAppConfig(config: AppConfigInterface): void;
+    static forRoot(config: {
+        APP_CONFIG?: AppConfigInterface;
+        AMQP_CONFIG?: AmqpConfigInterface;
+        SEQUELIZE_CONFIG?: SequelizeConfigInterface;
+    }): typeof ConfigService;
 }

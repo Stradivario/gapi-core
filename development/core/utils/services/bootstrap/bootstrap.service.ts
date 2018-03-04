@@ -9,7 +9,6 @@ import { GapiServerModule } from "../../../modules/server/server.module";
 async function getAllFields() {
     const controllerContainerService = Container.get(ControllerContainerService);
     return new Promise((resolve, reject) => {
-        const schemaService = Container.get(SchemaService)
         const Fields = { query: {}, mutation: {}, subscription: {} };
         Array.from(controllerContainerService.controllers.keys())
             .forEach(controller => {
@@ -17,6 +16,10 @@ async function getAllFields() {
                 currentCtrl.getAllDescriptors().forEach(descriptor => {
                     const desc = currentCtrl.getDescriptor(descriptor).value();
                     Fields[desc.method_type][desc.method_name] = desc;
+                    const originalResolve = desc.resolve.bind(desc.target);
+                    desc.resolve = function resolve(...args: any[]) {
+                        return originalResolve.apply(desc.target, args)
+                    }
                 })
             });
         function generateType(query, name, description) {
@@ -29,7 +32,7 @@ async function getAllFields() {
                 fields: query
             })
         }
-        const schema = schemaService.generateSchema(
+        const schema = Container.get(SchemaService).generateSchema(
             generateType(Fields.query, 'Query', 'Query type for all get requests which will not change persistent data'),
             generateType(Fields.mutation, 'Mutation', 'Mutation type for all requests which will change persistent data'),
             generateType(Fields.subscription, 'Subscription', 'Subscription type for all rabbitmq subscriptions via pub sub')

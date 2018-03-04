@@ -11,7 +11,7 @@ export function Scope<T>(...arg: string[]): Function {
         const propertyKey = propKey;
         const self = t;
         descriptor.value = function (...args: any[]) {
-            let returnValue = originalMethod.apply(this, args);
+            let returnValue = originalMethod.apply(self, args);
             Object.assign(returnValue, scope);
             return returnValue;
         };

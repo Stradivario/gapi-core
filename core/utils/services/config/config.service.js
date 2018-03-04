@@ -7,7 +7,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const index_1 = require("../../../../core/utils/container/index");
-let ConfigService = class ConfigService {
+const Container_1 = require("../../container/Container");
+let ConfigService = ConfigService_1 = class ConfigService {
     constructor() {
         this.SEQUELIZE_CONFIG = {
             development: {
@@ -67,8 +68,16 @@ let ConfigService = class ConfigService {
     setAppConfig(config) {
         this.APP_CONFIG = config;
     }
+    static forRoot(config) {
+        const configService = Container_1.Container.get(ConfigService_1);
+        configService.APP_CONFIG = config.APP_CONFIG;
+        configService.AMQP_CONFIG = config.AMQP_CONFIG;
+        configService.SEQUELIZE_CONFIG = config.SEQUELIZE_CONFIG;
+        return ConfigService_1;
+    }
 };
-ConfigService = __decorate([
+ConfigService = ConfigService_1 = __decorate([
     index_1.Service()
 ], ConfigService);
 exports.ConfigService = ConfigService;
+var ConfigService_1;

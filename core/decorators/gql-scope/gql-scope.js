@@ -11,7 +11,7 @@ function Scope(...arg) {
         const propertyKey = propKey;
         const self = t;
         descriptor.value = function (...args) {
-            let returnValue = originalMethod.apply(this, args);
+            let returnValue = originalMethod.apply(self, args);
             Object.assign(returnValue, scope);
             return returnValue;
         };

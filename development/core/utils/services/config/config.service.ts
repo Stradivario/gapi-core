@@ -4,6 +4,7 @@ import { GraphQLObjectType } from "graphql";
 import { ControllerContainerService } from "../../services/controller-service/controller.service";
 import { SchemaService } from "../../services/schema/schema.service";
 import { Service } from "../../../../core/utils/container/index";
+import { Container } from "../../container/Container";
 
 @Service()
 export class ConfigService {
@@ -79,5 +80,12 @@ export class ConfigService {
         this.APP_CONFIG = config;
     }
 
+    static forRoot(config: {APP_CONFIG?: AppConfigInterface, AMQP_CONFIG?: AmqpConfigInterface, SEQUELIZE_CONFIG?: SequelizeConfigInterface}) {
+        const configService = Container.get(ConfigService);
+        configService.APP_CONFIG = config.APP_CONFIG;
+        configService.AMQP_CONFIG = config.AMQP_CONFIG;
+        configService.SEQUELIZE_CONFIG = config.SEQUELIZE_CONFIG;
+        return ConfigService;
+    }
 }
 
