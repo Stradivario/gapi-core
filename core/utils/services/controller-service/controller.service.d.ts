@@ -30,5 +30,5 @@ export declare class ControllerMapping {
 export declare class ControllerContainerService {
     controllers: Map<string, ControllerMapping>;
     getController(name: string): ControllerMapping;
-    createController(name: any): ControllerMapping;
+    createController(name: string): ControllerMapping;
 }

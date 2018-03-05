@@ -15,19 +15,19 @@ let ConfigService = ConfigService_1 = class ConfigService {
                 dialect: 'postgres',
                 host: process.env.DB_HOST || '172.10.0.10',
                 port: process.env.DB_PORT || '5432',
-                username: process.env.DB_USERNAME || 'dbuser',
-                password: process.env.DB_PASSWORD || 'dbuserpass',
-                name: process.env.DB_NAME || 'antitheft',
+                username: process.env.DB_USERNAME || '',
+                password: process.env.DB_PASSWORD || '',
+                name: process.env.DB_NAME || '',
                 logging: false,
                 storage: ':memory:',
                 modelPaths: [__dirname + '/graphql/core/models']
             },
             testing: {
                 dialect: 'postgres',
-                host: process.env.DB_HOST || '172.10.0.10',
+                host: process.env.DB_HOST || '172.10.0.180',
                 port: process.env.DB_PORT || '5432',
-                username: process.env.DB_USERNAME || 'dbuser',
-                password: process.env.DB_PASSWORD || 'dbuserpass',
+                username: process.env.DB_USERNAME || '',
+                password: process.env.DB_PASSWORD || '',
                 name: process.env.DB_NAME || 'testing',
                 storage: ':memory:',
                 logging: false,
@@ -35,21 +35,21 @@ let ConfigService = ConfigService_1 = class ConfigService {
             },
         };
         this.AMQP_CONFIG = {
-            host: process.env.AMQP_HOST || '172.10.0.4',
+            host: process.env.AMQP_HOST || '172.10.0.181',
             port: process.env.AMQP_PORT || 5672
         };
         this.APP_CONFIG = {
             cert: new Buffer(1),
             schema: null,
-            uploadFolder: '/home/rampage/Desktop/testUploadDir',
+            uploadFolder: '',
             // tslint:disable-next-line:max-line-length
             graphiqlToken: process.env.GRAPHIQL_TOKEN || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImtyaXN0aXFuLnRhY2hldkBnbWFpbC5jb20iLCJzY29wZSI6WyJBRE1JTiJdLCJpZCI6MSwiaWF0IjoxNTE2NjQ1NDMwfQ.NtCild_BQozDUWM-4f2Q94YrKLGUzaELv_rfQcnDVTA',
             port: process.env.API_PORT || 8200,
             fakeUsers: true,
             force: true,
             cyper: {
-                iv: 'JkYt1H3fA8JK9L3G',
-                privateKey: '8zTVzr3p53VC12jmV54rIYu2545x47lY',
+                iv: 'Jkyt1H3FA8JK9L3A',
+                privateKey: '8zTVzr3p53VC12jHV54rIYu2545x47lY',
                 algorithm: 'aes256',
                 key: ''
             },

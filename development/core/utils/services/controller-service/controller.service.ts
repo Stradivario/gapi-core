@@ -58,7 +58,7 @@ export class ControllerContainerService {
             return this.controllers.get(name);
         }
     }
-    createController(name: any): ControllerMapping {
+    createController(name: string): ControllerMapping {
         if (this.controllers.has(name)) {
             return this.controllers.get(name);
         } else {

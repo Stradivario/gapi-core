@@ -1,5 +1,6 @@
 import { Container } from "./Container";
 export * from "./decorators/Service";
+export * from "./decorators/GapiController";
 export * from "./decorators/Inject";
 export * from "./decorators/InjectMany";
 export { Container } from "./Container";
