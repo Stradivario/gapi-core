@@ -103,9 +103,38 @@ export class UserModule {}
 ### Folder root/src/user/type/user.type.ts
 ##### You can customize every resolver from schema and you can create nested schemas with @GapiObjectType decorator
 
+
+## User Schema
+##### Note that you can modify response result via @Resolve('key for modifier defined inside constructor') 
+##### Root is the value of previews resolver so for example root.id = '1';
+##### When you return some value from @Resolve decorator root.id will be replaced with returned value so it will be 5 in the example
+##### If you remove @Resolve decorator it will be passed value returned from the first root resolver
+
 ```typescript
 import { GraphQLObjectType, GraphQLString, GraphQLInt, GapiObjectType, Type, Resolve } from "gapi";
 import { GraphQLScalarType } from "graphql";
+import { UserSettingsObjectType } from './user-settings.type';
+
+@GapiObjectType()
+export class UserType {
+    id: number | GraphQLScalarType = GraphQLInt;
+    settings: string | UserSettings = UserSettingsObjectType;
+    
+    @Resolve('id')
+    getId?(root, payload, context) {
+        return 5;
+    }
+}
+
+export const UserObjectType = new UserType();
+```
+
+## UserSettings Schema
+
+```typescript
+import { GraphQLObjectType, GraphQLString, GraphQLInt, GapiObjectType, Type, Resolve } from "gapi";
+import { GraphQLScalarType } from "graphql";
+
 
 @GapiObjectType()
 export class UserSettings {
@@ -118,18 +147,7 @@ export class UserSettings {
     }
 }
 
-@GapiObjectType()
-export class UserType {
-    id: number | GraphQLScalarType = GraphQLInt;
-    settings: string | UserSettings = new UserSettings();
-    
-    @Resolve('id')
-    getId?(root, payload, context) {
-        return 5;
-    }
-}
-
-export const UserObjectType = new UserType();
+export const UserSettingsObjectType = new UserSettings();
 ```
 
 
