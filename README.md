@@ -18,10 +18,28 @@ $ npm install Stradivario/gapi --save
 
 ### Install gapi-cli globally using npm
 
-```
+```bash
 npm install gapi-cli -g
 ```
 
+## With CLI
+
+### To skip the following steps creating project and bootstraping from scratch you can type the following command:
+
+```bash
+gapi-cli new my-project
+```
+
+Enter inside my-project and type: 
+
+```bash
+npm start
+```
+
+
+## Without CLI
+
+### 
 
 ### Next create folder structure like this root/src/app
 
