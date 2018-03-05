@@ -12,3 +12,4 @@ __export(require("./gql-scope/index"));
 __export(require("./gql-args/index"));
 __export(require("./gql-injector/index"));
 __export(require("./gql-object-type/index"));
+__export(require("./gapi-resolver/index"));

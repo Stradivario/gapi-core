@@ -7,3 +7,4 @@ export * from './gql-scope/index';
 export * from './gql-args/index';
 export * from './gql-injector/index';
 export * from './gql-object-type/index';
+export * from './gapi-resolver/index';

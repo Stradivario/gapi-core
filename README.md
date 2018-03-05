@@ -99,20 +99,47 @@ export class UserModule {}
 ```
 
 
+#### Define UserType schema
+### Folder root/src/user/type/user.type.ts
+##### You can customize every resolver from schema and you can create nested schemas with @GapiObjectType decorator
+
+```typescript
+import { GraphQLObjectType, GraphQLString, GraphQLInt, GapiObjectType, Type, Resolve } from "gapi";
+import { GraphQLScalarType } from "graphql";
+
+@GapiObjectType()
+export class UserSettings {
+    username: string | GraphQLScalarType = GraphQLString;
+    firstname: string | GraphQLScalarType = GraphQLString;
+
+    @Resolve('username')
+    getUsername?(root, payload, context) {
+        return 'username-changed';
+    }
+}
+
+@GapiObjectType()
+export class UserType {
+    id: number | GraphQLScalarType = GraphQLInt;
+    settings: string | UserSettings = new UserSettings();
+    
+    @Resolve('id')
+    getId?(root, payload, context) {
+        return 5;
+    }
+}
+
+export const UserObjectType = new UserType();
+```
+
+
 #### Query
 ### Folder root/src/user/query.controller.ts
 ```typescript
 import { Query, GraphQLNonNull, Scope, Type, GraphQLObjectType, Mutation, GapiController, Service, GraphQLInt, Injector } from "gapi";
 import { UserService } from './services/user.service';
+import { UserObjectType } from './services/type/user.type';
 
-export const UserType = new GraphQLObjectType({
-    name: 'UserType',
-    fields: {
-        id: {
-            type: GraphQLInt
-        },
-    }
-});
 
 @GapiController()
 export class UserQueriesController {
@@ -120,7 +147,7 @@ export class UserQueriesController {
     @Injector(UserService) userService: UserService;
 
     @Scope('ADMIN')
-    @Type(UserType)
+    @Type(UserObjectType)
     @Query({
         id: {
             type: new GraphQLNonNull(GraphQLInt)
@@ -141,15 +168,8 @@ export class UserQueriesController {
 ```typescript
 import { Query, GraphQLNonNull, Scope, Type, GraphQLObjectType, Mutation, GapiController, Service, GraphQLInt, Injector } from "gapi";
 import { UserService } from './services/user.service';
+import { UserObjectType } from './services/type/user.type';
 
-export const UserType = new GraphQLObjectType({
-    name: 'UserType',
-    fields: {
-        id: {
-            type: GraphQLInt
-        },
-    }
-});
 
 @GapiController()
 export class UserMutationsController {
@@ -157,7 +177,7 @@ export class UserMutationsController {
     @Injector(UserService) userService: UserService;
 
     @Scope('ADMIN')
-    @Type(UserType)
+    @Type(UserObjectType)
     @Mutation({
         id: {
             type: new GraphQLNonNull(GraphQLInt)
@@ -168,7 +188,7 @@ export class UserMutationsController {
     }
 
     @Scope('ADMIN')
-    @Type(UserType)
+    @Type(UserObjectType)
     @Mutation({
         id: {
             type: new GraphQLNonNull(GraphQLInt)
@@ -179,7 +199,7 @@ export class UserMutationsController {
     }
 
     @Scope('ADMIN')
-    @Type(UserType)
+    @Type(UserObjectType)
     @Mutation({
         id: {
             type: new GraphQLNonNull(GraphQLInt)

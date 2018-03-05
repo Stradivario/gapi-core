@@ -2,6 +2,7 @@ import { ServiceMetadata } from "../types/ServiceMetadata";
 import { ServiceOptions } from "../types/ServiceOptions";
 import { ControllerMappingSettings, ControllerContainerService } from "../../services/controller-service/controller.service";
 import { Token } from "../Token";
+import {Container} from "../Container";
 
 export function GapiController<T, K extends keyof T>(optionsOrServiceName?: ControllerMappingSettings): Function {
     return function (target) {
@@ -24,5 +25,6 @@ export function GapiController<T, K extends keyof T>(optionsOrServiceName?: Cont
             service.global = (optionsOrServiceName as ServiceOptions<T, K>).global || false;
             service.transient = (optionsOrServiceName as ServiceOptions<T, K>).transient;
         }
+        Container.set(service);
     };
 }

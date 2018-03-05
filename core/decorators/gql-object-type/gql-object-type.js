@@ -7,10 +7,13 @@ function GapiObjectType() {
         const type = Object.create({});
         type.fields = {};
         type.name = target.name;
-        Object.keys(userTypes).forEach(field => {
-            type.fields[field] = { type: userTypes[field] };
-        });
+        const metadata = {};
+        Object.keys(userTypes).forEach(field => type.fields[field] = { type: userTypes[field] });
+        if (target.prototype._metadata && target.prototype._metadata.length) {
+            target.prototype._metadata.forEach(meta => type.fields[meta.key].resolve = meta.resolve);
+        }
         target.prototype = new graphql_1.GraphQLObjectType(type);
+        return target;
     };
 }
 exports.GapiObjectType = GapiObjectType;

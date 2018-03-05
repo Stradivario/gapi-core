@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Token_1 = require("../Token");
+const Container_1 = require("../Container");
 function GapiController(optionsOrServiceName) {
     return function (target) {
         const original = target;
@@ -21,6 +22,7 @@ function GapiController(optionsOrServiceName) {
             service.global = optionsOrServiceName.global || false;
             service.transient = optionsOrServiceName.transient;
         }
+        Container_1.Container.set(service);
     };
 }
 exports.GapiController = GapiController;
