@@ -291,6 +291,95 @@ Bootstrap(AppModule);
 ```
 
 
+
+## Basic authentication
+
+
+#### Create Core Module
+
+##### Folder root/src/app/core/core.module.ts
+
+```typescript
+
+import { GapiModule, ConfigService } from 'gapi';
+import { AuthPrivateService } from './services/auth/auth.service';
+import { readFileSync } from 'fs';
+
+@GapiModule({
+    services: [
+        ConfigService.forRoot({
+            APP_CONFIG: {
+                port: 8200,
+                cert: readFileSync('./cert.key'),
+                graphiqlToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImtyaXN0aXFuLnRhY2hldkBnbWFpbC5jb20iLCJpZCI6MSwic2NvcGUiOlsiQURNSU4iXSwiaWF0IjoxNTIwMjkxMzkyfQ.9hpIDPkSiGvjTmUEyg_R_izW-ra2RzzLbe3Uh3IFsZg'
+            },
+        }),
+        AuthPrivateService
+    ]
+})
+export class CoreModule {}
+
+```
+
+#### Create PrivateAuthService @Service
+
+##### Folder root/src/app/core/services/auth/auth.service
+
+```typescript
+
+import { Service, ConnectionHookService, AuthService, Injector, Container } from "gapi";
+import * as Boom from 'boom';
+
+@Service()
+export class AuthPrivateService {
+
+    @Injector(AuthService) private authService: AuthService
+    @Injector(ConnectionHookService) private connectionHookService: ConnectionHookService
+
+    constructor() {
+        this.connectionHookService.modifyHooks.onSubConnection = this.onSubConnection.bind(this);
+        this.authService.modifyFunctions.validateToken = this.validateToken.bind(this);
+    }
+
+    onSubConnection(connectionParams) {
+        if (connectionParams.token) {
+            return this.authService.modifyFunctions.validateToken(connectionParams.token);
+        } else {
+            throw Boom.unauthorized();
+        }
+    }
+
+    validateToken(token: string) {
+        const userVerifiedInfo = this.authService.verifyToken(token);
+        const user: {type?: string} = Object.assign(userVerifiedInfo);
+        user.type = userVerifiedInfo.scope[0];
+        if (user) {
+            return user;
+        } else {
+            throw Boom.unauthorized();
+        }
+    }
+}
+
+```
+
+##### Final import CoreModule inside AppModule
+
+```typescript
+import { GapiModule, GapiServerModule } from 'gapi';
+import { UserModule } from './user/user.module';
+import { UserService } from './user/services/user.service';
+import { CoreModule } from './core/core.module';
+
+@GapiModule({
+    imports: [
+        UserModule,
+        CoreModule
+    ]
+})
+export class AppModule { }
+```
+
 ## Start your application using following command inside root folder of the repo
 ##### Important the script will search main.ts inside root/src/main.ts where we bootstrap our module bellow
 
