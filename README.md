@@ -1,10 +1,11 @@
 # @gapi
 
-![Build Status](http://gitlab.youvolio.com/open-source/gapi/badges/branch/build.svg)
+![Build Status](http://gitlab.youvolio.com/gapi/gapi/badges/branch/build.svg)
 
-#### @StrongTyped @GraphQL @API 
+#### @StrongTyped @GraphQL @API @Hapi @Apollo
 
-##### For questions/issues you can write ticket [here](http://gitlab.youvolio.com/open-source/gapi/issues)
+##### For questions/issues you can write ticket [here](http://gitlab.youvolio.com/gapi/gapi/issues)
+##### Video starting tutorial with some explanation [here](https://www.youtube.com/watch?v=J8WeVfXR_us&feature=youtu.be)
 
 ## Installation and basic examples:
 ##### To install this library, run:
@@ -15,16 +16,23 @@ $ npm install Stradivario/gapi --save
 
 ## Consuming gapi
 
+##### First we need to install ts-node and nodemon globally
+```bash
+npm install -g nodemon ts-node
+```
 
-### Install gapi-cli globally using npm
+##### Next install gapi-cli globally using npm
 
 ```bash
 npm install gapi-cli -g
 ```
+##### Next create project using CLI or read above how to bootstrap your custom application
 
 ## With CLI
 
-### To skip the following steps creating project and bootstraping from scratch you can type the following command:
+##### To skip the following steps creating project and bootstraping from scratch you can type the following command:
+It may take 20 seconds because it install project dependencies you can check gapi-starter repo here 
+https://github.com/Stradivario/gapi-starter
 
 ```bash
 gapi-cli new my-project
@@ -36,7 +44,7 @@ Enter inside my-project and type:
 npm start
 ```
 
-Open browser to 
+##### Open browser to 
 ```bash
 http://localhost:8200/graphiql
 ```
@@ -44,10 +52,7 @@ http://localhost:8200/graphiql
 
 ## Without CLI
 
-### 
-
 ### Next create folder structure like this root/src/app
-
 
 
 #### Create AppModule like the example above
@@ -151,8 +156,8 @@ export const UserSettingsObjectType = new UserSettings();
 ```
 
 
-#### Query
-### Folder root/src/user/query.controller.ts
+## Query
+##### Folder root/src/user/query.controller.ts
 ```typescript
 import { Query, GraphQLNonNull, Scope, Type, GraphQLObjectType, Mutation, GapiController, Service, GraphQLInt, Injector } from "gapi";
 import { UserService } from './services/user.service';
@@ -181,8 +186,8 @@ export class UserQueriesController {
 ```
 
 
-#### Mutation
-### Folder root/src/user/mutation.controller.ts
+## Mutation
+##### Folder root/src/user/mutation.controller.ts
 ```typescript
 import { Query, GraphQLNonNull, Scope, Type, GraphQLObjectType, Mutation, GapiController, Service, GraphQLInt, Injector } from "gapi";
 import { UserService } from './services/user.service';
@@ -231,8 +236,8 @@ export class UserMutationsController {
 
 ```
 
-#### Create Service with @Service decorator somewhere
-### Folder root/src/user/services/user.service.ts
+## Create Service with @Service decorator somewhere
+##### Folder root/src/user/services/user.service.ts
 ```typescript
 import { Service } from "gapi";
 
@@ -274,8 +279,8 @@ export class UserService {
 ```
 
 
-#### Finally Bootstrap your application
-### Folder root/src/main.ts
+## Finally Bootstrap your application
+##### Folder root/src/main.ts
 ```typescript
 
 import { AppModule } from './app/app.module';
@@ -286,26 +291,13 @@ Bootstrap(AppModule);
 ```
 
 
-#### Start your application using following command inside root folder of the repo
-## Important the script will search main.ts inside root/src/main.ts where we bootstrap our module bellow
+## Start your application using following command inside root folder of the repo
+##### Important the script will search main.ts inside root/src/main.ts where we bootstrap our module bellow
 
 ```
 gapi-cli start
 ```
 
-
-#### Experminetal!!
-
-
-##### @GapiObjectType() Decorator
-
-```typescript
-// Experimental no nested values
-@GapiObjectType()
-export class UserType {
-    id: GraphQLScalarType = GraphQLInt;
-    username: GraphQLScalarType = GraphQLString;
-}
-```
+TODO: Better documentation...
 
 Enjoy ! :)

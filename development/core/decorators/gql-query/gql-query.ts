@@ -3,7 +3,7 @@ import Container from '../../utils/container/index';
 import { GenericGapiResolversType } from "../../utils/services/controller-service/controller.service";
 
   
-export function Query<T>(options) {
+export function Query<T>(options?: any) {
     return (t: any, propKey: string, descriptor: TypedPropertyDescriptor<any>) => {
         const originalMethod = descriptor.value;
         const target = t;

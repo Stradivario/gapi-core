@@ -1,7 +1,7 @@
 import { ControllerContainerService } from "../../utils/services/controller-service/controller.service";
 import Container from '../../utils/container/index';
 import { GenericGapiResolversType } from "../../utils/services/controller-service/controller.service";
-export function Mutation(options) {
+export function Mutation(options?: any) {
     return (t: any, propKey: string, descriptor: TypedPropertyDescriptor<any>) => {
         const originalMethod = descriptor.value;
         const target = t;
