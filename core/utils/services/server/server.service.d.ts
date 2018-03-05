@@ -1,13 +1,9 @@
 import { Server } from 'hapi';
+import { ConnectionHookService } from '../..';
 export declare class ServerUtilService {
+    private connectionHookService;
     server: Server;
-    validateToken(token: string): Promise<{
-        id: number;
-        user: {
-            id: number;
-            type: string;
-        };
-    }>;
+    constructor(connectionHookService: ConnectionHookService);
     registerEndpoints(endpoints: Array<any>): void;
     initGraphQl(): Promise<void>;
     connect(options: any): void;

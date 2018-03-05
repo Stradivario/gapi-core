@@ -7,39 +7,16 @@ import { execute } from 'graphql/execution';
 
 import { attachErrorHandlers, Boom } from '../error/error.service';
 import Container, {Service} from '../../../utils/container/index';
-import { ConfigService, AuthModule, SequelizeService, SchemaService } from '../..';
+import { ConfigService, AuthService, SequelizeService, SchemaService, ConnectionHookService } from '../..';
 import { GraphQLSchema } from 'graphql';
-import { ConfigFactory } from '../../..';
 
 @Service()
 export class ServerUtilService {
     server: Server = new Server();
-    async validateToken(token: string) {
-        // const userInfo = Container.get(AuthModule).verifyToken(token);
-        // let credential: Credential;
-        return {id: 1, user: {id: 1, type: 'ADMIN'}};
-        // if (userInfo) {
-        //   try {
-        // credential = await Credential.find(<any>{
-        //   where: {
-        //     email: userInfo.email
-        //   },
-        //   include: [{
-        //     association: 'user',
-        //     include: [{association: 'wallet', include: ['transaction']}]
-        //   }]
-        // });
-        //   } catch (e) {
-        //     throw Boom.unauthorized();
-        //   }
-        //   if (credential) {
-        // return credential;
-        //   } else {
-        // throw Boom.unauthorized();
-        //   }
-        // } else {
-        //   throw Boom.unauthorized();
-        // }
+    constructor(
+        private connectionHookService: ConnectionHookService
+    ) {
+
     }
 
     //noinspection TypeScriptUnresolvedFunction
@@ -51,6 +28,7 @@ export class ServerUtilService {
 
     async initGraphQl() {
         const config = Container.get(ConfigService);
+        console.log(config.APP_CONFIG.graphiqlToken)
         const graphqlOptions = {
             register: graphqlHapi,
             options: {
@@ -136,8 +114,9 @@ export class ServerUtilService {
     }
 
     onRequest() {
-        // this.ext('onRequest', function (request, reply) {
+        // this.server.ext('onRequest', function (request, reply) {
         //   // if(request.method === 'options') {
+        //       console.log('1441')
         //     return reply.continue();
         //   // }
         //   // if(!request.headers.authorization) {
@@ -150,7 +129,8 @@ export class ServerUtilService {
     }
 
     startServer() {
-        this.connect(Container.get(ConfigService).APP_CONFIG);
+        const configContainer = Container.get(ConfigService);
+        this.connect(configContainer.APP_CONFIG);
         this.initGraphQl();
         const self = this;
         return new Promise((resolve, reject) => {
@@ -159,20 +139,15 @@ export class ServerUtilService {
                     reject(err);
                     throw err;
                 }
-   
                 const subscriptionServer = new SubscriptionServer(<any>{
                     execute,
                     subscribe,
-                    schema: Container.get(ConfigService).APP_CONFIG.schema,
+                    schema: configContainer.APP_CONFIG.schema,
                     onConnect(connectionParams) {
-                        // if (connectionParams.token) {
-                            return {id: 1, userId: 1, user: {id: 1, type: 'ADMIN'}};
-                        // } else {
-                            // throw Boom.unauthorized();
-                        // }
+                            return self.connectionHookService.modifyHooks.onSubConnection(connectionParams);
                     },
                     onOperation: (message, params, webSocket) => {
-                        return params;
+                        return self.connectionHookService.modifyHooks.onSubOperation(message, params, webSocket);
                     },
                 }, {
                         server: this.server.listener,

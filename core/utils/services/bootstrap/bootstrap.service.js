@@ -14,6 +14,7 @@ const graphql_1 = require("graphql");
 const config_service_1 = require("../../services/config/config.service");
 const schema_service_1 = require("../../services/schema/schema.service");
 const server_module_1 = require("../../../modules/server/server.module");
+const hook_service_1 = require("../../services/hook/hook.service");
 function getAllFields() {
     return __awaiter(this, void 0, void 0, function* () {
         const controllerContainerService = index_1.default.get(controller_service_1.ControllerContainerService);
@@ -41,8 +42,11 @@ function getAllFields() {
                     fields: query
                 });
             }
-            const schema = index_1.default.get(schema_service_1.SchemaService).generateSchema(generateType(Fields.query, 'Query', 'Query type for all get requests which will not change persistent data'), generateType(Fields.mutation, 'Mutation', 'Mutation type for all requests which will change persistent data'), generateType(Fields.subscription, 'Subscription', 'Subscription type for all rabbitmq subscriptions via pub sub'));
-            // console.log(schema);
+            const query = generateType(Fields.query, 'Query', 'Query type for all get requests which will not change persistent data');
+            const mutation = generateType(Fields.mutation, 'Mutation', 'Mutation type for all requests which will change persistent data');
+            const subscription = generateType(Fields.subscription, 'Subscription', 'Subscription type for all rabbitmq subscriptions via pub sub');
+            hook_service_1.HookService.AttachHooks([query, mutation, subscription]);
+            const schema = index_1.default.get(schema_service_1.SchemaService).generateSchema(query, mutation, subscription);
             resolve(schema);
         });
     });

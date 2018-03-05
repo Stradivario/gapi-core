@@ -10,15 +10,6 @@ const index_1 = require("../../utils/container/index");
 const config_service_1 = require("../../utils/services/config/config.service");
 const server_service_1 = require("../../utils/services/server/server.service");
 ;
-let ConfigFactory = class ConfigFactory {
-    setConfig(config) {
-        this.config = config;
-    }
-};
-ConfigFactory = __decorate([
-    index_1.Service()
-], ConfigFactory);
-exports.ConfigFactory = ConfigFactory;
 const utilService = index_1.default.get(server_service_1.ServerUtilService);
 let GapiServerModule = GapiServerModule_1 = class GapiServerModule {
     start() {

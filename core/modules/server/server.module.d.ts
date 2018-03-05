@@ -5,10 +5,6 @@ export interface Config {
     cert: any;
     schema: GraphQLSchema;
 }
-export declare class ConfigFactory {
-    config: Config;
-    setConfig(config: any): void;
-}
 export declare class GapiServerModule {
     start(): Promise<{}>;
     static forRoot(config: AppConfigInterface): typeof GapiServerModule;

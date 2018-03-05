@@ -11,13 +11,6 @@ export interface Config {
     schema: GraphQLSchema;
 };
 
-@Service()
-export class ConfigFactory {
-    config: Config;
-    setConfig(config: any) {
-        this.config = config;
-    }
-}
 const utilService: ServerUtilService = Container.get(ServerUtilService);
 @Service()
 export class GapiServerModule {

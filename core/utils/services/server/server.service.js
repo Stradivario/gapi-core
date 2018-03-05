@@ -5,6 +5,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -24,37 +27,9 @@ const error_service_1 = require("../error/error.service");
 const index_1 = require("../../../utils/container/index");
 const __1 = require("../..");
 let ServerUtilService = class ServerUtilService {
-    constructor() {
+    constructor(connectionHookService) {
+        this.connectionHookService = connectionHookService;
         this.server = new hapi_1.Server();
-    }
-    validateToken(token) {
-        return __awaiter(this, void 0, void 0, function* () {
-            // const userInfo = Container.get(AuthModule).verifyToken(token);
-            // let credential: Credential;
-            return { id: 1, user: { id: 1, type: 'ADMIN' } };
-            // if (userInfo) {
-            //   try {
-            // credential = await Credential.find(<any>{
-            //   where: {
-            //     email: userInfo.email
-            //   },
-            //   include: [{
-            //     association: 'user',
-            //     include: [{association: 'wallet', include: ['transaction']}]
-            //   }]
-            // });
-            //   } catch (e) {
-            //     throw Boom.unauthorized();
-            //   }
-            //   if (credential) {
-            // return credential;
-            //   } else {
-            // throw Boom.unauthorized();
-            //   }
-            // } else {
-            //   throw Boom.unauthorized();
-            // }
-        });
     }
     //noinspection TypeScriptUnresolvedFunction
     registerEndpoints(endpoints) {
@@ -65,6 +40,7 @@ let ServerUtilService = class ServerUtilService {
     initGraphQl() {
         return __awaiter(this, void 0, void 0, function* () {
             const config = index_1.default.get(__1.ConfigService);
+            console.log(config.APP_CONFIG.graphiqlToken);
             const graphqlOptions = {
                 register: apollo_service_1.graphqlHapi,
                 options: {
@@ -147,8 +123,9 @@ let ServerUtilService = class ServerUtilService {
         this.onRequest();
     }
     onRequest() {
-        // this.ext('onRequest', function (request, reply) {
+        // this.server.ext('onRequest', function (request, reply) {
         //   // if(request.method === 'options') {
+        //       console.log('1441')
         //     return reply.continue();
         //   // }
         //   // if(!request.headers.authorization) {
@@ -160,7 +137,8 @@ let ServerUtilService = class ServerUtilService {
         // });
     }
     startServer() {
-        this.connect(index_1.default.get(__1.ConfigService).APP_CONFIG);
+        const configContainer = index_1.default.get(__1.ConfigService);
+        this.connect(configContainer.APP_CONFIG);
         this.initGraphQl();
         const self = this;
         return new Promise((resolve, reject) => {
@@ -172,16 +150,12 @@ let ServerUtilService = class ServerUtilService {
                 const subscriptionServer = new subscriptions_transport_ws_1.SubscriptionServer({
                     execute: execution_1.execute,
                     subscribe: subscription_1.subscribe,
-                    schema: index_1.default.get(__1.ConfigService).APP_CONFIG.schema,
+                    schema: configContainer.APP_CONFIG.schema,
                     onConnect(connectionParams) {
-                        // if (connectionParams.token) {
-                        return { id: 1, userId: 1, user: { id: 1, type: 'ADMIN' } };
-                        // } else {
-                        // throw Boom.unauthorized();
-                        // }
+                        return self.connectionHookService.modifyHooks.onSubConnection(connectionParams);
                     },
                     onOperation: (message, params, webSocket) => {
-                        return params;
+                        return self.connectionHookService.modifyHooks.onSubOperation(message, params, webSocket);
                     },
                 }, {
                     server: this.server.listener,
@@ -197,7 +171,8 @@ let ServerUtilService = class ServerUtilService {
     }
 };
 ServerUtilService = __decorate([
-    index_1.Service()
+    index_1.Service(),
+    __metadata("design:paramtypes", [__1.ConnectionHookService])
 ], ServerUtilService);
 exports.ServerUtilService = ServerUtilService;
 function exitHandler(options, err) {

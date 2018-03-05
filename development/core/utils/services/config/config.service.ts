@@ -5,9 +5,16 @@ import { ControllerContainerService } from "../../services/controller-service/co
 import { SchemaService } from "../../services/schema/schema.service";
 import { Service } from "../../../../core/utils/container/index";
 import { Container } from "../../container/Container";
+import { ConnectionHookService } from "../../services/connection-hook/connection-hook.service";
 
 @Service()
 export class ConfigService {
+
+    constructor(
+        private connectionHookService: ConnectionHookService
+    ) {
+        
+    }
     SEQUELIZE_CONFIG: SequelizeConfigInterface = {
         development: {
             dialect: 'postgres',
@@ -61,6 +68,7 @@ export class ConfigService {
             algorithm: 'aes256',
             key: ''
         },
+        connectionHooks: this.connectionHookService,
         ethereumApi: process.env.ETHEREUM_API || 'http://localhost:7545' || 'http://pub-node1.etherscan.io:8545'
     };
 

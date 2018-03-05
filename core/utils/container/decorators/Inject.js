@@ -8,7 +8,6 @@ const CannotInjectError_1 = require("../error/CannotInjectError");
  */
 function Inject(typeOrName) {
     return function (target, propertyName, index) {
-        console.log('dadada', target);
         if (!typeOrName)
             typeOrName = () => Reflect.getMetadata("design:type", target, propertyName);
         Container_1.Container.registerHandler({

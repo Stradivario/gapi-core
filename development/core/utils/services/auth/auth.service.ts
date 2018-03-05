@@ -3,7 +3,7 @@ import { readFileSync } from 'fs';
 import { createDecipheriv, createCipheriv, randomBytes, createHash, pseudoRandomBytes } from 'crypto';
 import * as Moment from 'moment';
 import Container, {Service} from '../../../utils/container/index';
-import { ConfigService } from '../..';
+import { ConfigService } from '../../services/config/config.service';
 
 
 export let iv, key;
@@ -15,21 +15,53 @@ export interface TokenData {
 }
 
 @Service()
-export class AuthModule {
+export class AuthService {
+    modifyFunctions: {validateToken?: Function} = {
+        validateToken: this.validateToken
+    }
     constructor(
         private config: ConfigService
     ) {
         this.config.APP_CONFIG.cyper.iv = new Buffer(this.config.APP_CONFIG.cyper.iv);
         this.config.APP_CONFIG.cyper.key = new Buffer(this.config.APP_CONFIG.cyper.privateKey);
     }
-    verifyToken(token): TokenData | false {
+
+    validateToken(token: string) {
+        // const userInfo = Container.get(AuthModule).verifyToken(token);
+        // let credential: Credential;
+        return {id: 1, user: {id: 1, type: 'ADMIN'}};
+        // if (userInfo) {
+        //   try {
+        // credential = await Credential.find(<any>{
+        //   where: {
+        //     email: userInfo.email
+        //   },
+        //   include: [{
+        //     association: 'user',
+        //     include: [{association: 'wallet', include: ['transaction']}]
+        //   }]
+        // });
+        //   } catch (e) {
+        //     throw Boom.unauthorized();
+        //   }
+        //   if (credential) {
+        // return credential;
+        //   } else {
+        // throw Boom.unauthorized();
+        //   }
+        // } else {
+        //   throw Boom.unauthorized();
+        // }
+    }
+
+    verifyToken(token): TokenData {
         let result;
         try {
             result = verify(token, this.config.APP_CONFIG.cert, { algorithm: 'HS256' });
         } catch (e) {
             result = false;
         }
-        return {id: 1, scope: ['ADMIN'], email: 'kristiqn.tachev@gmail.com'};
+        return result;
     }
 
     decrypt(password: string) {

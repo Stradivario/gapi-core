@@ -12,3 +12,5 @@ __export(require("./services/config/config.service"));
 __export(require("./services/auth/auth.service"));
 __export(require("./services/schema/schema.service"));
 __export(require("./services/controller-service/controller.service"));
+__export(require("./services/connection-hook/connection-hook.service"));
+__export(require("./services/hook/hook.service"));

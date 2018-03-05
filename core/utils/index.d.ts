@@ -8,3 +8,5 @@ export * from './services/config/config.interface';
 export * from './services/auth/auth.service';
 export * from './services/schema/schema.service';
 export * from './services/controller-service/controller.service';
+export * from './services/connection-hook/connection-hook.service';
+export * from './services/hook/hook.service';

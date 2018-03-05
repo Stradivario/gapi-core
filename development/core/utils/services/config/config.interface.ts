@@ -1,4 +1,5 @@
 import { GraphQLSchema } from "graphql";
+import { ConnectionHookService } from "../../services/connection-hook/connection-hook.service";
 
 export interface AmqpConfigInterface {
     host: string;
@@ -14,6 +15,7 @@ export interface AppConfigInterface {
     force?: boolean;
     schema?: GraphQLSchema;
     cyper?: any;
+    connectionHooks?: ConnectionHookService;
     ethereumApi?: string;
 }
 

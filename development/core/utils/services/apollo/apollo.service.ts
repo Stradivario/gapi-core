@@ -4,6 +4,7 @@ import * as GraphiQL from 'apollo-server-module-graphiql';
 import { runHttpQuery, HttpQueryError } from 'apollo-server-core';
 import { ServerUtilService } from '../server/server.service';
 import Container, {Service} from '../../../utils/container/index';
+import { AuthService } from '../../services/auth/auth.service';
 
 export interface IRegister {
   (server: Server, options: any, next: any): void;
@@ -53,7 +54,7 @@ const graphqlHapi: IRegister = function (server: Server, options: HapiPluginOpti
   if (arguments.length !== 3) {
     throw new Error(`Apollo Server expects exactly 3 argument, got ${arguments.length}`);
   }
-  const serviceUtilsService: ServerUtilService = Container.get(ServerUtilService);
+
   server.route({
     method: ['GET', 'POST'],
     path: options.path || '/graphql',
@@ -61,7 +62,8 @@ const graphqlHapi: IRegister = function (server: Server, options: HapiPluginOpti
     handler: async (request, reply) => {
       if (request.headers.authorization) {
         try {
-          options.graphqlOptions.context = await serviceUtilsService.validateToken(request.headers.authorization);
+          const serviceUtilsService: AuthService = Container.get(AuthService);
+          options.graphqlOptions.context = await serviceUtilsService.modifyFunctions.validateToken(request.headers.authorization);
    
         } catch (e) {
           return reply(Boom.unauthorized());

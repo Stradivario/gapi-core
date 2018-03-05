@@ -5,11 +5,16 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const index_1 = require("../../../../core/utils/container/index");
 const Container_1 = require("../../container/Container");
+const connection_hook_service_1 = require("../../services/connection-hook/connection-hook.service");
 let ConfigService = ConfigService_1 = class ConfigService {
-    constructor() {
+    constructor(connectionHookService) {
+        this.connectionHookService = connectionHookService;
         this.SEQUELIZE_CONFIG = {
             development: {
                 dialect: 'postgres',
@@ -53,6 +58,7 @@ let ConfigService = ConfigService_1 = class ConfigService {
                 algorithm: 'aes256',
                 key: ''
             },
+            connectionHooks: this.connectionHookService,
             ethereumApi: process.env.ETHEREUM_API || 'http://localhost:7545' || 'http://pub-node1.etherscan.io:8545'
         };
     }
@@ -77,7 +83,8 @@ let ConfigService = ConfigService_1 = class ConfigService {
     }
 };
 ConfigService = ConfigService_1 = __decorate([
-    index_1.Service()
+    index_1.Service(),
+    __metadata("design:paramtypes", [connection_hook_service_1.ConnectionHookService])
 ], ConfigService);
 exports.ConfigService = ConfigService;
 var ConfigService_1;

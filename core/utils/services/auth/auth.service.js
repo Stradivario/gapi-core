@@ -13,12 +13,42 @@ const jsonwebtoken_1 = require("jsonwebtoken");
 const crypto_1 = require("crypto");
 const Moment = require("moment");
 const index_1 = require("../../../utils/container/index");
-const __1 = require("../..");
-let AuthModule = class AuthModule {
+const config_service_1 = require("../../services/config/config.service");
+let AuthService = class AuthService {
     constructor(config) {
         this.config = config;
+        this.modifyFunctions = {
+            validateToken: this.validateToken
+        };
         this.config.APP_CONFIG.cyper.iv = new Buffer(this.config.APP_CONFIG.cyper.iv);
         this.config.APP_CONFIG.cyper.key = new Buffer(this.config.APP_CONFIG.cyper.privateKey);
+    }
+    validateToken(token) {
+        // const userInfo = Container.get(AuthModule).verifyToken(token);
+        // let credential: Credential;
+        return { id: 1, user: { id: 1, type: 'ADMIN' } };
+        // if (userInfo) {
+        //   try {
+        // credential = await Credential.find(<any>{
+        //   where: {
+        //     email: userInfo.email
+        //   },
+        //   include: [{
+        //     association: 'user',
+        //     include: [{association: 'wallet', include: ['transaction']}]
+        //   }]
+        // });
+        //   } catch (e) {
+        //     throw Boom.unauthorized();
+        //   }
+        //   if (credential) {
+        // return credential;
+        //   } else {
+        // throw Boom.unauthorized();
+        //   }
+        // } else {
+        //   throw Boom.unauthorized();
+        // }
     }
     verifyToken(token) {
         let result;
@@ -28,7 +58,7 @@ let AuthModule = class AuthModule {
         catch (e) {
             result = false;
         }
-        return { id: 1, scope: ['ADMIN'], email: 'kristiqn.tachev@gmail.com' };
+        return result;
     }
     decrypt(password) {
         const decipher = crypto_1.createDecipheriv(this.config.APP_CONFIG.cyper.algorithm, exports.key, exports.iv);
@@ -55,8 +85,8 @@ let AuthModule = class AuthModule {
         return jsonwebtoken_1.sign(tokenData, this.config.APP_CONFIG.cert, { algorithm: 'HS256' });
     }
 };
-AuthModule = __decorate([
+AuthService = __decorate([
     index_1.Service(),
-    __metadata("design:paramtypes", [__1.ConfigService])
-], AuthModule);
-exports.AuthModule = AuthModule;
+    __metadata("design:paramtypes", [config_service_1.ConfigService])
+], AuthService);
+exports.AuthService = AuthService;

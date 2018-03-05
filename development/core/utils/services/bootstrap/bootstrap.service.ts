@@ -5,6 +5,7 @@ import { GraphQLSchema, GraphQLObjectType } from "graphql";
 import { ConfigService } from "../../services/config/config.service";
 import { SchemaService } from "../../services/schema/schema.service";
 import { GapiServerModule } from "../../../modules/server/server.module";
+import { HookService } from '../../services/hook/hook.service';
 
 async function getAllFields() {
     const controllerContainerService = Container.get(ControllerContainerService);
@@ -32,12 +33,11 @@ async function getAllFields() {
                 fields: query
             })
         }
-        const schema = Container.get(SchemaService).generateSchema(
-            generateType(Fields.query, 'Query', 'Query type for all get requests which will not change persistent data'),
-            generateType(Fields.mutation, 'Mutation', 'Mutation type for all requests which will change persistent data'),
-            generateType(Fields.subscription, 'Subscription', 'Subscription type for all rabbitmq subscriptions via pub sub')
-        );
-        // console.log(schema);
+        const query = generateType(Fields.query, 'Query', 'Query type for all get requests which will not change persistent data');
+        const mutation = generateType(Fields.mutation, 'Mutation', 'Mutation type for all requests which will change persistent data');
+        const subscription = generateType(Fields.subscription, 'Subscription', 'Subscription type for all rabbitmq subscriptions via pub sub');
+        HookService.AttachHooks([query, mutation, subscription ]);
+        const schema = Container.get(SchemaService).generateSchema(query, mutation, subscription);
         resolve(schema);
     })
 }
