@@ -17,12 +17,13 @@ export function Inject(serviceName?: string): Function;
  */
 export function Inject(token: Token<any>): Function;
 
+
 /**
  * Injects a service into a class property or constructor parameter.
  */
 export function Inject(typeOrName?: ((type?: any) => Function)|string|Token<any>): Function {
     return function(target: Object, propertyName: string, index?: number) {
-
+        console.log('dadada', target)
         if (!typeOrName)
             typeOrName = () => (Reflect as any).getMetadata("design:type", target, propertyName);
 

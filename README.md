@@ -36,6 +36,11 @@ Enter inside my-project and type:
 npm start
 ```
 
+Open browser to 
+```bash
+http://localhost:8200/graphiql
+```
+
 
 ## Without CLI
 
@@ -51,13 +56,19 @@ npm start
 
 ```typescript
 
-import { GapiModule, GapiServerModule } from 'gapi';
+import { GapiModule, GapiServerModule, ConfigService } from 'gapi';
 import { UserModule } from './user/user.module';
-import { UserService } from './user/services/user.service';
 
 @GapiModule({
     imports: [
         UserModule
+    ],
+    services: [
+        ConfigService.forRoot({
+            APP_CONFIG: {
+                port: 8200
+            }
+        })
     ]
 })
 export class AppModule {}
@@ -72,11 +83,16 @@ export class AppModule {}
 import { GapiModule } from 'gapi';
 import { UserQueriesController } from './user.queries.controller';
 import { UserMutationsController } from './user.mutations.controller';
+import { UserService, AnotherService } from './user/services/user.service';
 
 @GapiModule({
     controllers: [
         UserQueriesController,
         UserMutationsController
+    ],
+    services: [
+        UserService,
+        AnotherService
     ]
 })
 export class UserModule {}
@@ -86,7 +102,7 @@ export class UserModule {}
 #### Query
 ### Folder root/src/user/query.controller.ts
 ```typescript
-import { Query, GraphQLNonNull, Scope, Type, GraphQLObjectType, Mutation, GapiController, Service, GraphQLInt, Inject } from "gapi";
+import { Query, GraphQLNonNull, Scope, Type, GraphQLObjectType, Mutation, GapiController, Service, GraphQLInt, Injector } from "gapi";
 import { UserService } from './services/user.service';
 
 export const UserType = new GraphQLObjectType({
@@ -101,7 +117,7 @@ export const UserType = new GraphQLObjectType({
 @GapiController()
 export class UserQueriesController {
 
-    private userService: UserService = Container.get(UserService);
+    @Injector(UserService) userService: UserService;
 
     @Scope('ADMIN')
     @Type(UserType)
@@ -111,7 +127,6 @@ export class UserQueriesController {
         }
     })
     findUser(root, { id }, context) {
-        console.log(this);
         return this.userService.findUser(id);
     }
 
@@ -124,7 +139,7 @@ export class UserQueriesController {
 #### Mutation
 ### Folder root/src/user/mutation.controller.ts
 ```typescript
-import { Query, GraphQLNonNull, Scope, Type, GraphQLObjectType, Mutation, GapiController, Service, GraphQLInt } from "gapi";
+import { Query, GraphQLNonNull, Scope, Type, GraphQLObjectType, Mutation, GapiController, Service, GraphQLInt, Injector } from "gapi";
 import { UserService } from './services/user.service';
 
 export const UserType = new GraphQLObjectType({
@@ -139,7 +154,7 @@ export const UserType = new GraphQLObjectType({
 @GapiController()
 export class UserMutationsController {
 
-    private userService: UserService = Container.get(UserService);
+    @Injector(UserService) userService: UserService;
 
     @Scope('ADMIN')
     @Type(UserType)
@@ -240,5 +255,19 @@ Bootstrap(AppModule);
 gapi-cli start
 ```
 
+
+#### Experminetal!!
+
+
+##### @GapiObjectType() Decorator
+
+```typescript
+// Experimental no nested values
+@GapiObjectType()
+export class UserType {
+    id: GraphQLScalarType = GraphQLInt;
+    username: GraphQLScalarType = GraphQLString;
+}
+```
 
 Enjoy ! :)
