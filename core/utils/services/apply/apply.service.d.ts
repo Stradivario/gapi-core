@@ -1,2 +1,2 @@
-import { GapiModuleArguments } from "../../../decorators/gql-module/gql-module.decorator.interface";
+import { GapiModuleArguments } from "../../../decorators/gapi-module/gapi-module.decorator.interface";
 export declare const ApplyServicesHook: (self: any, options: GapiModuleArguments) => void;

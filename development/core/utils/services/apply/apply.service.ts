@@ -1,5 +1,5 @@
 import Container, {Service} from '../../../utils/container/index';
-import { GapiModuleArguments } from "../../../decorators/gql-module/gql-module.decorator.interface";
+import { GapiModuleArguments } from "../../../decorators/gapi-module/gapi-module.decorator.interface";
 import { GapiServerModule } from "../../../modules/server/server.module";
 
 export const ApplyServicesHook = (self, options: GapiModuleArguments) => {

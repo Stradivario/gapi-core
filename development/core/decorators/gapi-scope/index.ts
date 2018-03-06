@@ -1,0 +1,1 @@
+export * from './gapi-scope';
