@@ -6,6 +6,7 @@ import { ConfigService } from "../../services/config/config.service";
 import { SchemaService } from "../../services/schema/schema.service";
 import { GapiServerModule } from "../../../modules/server/server.module";
 import { HookService } from '../../services/hook/hook.service';
+import { GapiSequelizeService } from '../../../modules/sequelize/sequelize.module';
 
 async function getAllFields() {
     const controllerContainerService = Container.get(ControllerContainerService);
@@ -67,11 +68,11 @@ export const Bootstrap = (App) => {
             configService.APP_CONFIG.schema = schema;
             const server = Container.get(GapiServerModule.forRoot(configService.APP_CONFIG));
             server.start()
-                .then((data) => {
-                    onExitProcess(server);
-                    console.log('App started');
-                })
-                .catch(e => console.log(e));
+            .then((data) => {
+                onExitProcess(server);
+                console.log('App started');
+            })
+            .catch(e => console.log(e));
         })
 
     return App;

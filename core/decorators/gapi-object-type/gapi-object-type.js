@@ -10,9 +10,9 @@ function GapiObjectType() {
         const metadata = {};
         Object.keys(userTypes).forEach(field => type.fields[field] = { type: userTypes[field] });
         if (target.prototype._metadata && target.prototype._metadata.length) {
-            target.prototype._metadata.forEach(meta => type.fields[meta.key].resolve = meta.resolve);
+            target.prototype._metadata.forEach(meta => type.fields[meta.key].resolve = meta.resolve.bind(userTypes));
         }
-        target.prototype = new graphql_1.GraphQLObjectType(type);
+        Object.setPrototypeOf(target.prototype, new graphql_1.GraphQLObjectType(type));
         return target;
     };
 }

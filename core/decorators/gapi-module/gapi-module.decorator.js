@@ -16,7 +16,7 @@ function GapiModule(options) {
     return (target) => {
         const original = target;
         function construct(constructor, args) {
-            const c = function dfada() {
+            const c = function () {
                 if (options.imports) {
                     importModules(options.imports);
                 }
@@ -27,7 +27,7 @@ function GapiModule(options) {
                     importModules(options.controllers);
                 }
                 this.options = options;
-                return constructor.apply(this, args);
+                return new constructor();
             };
             c.prototype = constructor.prototype;
             Object.defineProperty(c, 'name', { value: constructor.name, writable: true });
@@ -38,6 +38,9 @@ function GapiModule(options) {
             return construct(original, args);
         };
         f.prototype = original.prototype;
+        if (original.forRoot) {
+            f.forRoot = original.forRoot;
+        }
         return f;
     };
 }

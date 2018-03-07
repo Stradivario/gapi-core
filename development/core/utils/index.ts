@@ -1,7 +1,6 @@
 export * from './services/apply/apply.service';
 export * from './services/bootstrap/bootstrap.service';
 export * from './services/server/server.service';
-export * from './services/sequelize/sequelize.service';
 export * from './services/apollo/apollo.service';
 export * from './services/config/config.service';
 export * from './services/config/config.interface';

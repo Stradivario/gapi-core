@@ -31,9 +31,10 @@ export function GapiModule<T, K extends keyof T>(options: GapiModuleArguments) {
                     importModules(options.controllers);
                 }
                 this.options = options;
-                return constructor.apply(this, args);
+                return new constructor();
             };
-            c.prototype = constructor.prototype;
+   
+            c.prototype = constructor.prototype; 
             Object.defineProperty(c, 'name', {value: constructor.name, writable: true});
             return Container.get(c);
 
@@ -42,7 +43,10 @@ export function GapiModule<T, K extends keyof T>(options: GapiModuleArguments) {
             console.log('Loaded Module: ' + original.name);
             return construct(original, args);
         };
-        f.prototype = original.prototype;
+        f.prototype = original.prototype; 
+        if(original.forRoot) {
+            f.forRoot = original.forRoot; 
+        }
         return f;
     };
 }

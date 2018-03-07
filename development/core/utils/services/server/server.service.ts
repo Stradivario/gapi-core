@@ -7,7 +7,7 @@ import { execute } from 'graphql/execution';
 
 import { attachErrorHandlers, Boom } from '../error/error.service';
 import Container, {Service} from '../../../utils/container/index';
-import { ConfigService, AuthService, SequelizeService, SchemaService, ConnectionHookService } from '../..';
+import { ConfigService, AuthService, SchemaService, ConnectionHookService } from '../..';
 import { GraphQLSchema } from 'graphql';
 
 @Service()
