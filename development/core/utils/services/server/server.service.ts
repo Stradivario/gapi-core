@@ -13,13 +13,7 @@ import { GraphQLSchema } from 'graphql';
 @Service()
 export class ServerUtilService {
     server: Server = new Server();
-    constructor(
-        private connectionHookService: ConnectionHookService
-    ) {
 
-    }
-
-    //noinspection TypeScriptUnresolvedFunction
     registerEndpoints(endpoints: Array<any>) {
         for (const endpoint of endpoints) {
             this.server.register(endpoint);
@@ -28,7 +22,6 @@ export class ServerUtilService {
 
     async initGraphQl() {
         const config = Container.get(ConfigService);
-        console.log(config.APP_CONFIG.graphiqlToken)
         const graphqlOptions = {
             register: graphqlHapi,
             options: {
@@ -133,6 +126,7 @@ export class ServerUtilService {
         this.connect(configContainer.APP_CONFIG);
         this.initGraphQl();
         const self = this;
+        const connectionHookService = Container.get(ConnectionHookService)
         return new Promise((resolve, reject) => {
             this.server.start((err) => {
                 if (err) {
@@ -144,16 +138,19 @@ export class ServerUtilService {
                     subscribe,
                     schema: configContainer.APP_CONFIG.schema,
                     onConnect(connectionParams) {
-                            return self.connectionHookService.modifyHooks.onSubConnection(connectionParams);
+                        return connectionHookService.modifyHooks.onSubConnection(connectionParams);
                     },
                     onOperation: (message, params, webSocket) => {
-                        return self.connectionHookService.modifyHooks.onSubOperation(message, params, webSocket);
+                        return connectionHookService.modifyHooks.onSubOperation(message, params, webSocket);
                     },
                 }, {
                         server: this.server.listener,
                         path: '/subscriptions',
                     });
-                console.log(`Server running at: ${this.server.info.uri}, environment: ${process.env.NODE_ENV}`);
+                console.log(`Server running at: http://${this.server.info.address}:${this.server.info.port}, environment: ${process.env.NODE_ENV || 'development'}`);
+                if (process.env.NODE_ENV !== 'production') {
+                    console.log(`Graphiql dev tool is running at: http://${this.server.info.address}:${this.server.info.port}/graphiql`);
+                }
                 resolve(true);
             });
         });

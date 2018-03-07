@@ -44,6 +44,7 @@ let ConfigService = ConfigService_1 = class ConfigService {
             port: process.env.AMQP_PORT || 5672
         };
         this.APP_CONFIG = {
+            graphiql: true,
             cert: new Buffer(1),
             schema: null,
             uploadFolder: '',

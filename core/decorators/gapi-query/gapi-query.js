@@ -7,16 +7,13 @@ function Query(options) {
         const originalMethod = descriptor.value;
         const target = t;
         const propertyKey = propKey;
-        // Container.registerHandler({ object: target, propertyName: propKey, value: containerInstance => logger });
         descriptor.value = function (...args) {
-            let returnValue = Object.create({});
-            Object.assign(returnValue, target);
-            returnValue.resolve = originalMethod;
-            returnValue.args = options ? options : null;
-            returnValue.method_type = 'query';
-            returnValue.method_name = propertyKey;
-            returnValue.target = target;
-            return returnValue;
+            this.resolve = originalMethod;
+            this.args = options ? options : null;
+            this.method_type = 'query';
+            this.method_name = propertyKey;
+            this.target = target;
+            return this;
         };
         index_1.default.get(controller_service_1.ControllerContainerService)
             .createController(target.constructor.name)
@@ -25,16 +22,3 @@ function Query(options) {
     };
 }
 exports.Query = Query;
-function Logger() {
-    return function (object, propertyName, index) {
-        const logger = new ConsoleLogger();
-        index_1.default.registerHandler({ object, propertyName, index, value: containerInstance => logger });
-    };
-}
-exports.Logger = Logger;
-class ConsoleLogger {
-    log(message) {
-        console.log(message);
-    }
-}
-exports.ConsoleLogger = ConsoleLogger;

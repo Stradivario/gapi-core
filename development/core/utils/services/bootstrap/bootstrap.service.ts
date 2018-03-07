@@ -61,7 +61,9 @@ function onExitProcess(server: GapiServerModule) {
 }
 
 export const Bootstrap = (App) => {
+    console.log(`Bootstrapping application...`);
     Container.get(App);
+    console.log('Finished!\nStarting application...');
     getAllFields()
         .then((schema: GraphQLSchema) => {
             const configService = Container.get(ConfigService);
@@ -70,7 +72,7 @@ export const Bootstrap = (App) => {
             server.start()
             .then((data) => {
                 onExitProcess(server);
-                console.log('App started');
+                console.log('Application started!');
             })
             .catch(e => console.log(e));
         })

@@ -5,9 +5,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -27,11 +24,9 @@ const error_service_1 = require("../error/error.service");
 const index_1 = require("../../../utils/container/index");
 const __1 = require("../..");
 let ServerUtilService = class ServerUtilService {
-    constructor(connectionHookService) {
-        this.connectionHookService = connectionHookService;
+    constructor() {
         this.server = new hapi_1.Server();
     }
-    //noinspection TypeScriptUnresolvedFunction
     registerEndpoints(endpoints) {
         for (const endpoint of endpoints) {
             this.server.register(endpoint);
@@ -40,7 +35,6 @@ let ServerUtilService = class ServerUtilService {
     initGraphQl() {
         return __awaiter(this, void 0, void 0, function* () {
             const config = index_1.default.get(__1.ConfigService);
-            console.log(config.APP_CONFIG.graphiqlToken);
             const graphqlOptions = {
                 register: apollo_service_1.graphqlHapi,
                 options: {
@@ -141,6 +135,7 @@ let ServerUtilService = class ServerUtilService {
         this.connect(configContainer.APP_CONFIG);
         this.initGraphQl();
         const self = this;
+        const connectionHookService = index_1.default.get(__1.ConnectionHookService);
         return new Promise((resolve, reject) => {
             this.server.start((err) => {
                 if (err) {
@@ -152,16 +147,19 @@ let ServerUtilService = class ServerUtilService {
                     subscribe: subscription_1.subscribe,
                     schema: configContainer.APP_CONFIG.schema,
                     onConnect(connectionParams) {
-                        return self.connectionHookService.modifyHooks.onSubConnection(connectionParams);
+                        return connectionHookService.modifyHooks.onSubConnection(connectionParams);
                     },
                     onOperation: (message, params, webSocket) => {
-                        return self.connectionHookService.modifyHooks.onSubOperation(message, params, webSocket);
+                        return connectionHookService.modifyHooks.onSubOperation(message, params, webSocket);
                     },
                 }, {
                     server: this.server.listener,
                     path: '/subscriptions',
                 });
-                console.log(`Server running at: ${this.server.info.uri}, environment: ${process.env.NODE_ENV}`);
+                console.log(`Server running at: http://${this.server.info.address}:${this.server.info.port}, environment: ${process.env.NODE_ENV || 'development'}`);
+                if (process.env.NODE_ENV !== 'production') {
+                    console.log(`Graphiql dev tool is running at: http://${this.server.info.address}:${this.server.info.port}/graphiql`);
+                }
                 resolve(true);
             });
         });
@@ -171,8 +169,7 @@ let ServerUtilService = class ServerUtilService {
     }
 };
 ServerUtilService = __decorate([
-    index_1.Service(),
-    __metadata("design:paramtypes", [__1.ConnectionHookService])
+    index_1.Service()
 ], ServerUtilService);
 exports.ServerUtilService = ServerUtilService;
 function exitHandler(options, err) {

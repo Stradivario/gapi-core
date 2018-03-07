@@ -6,6 +6,7 @@ export interface AmqpConfigInterface {
     port: string | number;
 }
 export interface AppConfigInterface {
+    graphiql?: boolean;
     cert?: Buffer;
     uploadFolder?: string;
     graphiqlToken?: string;

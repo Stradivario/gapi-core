@@ -68,7 +68,9 @@ function onExitProcess(server) {
     });
 }
 exports.Bootstrap = (App) => {
+    console.log(`Bootstrapping application...`);
     index_1.default.get(App);
+    console.log('Finished!\nStarting application...');
     getAllFields()
         .then((schema) => {
         const configService = index_1.default.get(config_service_1.ConfigService);
@@ -77,7 +79,7 @@ exports.Bootstrap = (App) => {
         server.start()
             .then((data) => {
             onExitProcess(server);
-            console.log('App started');
+            console.log('Application started!');
         })
             .catch(e => console.log(e));
     });

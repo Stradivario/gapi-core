@@ -8,7 +8,7 @@ function Mutation(options) {
         const target = t;
         const propertyKey = propKey;
         descriptor.value = function (...args) {
-            this.resolve = originalMethod.bind(target);
+            this.resolve = originalMethod;
             this.args = options ? options : null;
             this.method_type = 'mutation';
             this.method_name = propertyKey;

@@ -54,6 +54,7 @@ export class ConfigService {
         port: process.env.AMQP_PORT || 5672
     };
     APP_CONFIG: AppConfigInterface = {
+        graphiql: true,
         cert: new Buffer(1),
         schema: null,
         uploadFolder: '',
