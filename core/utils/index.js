@@ -13,3 +13,4 @@ __export(require("./services/schema/schema.service"));
 __export(require("./services/controller-service/controller.service"));
 __export(require("./services/connection-hook/connection-hook.service"));
 __export(require("./services/hook/hook.service"));
+__export(require("./services/pub-sub/pub-sub.service"));

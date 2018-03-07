@@ -8,12 +8,13 @@ function Mutation(options) {
         const target = t;
         const propertyKey = propKey;
         descriptor.value = function (...args) {
-            this.resolve = originalMethod;
-            this.args = options ? options : null;
-            this.method_type = 'mutation';
-            this.method_name = propertyKey;
-            this.target = target;
-            return this;
+            const returnValue = Object.create({});
+            returnValue.resolve = originalMethod;
+            returnValue.args = options ? options : null;
+            returnValue.method_type = 'mutation';
+            returnValue.method_name = propertyKey;
+            returnValue.target = target;
+            return returnValue;
         };
         index_1.default.get(controller_service_1.ControllerContainerService)
             .createController(target.constructor.name)

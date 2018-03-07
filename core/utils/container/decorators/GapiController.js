@@ -10,7 +10,6 @@ function GapiController(optionsOrServiceName) {
             type: original
         };
         if (typeof optionsOrServiceName === "string" || optionsOrServiceName instanceof Token_1.Token) {
-            service.id = optionsOrServiceName;
             service.multiple = optionsOrServiceName.multiple;
             service.global = optionsOrServiceName.global || false;
             service.transient = optionsOrServiceName.transient;

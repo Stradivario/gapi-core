@@ -1,1 +1,1 @@
-export * from './gapi-mutation';
+export * from './gapi-subscription';

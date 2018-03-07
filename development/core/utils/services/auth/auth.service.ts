@@ -5,7 +5,6 @@ import * as Moment from 'moment';
 import Container, {Service} from '../../../utils/container/index';
 import { ConfigService } from '../../services/config/config.service';
 
-
 export let iv, key;
 
 export interface TokenData {
@@ -27,31 +26,7 @@ export class AuthService {
     }
 
     validateToken(token: string) {
-        // const userInfo = Container.get(AuthModule).verifyToken(token);
-        // let credential: Credential;
         return {id: 1, user: {id: 1, type: 'ADMIN'}};
-        // if (userInfo) {
-        //   try {
-        // credential = await Credential.find(<any>{
-        //   where: {
-        //     email: userInfo.email
-        //   },
-        //   include: [{
-        //     association: 'user',
-        //     include: [{association: 'wallet', include: ['transaction']}]
-        //   }]
-        // });
-        //   } catch (e) {
-        //     throw Boom.unauthorized();
-        //   }
-        //   if (credential) {
-        // return credential;
-        //   } else {
-        // throw Boom.unauthorized();
-        //   }
-        // } else {
-        //   throw Boom.unauthorized();
-        // }
     }
 
     verifyToken(token): TokenData {

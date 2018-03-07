@@ -9,3 +9,4 @@ export * from './services/schema/schema.service';
 export * from './services/controller-service/controller.service';
 export * from './services/connection-hook/connection-hook.service';
 export * from './services/hook/hook.service';
+export * from './services/pub-sub/pub-sub.service';

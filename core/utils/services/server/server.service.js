@@ -42,8 +42,7 @@ let ServerUtilService = class ServerUtilService {
                     graphqlOptions: {
                         schema: config.APP_CONFIG.schema,
                         graphiql: true,
-                        formatError: error_service_1.attachErrorHandlers
-                        // context: {},
+                        formatError: error_service_1.attachErrorHandlers,
                     }
                 }
             };
@@ -56,6 +55,9 @@ let ServerUtilService = class ServerUtilService {
                                 endpointURL: '/graphql',
                                 passHeader: `'Authorization':'${config.APP_CONFIG.graphiqlToken}'`,
                                 subscriptionsEndpoint: `ws://localhost:${config.APP_CONFIG.port}/subscriptions`,
+                                websocketConnectionParams: {
+                                    token: config.APP_CONFIG.graphiqlToken
+                                }
                             },
                         },
                     }]);

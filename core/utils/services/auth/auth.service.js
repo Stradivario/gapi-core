@@ -24,31 +24,7 @@ let AuthService = class AuthService {
         this.config.APP_CONFIG.cyper.key = new Buffer(this.config.APP_CONFIG.cyper.privateKey);
     }
     validateToken(token) {
-        // const userInfo = Container.get(AuthModule).verifyToken(token);
-        // let credential: Credential;
         return { id: 1, user: { id: 1, type: 'ADMIN' } };
-        // if (userInfo) {
-        //   try {
-        // credential = await Credential.find(<any>{
-        //   where: {
-        //     email: userInfo.email
-        //   },
-        //   include: [{
-        //     association: 'user',
-        //     include: [{association: 'wallet', include: ['transaction']}]
-        //   }]
-        // });
-        //   } catch (e) {
-        //     throw Boom.unauthorized();
-        //   }
-        //   if (credential) {
-        // return credential;
-        //   } else {
-        // throw Boom.unauthorized();
-        //   }
-        // } else {
-        //   throw Boom.unauthorized();
-        // }
     }
     verifyToken(token) {
         let result;

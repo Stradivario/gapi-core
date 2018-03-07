@@ -9,3 +9,5 @@ export * from './gapi-injector/index';
 export * from './gapi-object-type/index';
 export * from './gapi-resolver/index';
 export * from './gapi-public/index';
+export * from './gapi-subscription/index';
+export * from './gapi-subscribe/index';

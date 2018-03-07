@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const controller_service_1 = require("../../utils/services/controller-service/controller.service");
 const index_1 = require("../../utils/container/index");
-function Query(options) {
+function Subscription(options) {
     return (t, propKey, descriptor) => {
         const originalMethod = descriptor.value;
         const target = t;
@@ -11,7 +11,7 @@ function Query(options) {
             const returnValue = Object.create({});
             returnValue.resolve = originalMethod;
             returnValue.args = options ? options : null;
-            returnValue.method_type = 'query';
+            returnValue.method_type = 'subscription';
             returnValue.method_name = propertyKey;
             returnValue.target = target;
             return returnValue;
@@ -19,8 +19,7 @@ function Query(options) {
         index_1.default.get(controller_service_1.ControllerContainerService)
             .createController(target.constructor.name)
             .setDescriptor(propertyKey, descriptor);
-        console.log(propertyKey, descriptor.value());
         return descriptor;
     };
 }
-exports.Query = Query;
+exports.Subscription = Subscription;
