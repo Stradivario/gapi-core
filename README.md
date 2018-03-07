@@ -143,13 +143,22 @@ import { GraphQLScalarType } from "graphql";
 
 @GapiObjectType()
 export class UserSettings {
-    username: string | GraphQLScalarType = GraphQLString;
-    firstname: string | GraphQLScalarType = GraphQLString;
+
+    @Injector(AnotherService) private anotherService?: AnotherService;
+
+    readonly username: string | GraphQLScalarType = GraphQLString;
+    readonly firstname: string | GraphQLScalarType = GraphQLString;
 
     @Resolve('username')
-    getUsername?(root, payload, context) {
-        return 'username-changed';
+    async getUsername?(root, payload, context) {
+        return await this.anotherService.trimFirstLetterAsync(root.username);
     }
+
+    @Resolve('firstname')
+    getFirstname?(root, payload, context) {
+        return 'firstname-changed';
+    }
+
 }
 
 export const UserSettingsObjectType = new UserSettings();
@@ -245,6 +254,10 @@ import { Service } from "gapi";
 class AnotherService {
     trimFirstLetter(username: string) {
         return username.charAt(1);
+    }
+
+    trimFirstLetterAsync(username): Promise<string> {
+        return Promise.resolve(this.trimFirstLetter(username));
     }
 }
 
