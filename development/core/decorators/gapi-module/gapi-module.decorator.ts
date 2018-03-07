@@ -5,14 +5,21 @@ import 'reflect-metadata';
 import Container from '../../utils/container/index';
 
 function importModules(modules) {
-    modules.forEach(m => Container.get(m));
+    modules.forEach(module => {
+        let name = module.name;
+        if (name === 'f') {
+            name = module.constructor.name;
+        }
+        Object.defineProperty(module, 'name', { value: name, writable: true });
+        Container.get(module)        
+    });
 }
 
 export function GapiModule<T, K extends keyof T>(options: GapiModuleArguments) {
-    return (target: Function) => {
+    return (target) => {
         const original = target;
         function construct(constructor, args) {
-            const c: any = function () {
+            const c: any = function() {
 
                 if (options.imports) {
                     importModules(options.imports);
@@ -23,10 +30,11 @@ export function GapiModule<T, K extends keyof T>(options: GapiModuleArguments) {
                 if (options.controllers) {
                     importModules(options.controllers);
                 }
+                this.options = options;
                 return constructor.apply(this, args);
             };
             c.prototype = constructor.prototype;
-            c.prototype.name = constructor.name;
+            Object.defineProperty(c, 'name', {value: constructor.name, writable: true});
             return Container.get(c);
 
         }
@@ -35,7 +43,6 @@ export function GapiModule<T, K extends keyof T>(options: GapiModuleArguments) {
             return construct(original, args);
         };
         f.prototype = original.prototype;
-        f.prototype.name = original.name;
         return f;
     };
 }

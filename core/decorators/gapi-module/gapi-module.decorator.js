@@ -3,13 +3,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
 const index_1 = require("../../utils/container/index");
 function importModules(modules) {
-    modules.forEach(m => index_1.default.get(m));
+    modules.forEach(module => {
+        let name = module.name;
+        if (name === 'f') {
+            name = module.constructor.name;
+        }
+        Object.defineProperty(module, 'name', { value: name, writable: true });
+        index_1.default.get(module);
+    });
 }
 function GapiModule(options) {
     return (target) => {
         const original = target;
         function construct(constructor, args) {
-            const c = function () {
+            const c = function dfada() {
                 if (options.imports) {
                     importModules(options.imports);
                 }
@@ -19,10 +26,11 @@ function GapiModule(options) {
                 if (options.controllers) {
                     importModules(options.controllers);
                 }
+                this.options = options;
                 return constructor.apply(this, args);
             };
             c.prototype = constructor.prototype;
-            c.prototype.name = constructor.name;
+            Object.defineProperty(c, 'name', { value: constructor.name, writable: true });
             return index_1.default.get(c);
         }
         const f = function (...args) {
@@ -30,7 +38,6 @@ function GapiModule(options) {
             return construct(original, args);
         };
         f.prototype = original.prototype;
-        f.prototype.name = original.name;
         return f;
     };
 }
