@@ -37,7 +37,7 @@ function Args(arg) {
         const target = t;
         const originalMethod = descriptor.value;
         descriptor.value = function (...args) {
-            let result = originalMethod.apply(this, args);
+            let result = originalMethod.apply(args);
             result = Object.assign({}, originalDecoratorArguments, result);
             return result;
         };

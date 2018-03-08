@@ -20,7 +20,6 @@ export function Query<T>(options?: any) {
         Container.get(ControllerContainerService)
             .createController(target.constructor.name)
             .setDescriptor(propertyKey, descriptor);
-            console.log(propertyKey, descriptor.value())
         return descriptor;
     }
 }

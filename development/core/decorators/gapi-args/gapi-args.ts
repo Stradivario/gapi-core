@@ -38,7 +38,7 @@ export function Args(arg): Function {
         const target = t;
         const originalMethod = descriptor.value;
         descriptor.value = function (...args: any[]) {
-            let result = originalMethod.apply(this, args);
+            let result = originalMethod.apply(args);
             result = {...originalDecoratorArguments, ...result};
             return result;
         };

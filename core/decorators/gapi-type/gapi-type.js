@@ -9,12 +9,11 @@ function Type(type) {
         const originalMethod = descriptor.value;
         const propertyKey = propKey;
         descriptor.value = function (...args) {
-            let returnValue = originalMethod();
+            let returnValue = originalMethod.apply(args);
             Object.assign(returnValue, type);
             return returnValue;
         };
         index_1.default.get(controller_service_1.ControllerContainerService).createController(self.constructor.name).setDescriptor(propertyKey, descriptor);
-        console.log(propertyKey, descriptor.value());
         return descriptor;
     };
 }

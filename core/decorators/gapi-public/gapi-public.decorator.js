@@ -10,7 +10,7 @@ function Public() {
         const propertyKey = propKey;
         const self = t;
         descriptor.value = function (...args) {
-            let returnValue = originalMethod.apply(self, args);
+            let returnValue = originalMethod.apply(args);
             Object.assign(returnValue, pub);
             return returnValue;
         };

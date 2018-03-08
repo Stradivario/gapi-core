@@ -10,7 +10,7 @@ export function Public<T>(): Function {
         const propertyKey = propKey;
         const self = t;
         descriptor.value = function (...args: any[]) {
-            let returnValue = originalMethod.apply(self, args);
+            let returnValue = originalMethod.apply(args);
             Object.assign(returnValue, pub);
             return returnValue;
         };

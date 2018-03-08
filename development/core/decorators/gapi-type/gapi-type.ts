@@ -8,13 +8,11 @@ export function Type<T>(type): Function {
         const originalMethod = descriptor.value;
         const propertyKey = propKey;
         descriptor.value = function (...args: any[]) {
-            let returnValue = originalMethod();
-       
+            let returnValue = originalMethod.apply(args);
             Object.assign(returnValue, type);
             return returnValue;
         };
         Container.get(ControllerContainerService).createController(self.constructor.name).setDescriptor(propertyKey, descriptor);
-        console.log(propertyKey, descriptor.value())
         return descriptor;
     };
 }

@@ -19,7 +19,6 @@ function Query(options) {
         index_1.default.get(controller_service_1.ControllerContainerService)
             .createController(target.constructor.name)
             .setDescriptor(propertyKey, descriptor);
-        console.log(propertyKey, descriptor.value());
         return descriptor;
     };
 }

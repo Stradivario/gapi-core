@@ -7,6 +7,10 @@
 ##### For questions/issues you can write ticket [here](http://gitlab.youvolio.com/gapi/gapi/issues)
 ##### Video starting tutorial with some explanation [here](https://www.youtube.com/watch?v=J8WeVfXR_us&feature=youtu.be)
 
+#### Integrated external modules:
+
+##### [@Gapi-Typescript-Sequelize](https://github.com/Stradivario/gapi-sequelize)
+
 ## Installation and basic examples:
 ##### To install this library, run:
 
@@ -31,11 +35,16 @@ npm install gapi-cli -g
 ## With CLI
 
 ##### To skip the following steps creating project and bootstraping from scratch you can type the following command:
-It may take 20 seconds because it install project dependencies you can check gapi-starter repo here 
-https://github.com/Stradivario/gapi-starter
+It may take 20 seconds because it will install project dependencies.
 
+###### [Basic project](https://github.com/Stradivario/gapi-starter) 
 ```bash
 gapi-cli new my-project
+```
+
+###### [Advanced Project](https://github.com/Stradivario/gapi-starter-postgres-sequelize)
+```bash
+gapi-cli new my-project --advanced
 ```
 
 Enter inside my-project and type: 
@@ -46,7 +55,7 @@ npm start
 
 ##### Open browser to 
 ```bash
-http://localhost:8200/graphiql
+http://localhost:9200/graphiql
 ```
 
 
@@ -71,7 +80,7 @@ import { UserModule } from './user/user.module';
     services: [
         ConfigService.forRoot({
             APP_CONFIG: {
-                port: 8200
+                port: 9200
             }
         })
     ]
@@ -428,7 +437,7 @@ import { readFileSync } from 'fs';
     services: [
         ConfigService.forRoot({
             APP_CONFIG: {
-                port: 8200,
+                port: 9200,
                 cert: readFileSync('./cert.key'),
                 graphiqlToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImtyaXN0aXFuLnRhY2hldkBnbWFpbC5jb20iLCJpZCI6MSwic2NvcGUiOlsiQURNSU4iXSwiaWF0IjoxNTIwMjkxMzkyfQ.9hpIDPkSiGvjTmUEyg_R_izW-ra2RzzLbe3Uh3IFsZg'
             },
