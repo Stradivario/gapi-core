@@ -28,8 +28,8 @@ let GapiPubSubService = class GapiPubSubService {
         else if (process.env.NODE_ENV === 'production') {
             this.sub = new graphql_rabbitmq_subscriptions_1.AmqpPubSub({
                 config: {
-                    host: this.configService.AMQP_CONFIG.host,
-                    port: this.configService.AMQP_CONFIG.port,
+                    host: process.env.AMQP_HOST || this.configService.AMQP_CONFIG.host,
+                    port: process.env.AMQP_PORT || this.configService.AMQP_CONFIG.port,
                 },
                 logger,
             });

@@ -1,12 +1,12 @@
 import {Container} from "../../utils/container";
-import { GraphQLObjectType } from "graphql";
+import { GraphQLObjectType, GraphQLInputObjectType } from "graphql";
 
 interface ResolveMetadata<T> {
     resolve?: () => T;
     key?: string;
 }
   
-export function GapiObjectType<T>(): Function {
+export function GapiObjectType<T>(input?: boolean): Function {
     return function(target: any, propertyName: string, index?: number) {
         const userTypes = new target();
         const type = Object.create({fields: {}, name: target.name});
@@ -15,7 +15,8 @@ export function GapiObjectType<T>(): Function {
         if (target.prototype._metadata && target.prototype._metadata.length) {
             target.prototype._metadata.forEach(meta => type.fields[meta.key].resolve = meta.resolve.bind(target.prototype))
         }
-        Object.setPrototypeOf(target.prototype, new GraphQLObjectType(type))
+        const objectType = input ? new GraphQLInputObjectType(type) : new GraphQLObjectType(type);
+        Object.setPrototypeOf(target.prototype, objectType)
         return target;
     };
 }

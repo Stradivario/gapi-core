@@ -5,7 +5,11 @@
 #### @StrongTyped @GraphQL @API @Hapi @Apollo
 
 ##### For questions/issues you can write ticket [here](http://gitlab.youvolio.com/gapi/gapi/issues)
-##### Video starting tutorial with some explanation [here](https://www.youtube.com/watch?v=J8WeVfXR_us&feature=youtu.be)
+
+##### (Video) Video starting tutorial with some explanation [here](https://www.youtube.com/watch?v=J8WeVfXR_us&feature=youtu.be)
+##### (Video) Easy-starter-in-2-mins-installation-with-cli [here](https://youtu.be/hZdirqZiM5M)
+##### (Video) Advanced-starter-in-2-mins-installation-with-cli [here](https://youtu.be/1zMab64WzfE)
+<!-- TODO: [(Video)Advanced-starter-in-2-mins-with-docker-and-workers](https://youtu.be/1zMab64WzfE) -->
 
 #### Integrated external modules:
 
@@ -55,13 +59,51 @@ npm start
 
 ##### Open browser to 
 ```bash
-http://localhost:9200/graphiql
+http://localhost:9000/graphiql
 ```
 
 
-## Without CLI
+### Docker
 
-### Next create folder structure like this root/src/app
+###### Following commands will start RabbitMQ, PostgreSQL, API, NGINX as a services and you need DOCKER installed on your system!
+###### More information you can find inside project [basic](https://github.com/Stradivario/gapi-starter) or [advanced](https://github.com/Stradivario/gapi-starter-postgres-sequelize-rabbitmq) Documentation 
+###### API will be served on https://localhost:80 and https://localhost:80/subscriptions
+###### Your custom certificates can be added here "root/nginx/certs/cert.key" "root/nginx/certs/cert.pem"
+#### To build project with Docker type:
+```bash
+gapi-cli app build
+```
+
+#### To start project with Docker type:
+```bash
+gapi-cli app start
+```
+
+#### To stop project type:
+```bash
+gapi-cli app stop
+```
+
+### Workers
+###### All workers will be mapped as Proxy and will be reverted to https://localhost:80 and https://localhost:80/subscriptions
+###### So you don't have to worry about if some of your workers stopped responding
+###### Todo: Create monitoring for all workers and main API
+
+#### To start workers type:
+```bash
+gapi-cli workers start
+```
+
+#### To stop workers type:
+```bash
+gapi-cli workers stop
+```
+
+
+
+# Creating application from scratch and custom bootstrapping Without CLI
+
+### Create folder structure like this root/src/app
 
 
 #### Create AppModule like the example above
@@ -80,7 +122,7 @@ import { UserModule } from './user/user.module';
     services: [
         ConfigService.forRoot({
             APP_CONFIG: {
-                port: 9200
+                port: 9000
             }
         })
     ]
@@ -437,7 +479,7 @@ import { readFileSync } from 'fs';
     services: [
         ConfigService.forRoot({
             APP_CONFIG: {
-                port: 9200,
+                port: 9000,
                 cert: readFileSync('./cert.key'),
                 graphiqlToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImtyaXN0aXFuLnRhY2hldkBnbWFpbC5jb20iLCJpZCI6MSwic2NvcGUiOlsiQURNSU4iXSwiaWF0IjoxNTIwMjkxMzkyfQ.9hpIDPkSiGvjTmUEyg_R_izW-ra2RzzLbe3Uh3IFsZg'
             },

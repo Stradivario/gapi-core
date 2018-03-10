@@ -15,32 +15,8 @@ const connection_hook_service_1 = require("../../services/connection-hook/connec
 let ConfigService = ConfigService_1 = class ConfigService {
     constructor(connectionHookService) {
         this.connectionHookService = connectionHookService;
-        this.SEQUELIZE_CONFIG = {
-            development: {
-                dialect: 'postgres',
-                host: process.env.DB_HOST || '172.10.0.10',
-                port: process.env.DB_PORT || '5432',
-                username: process.env.DB_USERNAME || '',
-                password: process.env.DB_PASSWORD || '',
-                name: process.env.DB_NAME || '',
-                logging: false,
-                storage: ':memory:',
-                modelPaths: [__dirname + '/graphql/core/models']
-            },
-            testing: {
-                dialect: 'postgres',
-                host: process.env.DB_HOST || '172.10.0.180',
-                port: process.env.DB_PORT || '5432',
-                username: process.env.DB_USERNAME || '',
-                password: process.env.DB_PASSWORD || '',
-                name: process.env.DB_NAME || 'testing',
-                storage: ':memory:',
-                logging: false,
-                modelPaths: [__dirname + '/graphql/core/models']
-            },
-        };
         this.AMQP_CONFIG = {
-            host: process.env.AMQP_HOST || '172.10.0.181',
+            host: process.env.AMQP_HOST || '182.10.0.5',
             port: process.env.AMQP_PORT || 5672
         };
         this.APP_CONFIG = {
@@ -50,7 +26,7 @@ let ConfigService = ConfigService_1 = class ConfigService {
             uploadFolder: '',
             // tslint:disable-next-line:max-line-length
             graphiqlToken: process.env.GRAPHIQL_TOKEN || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImtyaXN0aXFuLnRhY2hldkBnbWFpbC5jb20iLCJzY29wZSI6WyJBRE1JTiJdLCJpZCI6MSwiaWF0IjoxNTE2NjQ1NDMwfQ.NtCild_BQozDUWM-4f2Q94YrKLGUzaELv_rfQcnDVTA',
-            port: process.env.API_PORT || 8200,
+            port: process.env.API_PORT || 9200,
             fakeUsers: true,
             force: true,
             cyper: {
@@ -66,9 +42,6 @@ let ConfigService = ConfigService_1 = class ConfigService {
     getApp() {
         return this.APP_CONFIG;
     }
-    getSequelize() {
-        return this.SEQUELIZE_CONFIG;
-    }
     getAmqp() {
         return this.AMQP_CONFIG;
     }
@@ -79,7 +52,6 @@ let ConfigService = ConfigService_1 = class ConfigService {
         const configService = Container_1.Container.get(ConfigService_1);
         configService.APP_CONFIG = config.APP_CONFIG;
         configService.AMQP_CONFIG = config.AMQP_CONFIG;
-        configService.SEQUELIZE_CONFIG = config.SEQUELIZE_CONFIG;
         return ConfigService_1;
     }
 };

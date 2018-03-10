@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const graphql_1 = require("graphql");
-function GapiObjectType() {
+function GapiObjectType(input) {
     return function (target, propertyName, index) {
         const userTypes = new target();
         const type = Object.create({ fields: {}, name: target.name });
@@ -10,7 +10,8 @@ function GapiObjectType() {
         if (target.prototype._metadata && target.prototype._metadata.length) {
             target.prototype._metadata.forEach(meta => type.fields[meta.key].resolve = meta.resolve.bind(target.prototype));
         }
-        Object.setPrototypeOf(target.prototype, new graphql_1.GraphQLObjectType(type));
+        const objectType = input ? new graphql_1.GraphQLInputObjectType(type) : new graphql_1.GraphQLObjectType(type);
+        Object.setPrototypeOf(target.prototype, objectType);
         return target;
     };
 }

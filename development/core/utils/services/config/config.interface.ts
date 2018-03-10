@@ -19,28 +19,3 @@ export interface AppConfigInterface {
     connectionHooks?: ConnectionHookService;
     ethereumApi?: string;
 }
-
-export interface SequelizeConfigInterface {
-    development?: {
-        dialect?: string;
-        host?: string;
-        port?: string;
-        username?: string;
-        password?: string;
-        name?: string;
-        logging?: boolean;
-        storage?: string;
-        modelPaths?: string[];
-    };
-    testing: {
-        dialect?: string;
-        host?: string;
-        port?: string;
-        username?: string;
-        password?: string;
-        name?: string;
-        storage?: string;
-        logging?: boolean;
-        modelPaths?: string[];
-    };
-}

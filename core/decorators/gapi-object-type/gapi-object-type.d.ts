@@ -1,1 +1,1 @@
-export declare function GapiObjectType<T>(): Function;
+export declare function GapiObjectType<T>(input?: boolean): Function;

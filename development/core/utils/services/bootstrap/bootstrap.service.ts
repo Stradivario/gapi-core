@@ -6,7 +6,6 @@ import { ConfigService } from "../../services/config/config.service";
 import { SchemaService } from "../../services/schema/schema.service";
 import { GapiServerModule } from "../../../modules/server/server.module";
 import { HookService } from '../../services/hook/hook.service';
-import { GapiSequelizeService } from '../../../modules/sequelize/sequelize.module';
 
 async function getAllFields() {
     const controllerContainerService = Container.get(ControllerContainerService);
