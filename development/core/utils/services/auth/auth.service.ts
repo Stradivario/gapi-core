@@ -40,14 +40,14 @@ export class AuthService {
     }
 
     decrypt(password: string) {
-        const decipher = createDecipheriv(this.config.APP_CONFIG.cyper.algorithm, key, iv);
+        const decipher = createDecipheriv(this.config.APP_CONFIG.cyper.algorithm, this.config.APP_CONFIG.cyper.privateKey, this.config.APP_CONFIG.cyper.iv);
         let dec = decipher.update(password, 'hex', 'utf8');
         dec += decipher.final('utf8');
         return dec;
     }
 
     encrypt(password: string) {
-        const cipher = createCipheriv(this.config.APP_CONFIG.cyper.algorithm, key, iv);
+        const cipher = createCipheriv(this.config.APP_CONFIG.cyper.algorithm, this.config.APP_CONFIG.cyper.privateKey, this.config.APP_CONFIG.cyper.iv);
         let crypted = cipher.update(password, 'utf8', 'hex');
         crypted += cipher.final('hex');
         return crypted;

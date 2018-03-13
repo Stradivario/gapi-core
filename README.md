@@ -1,6 +1,6 @@
 # @gapi
 
-![Build Status](http://gitlab.youvolio.com/gapi/gapi/badges/branch/build.svg)
+![Build Status](http://gitlab.youvolio.com/gapi/gapi/badges/master/build.svg)
 
 #### @StrongTyped @GraphQL @API @Hapi @Apollo
 
@@ -9,7 +9,8 @@
 ##### (Video) Video starting tutorial with some explanation [here](https://www.youtube.com/watch?v=J8WeVfXR_us&feature=youtu.be)
 ##### (Video) Easy-starter-in-2-mins-installation-with-cli [here](https://youtu.be/hZdirqZiM5M)
 ##### (Video) Advanced-starter-in-2-mins-installation-with-cli [here](https://youtu.be/1zMab64WzfE)
-<!-- TODO: [(Video)Advanced-starter-in-2-mins-with-docker-and-workers](https://youtu.be/1zMab64WzfE) -->
+##### (Video) Start gapi a graphql server with Workers advanced(DOCKER) [here](https://youtu.be/FEDtxkjqXJA)
+##### (Video) Start gapi a graphql server with Workers in 2 minutes(DOCKER) [here](https://www.youtube.com/watch?v=3Td0jj__Ztk)
 
 #### Integrated external modules:
 
@@ -29,7 +30,7 @@ $ npm install Stradivario/gapi --save
 npm install -g nodemon ts-node
 ```
 
-##### Next install gapi-cli globally using npm
+##### Next install gapi globally using npm
 
 ```bash
 npm install gapi-cli -g
@@ -41,14 +42,16 @@ npm install gapi-cli -g
 ##### To skip the following steps creating project and bootstraping from scratch you can type the following command:
 It may take 20 seconds because it will install project dependencies.
 
+###### ![Build Status](http://gitlab.youvolio.com/gapi/gapi-starter/badges/master/build.svg)
 ###### [Basic project](https://github.com/Stradivario/gapi-starter) 
 ```bash
-gapi-cli new my-project
+gapi new my-project
 ```
 
+###### ![Build Status](http://gitlab.youvolio.com/gapi/gapi-starter-postgres-sequelize/badges/master/build.svg)
 ###### [Advanced Project](https://github.com/Stradivario/gapi-starter-postgres-sequelize)
 ```bash
-gapi-cli new my-project --advanced
+gapi new my-project --advanced
 ```
 
 Enter inside my-project and type: 
@@ -71,17 +74,17 @@ http://localhost:9000/graphiql
 ###### Your custom certificates can be added here "root/nginx/certs/cert.key" "root/nginx/certs/cert.pem"
 #### To build project with Docker type:
 ```bash
-gapi-cli app build
+gapi app build
 ```
 
 #### To start project with Docker type:
 ```bash
-gapi-cli app start
+gapi app start
 ```
 
 #### To stop project type:
 ```bash
-gapi-cli app stop
+gapi app stop
 ```
 
 ### Workers
@@ -91,12 +94,12 @@ gapi-cli app stop
 
 #### To start workers type:
 ```bash
-gapi-cli workers start
+gapi workers start
 ```
 
 #### To stop workers type:
 ```bash
-gapi-cli workers stop
+gapi workers stop
 ```
 
 
@@ -458,7 +461,7 @@ Bootstrap(AppModule);
 ##### Important the script will search main.ts inside root/src/main.ts where we bootstrap our module bellow
 
 ```
-gapi-cli start
+gapi start
 ```
 
 

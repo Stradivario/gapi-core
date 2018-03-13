@@ -37,13 +37,13 @@ let AuthService = class AuthService {
         return result;
     }
     decrypt(password) {
-        const decipher = crypto_1.createDecipheriv(this.config.APP_CONFIG.cyper.algorithm, exports.key, exports.iv);
+        const decipher = crypto_1.createDecipheriv(this.config.APP_CONFIG.cyper.algorithm, this.config.APP_CONFIG.cyper.privateKey, this.config.APP_CONFIG.cyper.iv);
         let dec = decipher.update(password, 'hex', 'utf8');
         dec += decipher.final('utf8');
         return dec;
     }
     encrypt(password) {
-        const cipher = crypto_1.createCipheriv(this.config.APP_CONFIG.cyper.algorithm, exports.key, exports.iv);
+        const cipher = crypto_1.createCipheriv(this.config.APP_CONFIG.cyper.algorithm, this.config.APP_CONFIG.cyper.privateKey, this.config.APP_CONFIG.cyper.iv);
         let crypted = cipher.update(password, 'utf8', 'hex');
         crypted += cipher.final('hex');
         return crypted;

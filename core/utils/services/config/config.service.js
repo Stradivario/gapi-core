@@ -26,7 +26,7 @@ let ConfigService = ConfigService_1 = class ConfigService {
             uploadFolder: '',
             // tslint:disable-next-line:max-line-length
             graphiqlToken: process.env.GRAPHIQL_TOKEN || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImtyaXN0aXFuLnRhY2hldkBnbWFpbC5jb20iLCJzY29wZSI6WyJBRE1JTiJdLCJpZCI6MSwiaWF0IjoxNTE2NjQ1NDMwfQ.NtCild_BQozDUWM-4f2Q94YrKLGUzaELv_rfQcnDVTA',
-            port: process.env.API_PORT || 9200,
+            port: process.env.API_PORT || 9000,
             fakeUsers: true,
             force: true,
             cyper: {
