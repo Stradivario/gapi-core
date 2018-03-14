@@ -66,6 +66,49 @@ http://localhost:9000/graphiql
 ```
 
 
+### Testing
+
+###### To start developing with testing GAPI uses JEST and gapi-cli is preconfigurated for your needs! :)
+
+#### To run single test type:
+```bash
+gapi test
+```
+
+#### Testing watch mode
+###### Note: You need to start server before running tests 
+###### Note: Everytime you make change to server it will restart server and execute tests
+###### Note: To add more tests just create e2e.spec.ts or unit.spec.ts somewhere inside the application
+
+##### Start the application
+```bash
+gapi start
+```
+##### Execute test with --watch argument
+```bash
+gapi test --watch
+```
+###### You will end up with something like this
+ ![Alt Text](https://raw.githubusercontent.com/Stradivario/gapi/master/images/sidebyside.png)
+
+
+#### Custom logic before testing ( for example creating MOCK users to database before testing)
+
+##### Create file test.ts inside root/src/test.ts with this content
+##### Everytime you run test with --before argument it will set environment variable BEFORE_HOOK
+```typescript
+  if (process.env.BEFORE_HOOK) {
+    // do something here
+  }
+```
+
+##### Then execute tests with --before
+```bash
+gapi test --before
+```
+
+###### This command will start root/src/test.ts file and will wait for process.exit(0) so you can customize your before logic check [this](https://github.com/Stradivario/gapi-starter-postgres-sequelize-rabbitmq/blob/master/src/test.ts#L73) link for reference
+
 ### Docker
 
 ###### Following commands will start RabbitMQ, PostgreSQL, API, NGINX as a services and you need DOCKER installed on your system!
@@ -86,6 +129,7 @@ gapi app start
 ```bash
 gapi app stop
 ```
+
 
 ### Workers
 ###### All workers will be mapped as Proxy and will be reverted to https://localhost:80 and https://localhost:80/subscriptions

@@ -50,4 +50,3 @@ GapiPubSubService = __decorate([
     __metadata("design:paramtypes", [Object, config_service_1.ConfigService])
 ], GapiPubSubService);
 exports.GapiPubSubService = GapiPubSubService;
-var _a;

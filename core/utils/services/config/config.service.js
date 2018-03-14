@@ -9,6 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const fs_1 = require("fs");
 const index_1 = require("../../../../core/utils/container/index");
 const Container_1 = require("../../container/Container");
 const connection_hook_service_1 = require("../../services/connection-hook/connection-hook.service");
@@ -20,15 +21,12 @@ let ConfigService = ConfigService_1 = class ConfigService {
             port: process.env.AMQP_PORT || 5672
         };
         this.APP_CONFIG = {
-            graphiql: true,
-            cert: new Buffer(1),
+            graphiql: process.env.GRAPHIQL === 'true' ? true : false,
+            cert: fs_1.readFileSync(process.env.API_CERT) || new Buffer(1),
             schema: null,
             uploadFolder: '',
             // tslint:disable-next-line:max-line-length
-            graphiqlToken: process.env.GRAPHIQL_TOKEN || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImtyaXN0aXFuLnRhY2hldkBnbWFpbC5jb20iLCJzY29wZSI6WyJBRE1JTiJdLCJpZCI6MSwiaWF0IjoxNTE2NjQ1NDMwfQ.NtCild_BQozDUWM-4f2Q94YrKLGUzaELv_rfQcnDVTA',
             port: process.env.API_PORT || 9000,
-            fakeUsers: true,
-            force: true,
             cyper: {
                 iv: 'Jkyt1H3FA8JK9L3A',
                 privateKey: '8zTVzr3p53VC12jHV54rIYu2545x47lY',
@@ -38,6 +36,12 @@ let ConfigService = ConfigService_1 = class ConfigService {
             connectionHooks: this.connectionHookService,
             ethereumApi: process.env.ETHEREUM_API || 'http://localhost:7545' || 'http://pub-node1.etherscan.io:8545'
         };
+        try {
+            fs_1.readFileSync(process.env.API_CERT);
+        }
+        catch (e) {
+            console.error(`Error: missing cert file api authentication will not work! set env variable API_CERT or add it inside gapi-cli.conf.yml filename: "${process.env.API_CERT}"`);
+        }
     }
     getApp() {
         return this.APP_CONFIG;

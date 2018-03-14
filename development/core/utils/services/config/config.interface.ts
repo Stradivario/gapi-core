@@ -12,7 +12,6 @@ export interface AppConfigInterface {
     uploadFolder?: string;
     graphiqlToken?: string;
     port: string | number;
-    fakeUsers?: boolean;
     force?: boolean;
     schema?: GraphQLSchema;
     cyper?: any;

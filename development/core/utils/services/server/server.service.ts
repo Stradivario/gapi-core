@@ -6,7 +6,7 @@ import { execute } from 'graphql/execution';
 // import { Credential } from './models/Credential';
 
 import { attachErrorHandlers, Boom } from '../error/error.service';
-import Container, {Service} from '../../../utils/container/index';
+import Container, { Service } from '../../../utils/container/index';
 import { ConfigService, AuthService, SchemaService, ConnectionHookService } from '../..';
 import { GraphQLSchema } from 'graphql';
 
@@ -33,7 +33,7 @@ export class ServerUtilService {
                 }
             }
         };
- 
+
         if (process.env.NODE_ENV !== 'production') {
             this.registerEndpoints([{
                 register: graphiqlHapi,
@@ -41,15 +41,16 @@ export class ServerUtilService {
                     path: '/graphiql',
                     graphiqlOptions: {
                         endpointURL: '/graphql',
-                        passHeader: `'Authorization':'${config.APP_CONFIG.graphiqlToken}'`,
-                        subscriptionsEndpoint: `ws://localhost:${config.APP_CONFIG.port}/subscriptions`,
+                        passHeader: `'Authorization':'${config.APP_CONFIG.graphiqlToken || process.env.GRAPHIQL_TOKEN}'`,
+                        subscriptionsEndpoint: `ws://localhost:${config.APP_CONFIG.port || process.env.API_PORT}/subscriptions`,
                         websocketConnectionParams: {
-                            token: config.APP_CONFIG.graphiqlToken
+                            token: config.APP_CONFIG.graphiqlToken || process.env.GRAPHIQL_TOKEN
                         }
                     },
                 },
             }]);
         }
+
 
         // this.registerEndpoints([{
         //   method: 'POST',
@@ -171,19 +172,19 @@ function exitHandler(options, err) {
     if (err) console.log(err.stack);
     if (options.exit) {
         Container.get(ServerUtilService).stopServer()
-        .then(() => process.exit());
+            .then(() => process.exit());
     }
 }
 
 //do something when app is closing
-process.on('exit', exitHandler.bind(null,{cleanup:true}));
+process.on('exit', exitHandler.bind(null, { cleanup: true }));
 
 //catches ctrl+c event
-process.on('SIGINT', exitHandler.bind(null, {exit:true}));
+process.on('SIGINT', exitHandler.bind(null, { exit: true }));
 
 // catches "kill pid" (for example: nodemon restart)
-process.on('SIGUSR1', exitHandler.bind(null, {exit:true}));
-process.on('SIGUSR2', exitHandler.bind(null, {exit:true}));
+process.on('SIGUSR1', exitHandler.bind(null, { exit: true }));
+process.on('SIGUSR2', exitHandler.bind(null, { exit: true }));
 
 //catches uncaught exceptions
-process.on('uncaughtException', exitHandler.bind(null, {exit:true}));
+process.on('uncaughtException', exitHandler.bind(null, { exit: true }));

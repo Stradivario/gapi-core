@@ -53,10 +53,10 @@ let ServerUtilService = class ServerUtilService {
                             path: '/graphiql',
                             graphiqlOptions: {
                                 endpointURL: '/graphql',
-                                passHeader: `'Authorization':'${config.APP_CONFIG.graphiqlToken}'`,
-                                subscriptionsEndpoint: `ws://localhost:${config.APP_CONFIG.port}/subscriptions`,
+                                passHeader: `'Authorization':'${config.APP_CONFIG.graphiqlToken || process.env.GRAPHIQL_TOKEN}'`,
+                                subscriptionsEndpoint: `ws://localhost:${config.APP_CONFIG.port || process.env.API_PORT}/subscriptions`,
                                 websocketConnectionParams: {
-                                    token: config.APP_CONFIG.graphiqlToken
+                                    token: config.APP_CONFIG.graphiqlToken || process.env.GRAPHIQL_TOKEN
                                 }
                             },
                         },

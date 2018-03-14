@@ -9,26 +9,26 @@ import { ConnectionHookService } from "../../services/connection-hook/connection
 
 @Service()
 export class ConfigService {
-
     constructor(
         private connectionHookService: ConnectionHookService
     ) {
-        
+        try {
+            readFileSync(process.env.API_CERT);
+        } catch (e) {
+            console.error(`Error: missing cert file api authentication will not work! set env variable API_CERT or add it inside gapi-cli.conf.yml filename: "${process.env.API_CERT}"`)
+        }
     }
     AMQP_CONFIG: AmqpConfigInterface = {
         host: process.env.AMQP_HOST || '182.10.0.5',
         port: process.env.AMQP_PORT || 5672
     };
     APP_CONFIG: AppConfigInterface = {
-        graphiql: true,
-        cert: new Buffer(1),
+        graphiql: process.env.GRAPHIQL === 'true' ? true : false,
+        cert: readFileSync(process.env.API_CERT) || new Buffer(1),
         schema: null,
         uploadFolder: '',
         // tslint:disable-next-line:max-line-length
-        graphiqlToken: process.env.GRAPHIQL_TOKEN || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImtyaXN0aXFuLnRhY2hldkBnbWFpbC5jb20iLCJzY29wZSI6WyJBRE1JTiJdLCJpZCI6MSwiaWF0IjoxNTE2NjQ1NDMwfQ.NtCild_BQozDUWM-4f2Q94YrKLGUzaELv_rfQcnDVTA',
         port: process.env.API_PORT || 9000,
-        fakeUsers: true,
-        force: true,
         cyper: <any>{
             iv: 'Jkyt1H3FA8JK9L3A',
             privateKey: '8zTVzr3p53VC12jHV54rIYu2545x47lY',
@@ -51,7 +51,7 @@ export class ConfigService {
         this.APP_CONFIG = config;
     }
 
-    static forRoot(config: {APP_CONFIG?: AppConfigInterface, AMQP_CONFIG?: AmqpConfigInterface}) {
+    static forRoot(config: { APP_CONFIG?: AppConfigInterface, AMQP_CONFIG?: AmqpConfigInterface }) {
         const configService = Container.get(ConfigService);
         configService.APP_CONFIG = config.APP_CONFIG;
         configService.AMQP_CONFIG = config.AMQP_CONFIG;
