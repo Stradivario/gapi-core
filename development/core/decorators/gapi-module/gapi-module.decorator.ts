@@ -4,8 +4,11 @@ import { ApplyServicesHook } from '../../utils/services/apply/apply.service';
 import 'reflect-metadata';
 import Container from '../../utils/container/index';
 
-function importModules(modules) {
+function importModules(modules, original, status) {
     modules.forEach(module => {
+        if (!module) {
+            throw new Error(`Incorrect importing "${status}" inside ${original.name}`)
+        }
         let name = module.name;
         if (name === 'f') {
             name = module.constructor.name;
@@ -22,13 +25,13 @@ export function GapiModule<T, K extends keyof T>(options: GapiModuleArguments) {
             const c: any = function() {
 
                 if (options.imports) {
-                    importModules(options.imports);
+                    importModules(options.imports, original, 'imports');
                 }
                 if (options.services) {
-                    importModules(options.services);
+                    importModules(options.services, original, 'services');
                 }
                 if (options.controllers) {
-                    importModules(options.controllers);
+                    importModules(options.controllers, original, 'controllers');
                 }
                 this.options = options;
                 return new constructor();

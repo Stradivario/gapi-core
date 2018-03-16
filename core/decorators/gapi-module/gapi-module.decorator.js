@@ -2,8 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
 const index_1 = require("../../utils/container/index");
-function importModules(modules) {
+function importModules(modules, original, status) {
     modules.forEach(module => {
+        if (!module) {
+            throw new Error(`Incorrect importing "${status}" inside ${original.name}`);
+        }
         let name = module.name;
         if (name === 'f') {
             name = module.constructor.name;
@@ -18,13 +21,13 @@ function GapiModule(options) {
         function construct(constructor, args) {
             const c = function () {
                 if (options.imports) {
-                    importModules(options.imports);
+                    importModules(options.imports, original, 'imports');
                 }
                 if (options.services) {
-                    importModules(options.services);
+                    importModules(options.services, original, 'services');
                 }
                 if (options.controllers) {
-                    importModules(options.controllers);
+                    importModules(options.controllers, original, 'controllers');
                 }
                 this.options = options;
                 return new constructor();
