@@ -42,7 +42,7 @@ export class ServerUtilService {
                     graphiqlOptions: {
                         endpointURL: '/graphql',
                         passHeader: `'Authorization':'${config.APP_CONFIG.graphiqlToken || process.env.GRAPHIQL_TOKEN}'`,
-                        subscriptionsEndpoint: `ws://localhost:${config.APP_CONFIG.port || process.env.API_PORT}/subscriptions`,
+                        subscriptionsEndpoint: `ws://localhost:${config.APP_CONFIG.port || process.env.API_PORT || process.env.PORT}/subscriptions`,
                         websocketConnectionParams: {
                             token: config.APP_CONFIG.graphiqlToken || process.env.GRAPHIQL_TOKEN
                         }

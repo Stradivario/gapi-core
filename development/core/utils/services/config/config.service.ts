@@ -28,7 +28,7 @@ export class ConfigService {
         schema: null,
         uploadFolder: '',
         // tslint:disable-next-line:max-line-length
-        port: process.env.API_PORT || 9000,
+        port: process.env.API_PORT || process.env.PORT || 9000,
         cyper: <any>{
             iv: 'Jkyt1H3FA8JK9L3A',
             privateKey: '8zTVzr3p53VC12jHV54rIYu2545x47lY',

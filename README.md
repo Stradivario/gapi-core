@@ -3,6 +3,7 @@
 ![Build Status](http://gitlab.youvolio.com/gapi/gapi/badges/master/build.svg)
 
 #### @StrongTyped @GraphQL @API @Hapi @Apollo
+#### Inspired by Angular intended to provide complex applications with minimum effort.
 
 ##### For questions/issues you can write ticket [here](http://gitlab.youvolio.com/gapi/gapi/issues)
 
@@ -15,6 +16,8 @@
 #### Integrated external modules:
 
 ##### [@Gapi-Typescript-Sequelize](https://github.com/Stradivario/gapi-sequelize)
+##### [@Gapi-Angular-Client](https://github.com/Stradivario/gapi-angular-client)
+##### [@Gapi-Amqp-PubSub](https://github.com/Stradivario/gapi-amqp) (Internally)
 
 ## Installation and basic examples:
 ##### To install this library, run:
@@ -89,7 +92,7 @@ gapi start
 gapi test --watch
 ```
 ###### You will end up with something like this
- ![Alt Text](https://raw.githubusercontent.com/Stradivario/gapi/master/images/sidebyside.png)
+ ![Alt Text](https://raw.githubusercontent.com/Stradivario/gapi-cli/master/docs/assets/images/sidebyside.png)
 
 
 #### Custom logic before testing ( for example creating MOCK users to database before testing)
