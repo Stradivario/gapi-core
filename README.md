@@ -109,8 +109,74 @@ gapi test --watch
 ```bash
 gapi test --before
 ```
-
 ###### This command will start root/src/test.ts file and will wait for process.exit(0) so you can customize your before logic check [this](https://github.com/Stradivario/gapi-starter-postgres-sequelize-rabbitmq/blob/master/src/test.ts#L73) link for reference
+
+##### Integrated testing utility inside basic and advanced examples E2E testing
+Filepath: `root/src/app/user/user-queries.controller.e2e.spec.ts`
+```typescript
+import { Container } from 'gapi';
+import { IQuery } from '../core/api-introspection/index';
+import { TestUtil } from '../core/test-util/testing.service';
+
+const testUtil: TestUtil = Container.get(TestUtil);
+
+describe('User Queries Controller', () => {
+  it('e2e: queries => (findUser) : Should sucessfully find user', async done => {
+    testUtil.sendRequest<IQuery>({
+      query: `
+        query findUser($id: Int!) {
+            findUser(id: $id) {
+                id
+                settings {
+                    username
+                    firstname
+                }
+            }
+        }
+      `,
+      variables: {
+        id: 1
+      }
+    })
+      .map(res => {
+        expect(res.success).toBeTruthy();
+        return res.data.findUser;
+      })
+      .subscribe(async res => {
+        expect(res.id).toBe(1);
+        expect(res.settings.username).toBe('o');
+        expect(res.settings.firstname).toBe('pesho');
+        done();
+      }, err => {
+        expect(err).toBe(null);
+        done();
+      });
+  });
+});
+
+```
+Filepath: `root/src/app/core/test-util/testing.service.ts`
+```typescript
+    disableAuthorization() {
+        this.tester = tester({ url: process.env.ENDPOINT_TESTING, contentType: 'application/json' });
+    }
+
+    enableAuthorization() {
+        this.tester = tester({ url: process.env.ENDPOINT_TESTING, contentType: 'application/json', authorization: process.env.TOKEN_TESTING});
+    }
+
+    sendRequest<T>(query: SendRequestQueryType): Observable<Response<T>> {
+        if (query.signiture) {
+            this.tester = tester({
+                url: process.env.ENDPOINT_TESTING,
+                contentType: 'application/json',
+                authorization: query.signiture.token
+            });
+        }
+        return Observable.fromPromise(this.tester(JSON.stringify(query)));
+    }
+```
+
 
 ### Docker
 
@@ -429,13 +495,13 @@ export class UserSubscriptionsController {
 
 ```typescript
 subscription {
-  subscribeToUserMessagesBasic(id:1)  {
+  subscribeToUserMessagesBasic {
     message
   }
 }
 ```
 
-##### Example subscription query Basic
+##### Example subscription query WithFilter
 
 ```typescript
 subscription {
