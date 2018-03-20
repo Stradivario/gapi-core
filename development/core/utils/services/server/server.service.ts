@@ -42,7 +42,7 @@ export class ServerUtilService {
                     graphiqlOptions: {
                         endpointURL: '/graphql',
                         passHeader: `'Authorization':'${config.APP_CONFIG.graphiqlToken || process.env.GRAPHIQL_TOKEN}'`,
-                        subscriptionsEndpoint: `${process.env.GRAPHIQL_WS_SSH ? 'wss' : 'ws'}://${process.env.GRAPHIQL_WS_PATH || 'localhost'}${process.env.HEROKU ? '' : `:${config.APP_CONFIG.port || process.env.API_PORT || process.env.PORT}`}/subscriptions`,
+                        subscriptionsEndpoint: `${process.env.GRAPHIQL_WS_SSH ? 'wss' : 'ws'}://${process.env.GRAPHIQL_WS_PATH || 'localhost'}${process.env.DEPLOY_PLATFORM === 'heroku' ? '' : `:${config.APP_CONFIG.port || process.env.API_PORT || process.env.PORT}`}/subscriptions`,
                         websocketConnectionParams: {
                             token: config.APP_CONFIG.graphiqlToken || process.env.GRAPHIQL_TOKEN
                         }
