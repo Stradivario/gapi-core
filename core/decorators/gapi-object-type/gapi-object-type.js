@@ -10,9 +10,9 @@ function GapiObjectType(input) {
         if (target.prototype._metadata && target.prototype._metadata.length) {
             target.prototype._metadata.forEach(meta => type.fields[meta.key].resolve = meta.resolve.bind(target.prototype));
         }
-        const objectType = input ? new graphql_1.GraphQLInputObjectType(type) : new graphql_1.GraphQLObjectType(type);
-        Object.setPrototypeOf(target.prototype, objectType);
-        return target;
+        return function () {
+            return input ? new graphql_1.GraphQLInputObjectType(type) : new graphql_1.GraphQLObjectType(type);
+        };
     };
 }
 exports.GapiObjectType = GapiObjectType;

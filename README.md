@@ -111,6 +111,33 @@ gapi test --before
 ```
 ###### This command will start root/src/test.ts file and will wait for process.exit(0) so you can customize your before logic check [this](https://github.com/Stradivario/gapi-starter-postgres-sequelize-rabbitmq/blob/master/src/test.ts#L73) link for reference
 
+
+##### Unit Testing
+
+```typescript
+import { Container } from 'gapi';
+import { AuthPrivateService } from './auth.service';
+
+const authService: AuthPrivateService = Container.get(AuthPrivateService);
+
+describe('User Queries Controller', () => {
+  it('unit: signJWTtoken => (findUser) : Should sucessfully sign jwt', async done => {
+        const token = authService.signJWTtoken({
+            email: 'dada@abv.bg',
+            id: 1,
+            scope: ['ADMIN']
+        });
+        expect(token).toBeTruthy();
+        const verifyedToken = authService.verifyToken(token);
+        expect(verifyedToken.email).toBe('dada@abv.bg');
+        expect(verifyedToken.id).toBe(1);
+        expect(verifyedToken.scope[0]).toBe('ADMIN');
+        done();
+  });
+});
+
+```
+
 ##### Integrated testing utility inside basic and advanced examples E2E testing
 Filepath: `root/src/app/user/user-queries.controller.e2e.spec.ts`
 ```typescript
@@ -343,6 +370,21 @@ export class UserMessage {
 export const UserMessageType = new UserMessage();
 ```
 
+## UserToken
+
+```typescript
+import { GapiObjectType, GraphQLScalarType, GraphQLString } from 'gapi';
+import { UserType, UserObjectType } from './user.type';
+
+@GapiObjectType()
+export class UserTokenType {
+    readonly token: string | GraphQLScalarType = GraphQLString;
+    readonly user: UserType = UserObjectType;
+}
+
+export const UserTokenObjectType = new UserTokenType();
+```
+
 
 ## Query
 ##### Folder root/src/user/query.controller.ts
@@ -350,6 +392,7 @@ export const UserMessageType = new UserMessage();
 import { Query, GraphQLNonNull, Scope, Type, GraphQLObjectType, Mutation, GapiController, Service, GraphQLInt, Injector } from "gapi";
 import { UserService } from './services/user.service';
 import { UserObjectType } from './services/type/user.type';
+import { UserTokenObjectType } from './types/user-login.type';
 import { UserMessageType } from './user.subscription.controller';
 
 @GapiController()
@@ -368,8 +411,46 @@ export class UserQueriesController {
         return this.userService.findUser(id);
     }
 
-}
+    @Type(UserTokenObjectType)
+    @Query({
+        email: {
+            type: new GraphQLNonNull(GraphQLString)
+        },
+        password: {
+            type: new GraphQLNonNull(GraphQLString)
+        }
+    })
+    login(root, {email, password}, context) {
+        let credential: IUserTokenType;
 
+        // Find user from database
+        const user = <IUserType>{
+            id: 1,
+            email: email,
+            type: 'ADMIN',
+            settings: {
+                sidebar: true
+            },
+            password: this.authService.encryptPassword(password),
+            name: 'Test Testov'
+        };
+
+        if (this.authService.decryptPassword(user.password) === password) {
+            credential = {
+                user: user,
+                token: this.authService.signJWTtoken({
+                    email: user.email,
+                    id: user.id,
+                    scope: [user.type]
+                })
+            };
+        } else {
+            throw new Error('missing-username-or-password');
+        }
+        return credential;
+    }
+
+}
 
 ```
 

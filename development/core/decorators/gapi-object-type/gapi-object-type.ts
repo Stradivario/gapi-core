@@ -15,8 +15,8 @@ export function GapiObjectType<T>(input?: boolean): Function {
         if (target.prototype._metadata && target.prototype._metadata.length) {
             target.prototype._metadata.forEach(meta => type.fields[meta.key].resolve = meta.resolve.bind(target.prototype))
         }
-        const objectType = input ? new GraphQLInputObjectType(type) : new GraphQLObjectType(type);
-        Object.setPrototypeOf(target.prototype, objectType)
-        return target;
+        return function() {
+            return input ? new GraphQLInputObjectType(type) : new GraphQLObjectType(type)
+        };
     };
 }
