@@ -120,8 +120,8 @@ import { AuthPrivateService } from './auth.service';
 
 const authService: AuthPrivateService = Container.get(AuthPrivateService);
 
-describe('User Queries Controller', () => {
-  it('unit: signJWTtoken => (findUser) : Should sucessfully sign jwt', async done => {
+describe('Auth Service', () => {
+  it('unit: signJWTtoken => token : Should sucessfully sign jwt', async done => {
         const token = authService.signJWTtoken({
             email: 'dada@abv.bg',
             id: 1,
