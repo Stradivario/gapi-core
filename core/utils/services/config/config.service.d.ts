@@ -4,9 +4,9 @@ import { ConnectionHookService } from "../../services/connection-hook/connection
 export declare class ConfigService {
     private connectionHookService;
     cert: Buffer;
-    constructor(connectionHookService: ConnectionHookService);
     AMQP_CONFIG: AmqpConfigInterface;
     APP_CONFIG: AppConfigInterface;
+    constructor(connectionHookService: ConnectionHookService);
     getApp(): AppConfigInterface;
     getAmqp(): AmqpConfigInterface;
     setAppConfig(config: AppConfigInterface): void;

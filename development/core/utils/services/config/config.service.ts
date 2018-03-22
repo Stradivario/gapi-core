@@ -10,16 +10,6 @@ import { ConnectionHookService } from "../../services/connection-hook/connection
 @Service()
 export class ConfigService {
     cert: Buffer;
-    constructor(
-        private connectionHookService: ConnectionHookService
-    ) {
-        try {
-            this.cert = readFileSync(process.env.API_CERT || './cert.key')
-        } catch (e) {
-            console.log('This server will be runned without authentication!')
-            this.cert = null;
-        }
-    }
     AMQP_CONFIG: AmqpConfigInterface = {
         host: process.env.AMQP_HOST || '182.10.0.5',
         port: process.env.AMQP_PORT || 5672
@@ -40,6 +30,16 @@ export class ConfigService {
         connectionHooks: this.connectionHookService,
         ethereumApi: process.env.ETHEREUM_API || 'http://localhost:7545' || 'http://pub-node1.etherscan.io:8545'
     };
+    constructor(
+        private connectionHookService: ConnectionHookService
+    ) {
+        try {
+            this.cert = readFileSync(process.env.API_CERT || './cert.key')
+        } catch (e) {
+            console.log('This server will be runned without authentication!')
+            this.cert = null;
+        }
+    }
 
     getApp() {
         return this.APP_CONFIG;

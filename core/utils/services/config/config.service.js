@@ -40,6 +40,7 @@ let ConfigService = ConfigService_1 = class ConfigService {
             this.cert = fs_1.readFileSync(process.env.API_CERT || './cert.key');
         }
         catch (e) {
+            console.log('This server will be runned without authentication!');
             this.cert = null;
         }
     }
