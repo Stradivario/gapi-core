@@ -34,10 +34,12 @@ export class ConfigService {
         private connectionHookService: ConnectionHookService
     ) {
         try {
-            this.cert = readFileSync(process.env.API_CERT || './cert.key')
+            this.cert = readFileSync(process.env.API_CERT || './cert.key');
+            this.APP_CONFIG.cert = this.cert;
         } catch (e) {
             console.log('This server will be runned without authentication!')
             this.cert = null;
+            this.APP_CONFIG.cert = null;
         }
     }
 
