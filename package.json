@@ -1,16 +1,13 @@
 {
-  "name": "gapi",
+  "name": "@gapi/core",
   "version": "0.5.1",
   "repository": {
     "type": "git",
     "url": "http://gitlab.youvolio.com/open-source/gapi.git"
   },
-  "author": {
-    "name": "Kristian Tachev(Stradivario)",
-    "email": "kristiqn.tachev@gmail.com"
-  },
-  "scripts":{
-    "ammend":"git add . && git commit --amend && git push -f && git push -f git@github.com:Stradivario/gapi.git"
+  "author": "Kristian Tachev <kristiqn.tachev@gmail.com> (Stradivario)",
+  "scripts": {
+    "ammend": "git add . && git commit --amend && git push -f && git push -f git@github.com:Stradivario/gapi.git"
   },
   "keywords": [
     "graphql",
@@ -76,5 +73,7 @@
     "testRegex": "/graphql/.*\\.spec.(ts|tsx|js)$",
     "verbose": true,
     "collectCoverage": true
-  }
+  },
+  "description": "![Build Status](http://gitlab.youvolio.com/gapi/gapi-starter/badges/master/build.svg)",
+  "main": "index.js"
 }
