@@ -11,7 +11,7 @@
 
 **Starting project for less than 1 minute via [Gapi-CLI](https://stradivario.github.io/gapi-cli/)**
 
-<img width="400" style="margin:0 auto;text-align:center" alt="portfolio_view" src="https://stradivario.github.io/gapi-cli/assets/images/cli-logo1.svg">
+<img width="400" style="margin:0 auto;text-align:center" alt="portfolio_view" src="https://github.com/Stradivario/gapi-cli-docs/blob/master/src/assets/images/cli-logo1.svg">
 <!-- </p> -->
 
 
