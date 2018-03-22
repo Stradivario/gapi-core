@@ -75,7 +75,7 @@ npm install Stradivario/gapi
 import {
   GapiObjectType, GraphQLScalarType, GraphQLInt, GraphQLNonNull,
   GapiController, Type, Query, GapiModule, Bootstrap
-} from 'gapi';
+} from '@gapi/core';
 
 @GapiObjectType()
 export class UserType {
@@ -204,7 +204,7 @@ gapi test --before
 ##### Unit Testing
 
 ```typescript
-import { Container } from 'gapi';
+import { Container } from '@gapi/core';
 import { AuthPrivateService } from './auth.service';
 
 const authService: AuthPrivateService = Container.get(AuthPrivateService);
@@ -230,7 +230,7 @@ describe('Auth Service', () => {
 ##### Integrated testing utility inside basic and advanced examples E2E testing
 Filepath: `root/src/app/user/user-queries.controller.e2e.spec.ts`
 ```typescript
-import { Container } from 'gapi';
+import { Container } from '@gapi/core';
 import { IQuery } from '../core/api-introspection/index';
 import { TestUtil } from '../core/test-util/testing.service';
 
@@ -344,7 +344,7 @@ gapi workers stop
 
 ```typescript
 
-import { GapiModule, GapiServerModule, ConfigService } from 'gapi';
+import { GapiModule, GapiServerModule, ConfigService } from '@gapi/core';
 import { UserModule } from './user/user.module';
 
 @GapiModule({
@@ -368,7 +368,7 @@ export class AppModule {}
 ### Folder root/src/app/user/user.module.ts
 ```typescript
 
-import { GapiModule } from 'gapi';
+import { GapiModule } from '@gapi/core';
 import { UserQueriesController } from './user.queries.controller';
 import { UserMutationsController } from './user.mutations.controller';
 import { UserService, AnotherService } from './user/services/user.service';
@@ -449,7 +449,7 @@ export const UserSettingsObjectType = new UserSettings();
 ## UserMessage Schema for Subscriptions
 
 ```typescript
-import { GapiObjectType, GraphQLScalarType, GraphQLString } from 'gapi';
+import { GapiObjectType, GraphQLScalarType, GraphQLString } from '@gapi/core';
 
 @GapiObjectType()
 export class UserMessage {
@@ -462,7 +462,7 @@ export const UserMessageType = new UserMessage();
 ## UserToken
 
 ```typescript
-import { GapiObjectType, GraphQLScalarType, GraphQLString } from 'gapi';
+import { GapiObjectType, GraphQLScalarType, GraphQLString } from '@gapi/core';
 import { UserType, UserObjectType } from './user.type';
 
 @GapiObjectType()
@@ -618,7 +618,7 @@ export class UserMutationsController {
 import {
     GapiObjectType, GraphQLScalarType, GraphQLString, GapiController,
     GapiPubSubService, Type, Injector, Subscribe, Subscription, withFilter, Scope, GraphQLInt, GraphQLNonNull
-} from 'gapi';
+} from '@gapi/core';
 import { UserService } from './services/user.service';
 import { UserMessageType, UserMessage } from './types/user-message.type';
 
@@ -733,7 +733,7 @@ export class UserService {
 ```typescript
 
 import { AppModule } from './app/app.module';
-import { Bootstrap } from 'gapi';
+import { Bootstrap } from '@gapi/core';
 
 Bootstrap(AppModule);
 
@@ -757,7 +757,7 @@ gapi start
 
 ```typescript
 
-import { GapiModule, ConfigService } from 'gapi';
+import { GapiModule, ConfigService } from '@gapi/core';
 import { AuthPrivateService } from './services/auth/auth.service';
 import { readFileSync } from 'fs';
 
@@ -851,7 +851,7 @@ export class AuthPrivateService {
 ##### Final import CoreModule inside AppModule
 
 ```typescript
-import { GapiModule, GapiServerModule } from 'gapi';
+import { GapiModule, GapiServerModule } from '@gapi/core';
 import { UserModule } from './user/user.module';
 import { UserService } from './user/services/user.service';
 import { CoreModule } from './core/core.module';
