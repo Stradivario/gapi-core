@@ -1,6 +1,6 @@
 {
   "name": "gapi",
-  "version": "0.4.9",
+  "version": "0.5.0",
   "repository": {
     "type": "git",
     "url": "http://gitlab.youvolio.com/open-source/gapi.git"
@@ -8,6 +8,9 @@
   "author": {
     "name": "Kristian Tachev(Stradivario)",
     "email": "kristiqn.tachev@gmail.com"
+  },
+  "scripts":{
+    "ammend":"git add . && git commit --amend && git push -f && git push -f git@github.com:Stradivario/gapi.git"
   },
   "keywords": [
     "graphql",
@@ -22,9 +25,9 @@
   "typings": "gapi-module.d.ts",
   "devDependencies": {
     "@types/graphql": "^0.12.4",
-    "@types/jest": "^22.1.4",
-    "@types/node": "^9.4.6",
     "@types/hapi": "^16.1.9",
+    "@types/jest": "^22.1.4",
+    "@types/node": "^9.4.7",
     "graphql-tester": "0.0.5",
     "jest": "^22.4.2",
     "jest-cli": "^22.4.2",

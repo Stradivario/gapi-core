@@ -9,13 +9,15 @@ import { ConnectionHookService } from "../../services/connection-hook/connection
 
 @Service()
 export class ConfigService {
+    cert: Buffer;
     constructor(
         private connectionHookService: ConnectionHookService
     ) {
         try {
-            readFileSync(process.env.API_CERT);
+            this.cert = readFileSync(process.env.API_CERT || './cert.key')
         } catch (e) {
-            console.error(`Error: missing cert file api authentication will not work! set env variable API_CERT or add it inside gapi-cli.conf.yml filename: "${process.env.API_CERT}"`)
+            console.log('This server will be runned without authentication!')
+            this.cert = null;
         }
     }
     AMQP_CONFIG: AmqpConfigInterface = {
@@ -24,7 +26,7 @@ export class ConfigService {
     };
     APP_CONFIG: AppConfigInterface = {
         graphiql: process.env.GRAPHIQL === 'true' ? true : false,
-        cert: readFileSync(process.env.API_CERT) || new Buffer(1),
+        cert: this.cert,
         schema: null,
         uploadFolder: '',
         // tslint:disable-next-line:max-line-length

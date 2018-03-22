@@ -1,17 +1,59 @@
 # @gapi
 
-![Build Status](http://gitlab.youvolio.com/gapi/gapi/badges/master/build.svg)
+![Build Status](http://gitlab.youvolio.com/gapi/gapi-starter/badges/master/build.svg)
 
-#### @StrongTyped @GraphQL @API @Hapi @Apollo
-#### Inspired by Angular intended to provide complex applications with minimum effort.
+**Really easy [GraphQL](https://graphql.org/) API framework builded on top of NodeJS inspired by [@Angular](https://angular.io/)**
 
-##### For questions/issues you can write ticket [here](http://gitlab.youvolio.com/gapi/gapi/issues)
+**Created to provide complex backend scalable applications with minimum effort.**
 
-##### (Video) Video starting tutorial with some explanation [here](https://www.youtube.com/watch?v=J8WeVfXR_us&feature=youtu.be)
-##### (Video) Easy-starter-in-2-mins-installation-with-cli [here](https://youtu.be/hZdirqZiM5M)
-##### (Video) Advanced-starter-in-2-mins-installation-with-cli [here](https://youtu.be/1zMab64WzfE)
-##### (Video) Start gapi a graphql server with Workers advanced(DOCKER) [here](https://youtu.be/FEDtxkjqXJA)
-##### (Video) Start gapi a graphql server with Workers in 2 minutes(DOCKER) [here](https://www.youtube.com/watch?v=3Td0jj__Ztk)
+**For questions/issues you can write ticket [here](http://gitlab.youvolio.com/gapi/gapi/issues)**
+<!-- <p align="center"> -->
+
+**Starting project for less than 1 minute via [Gapi-CLI](https://stradivario.github.io/gapi-cli/)**
+
+<img width="400" style="margin:0 auto;text-align:center" alt="portfolio_view" src="https://stradivario.github.io/gapi-cli/assets/images/cli-logo.svg">
+<!-- </p> -->
+
+
+***
+**Heroku Ready!**
+
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://github.com/Stradivario/gapi-starter) 
+
+**[Basic starter](https://github.com/Stradivario/gapi-starter) project has Heroku Easy Deploy Button!**
+
+
+***
+**Part of the frameworks and techniques used for creation of this project without which Gapi would not exist :love_letter:**
+
+- [Inversion of control pattern](https://martinfowler.com/articles/injection.html#InversionOfControl)
+IOC explanation taken from [this](https://stackoverflow.com/a/6551303) article: 
+
+> IoC Containers are DI frameworks that can work outside of the programming language. In some you can configure which implementations to use in metadata files
+> (e.g. XML) which are less invasive. With some you can do IoC that would normally be impossible like inject an implementation at pointcuts.
+
+- [Pointcuts](https://en.wikipedia.org/wiki/Pointcut) - aspect-oriented computer programming
+- [Dependency Injection](https://en.wikipedia.org/wiki/Dependency_injection)
+- [Typescript](http://www.typescriptlang.org/) [@Decorators](http://www.typescriptlang.org/docs/handbook/decorators.html)
+
+ - [@NodeJS](https://nodejs.org/en/)
+ - [@HAPI](https://hapijs.com/)
+ - [@ApolloGraphQL](https://www.apollographql.com/)
+ - [@Gapi-cli](https://stradivario.github.io/gapi-cli/)
+ - [@RXJS](http://reactivex.io/rxjs/)
+
+**Advanced Starter Example and production build**
+ - [@Docker](https://www.docker.com/)
+ - [@PostgreSQL](https://www.postgresql.org)
+ - [@RabbitMQ](http://www.rabbitmq.com/)
+***
+
+**Video Tutorials**
+##### [Starting tutorial with some explanation](https://www.youtube.com/watch?v=J8WeVfXR_us&feature=youtu.be)
+##### [Easy-starter-in-2-mins-installation-with-cli](https://youtu.be/hZdirqZiM5M)
+##### [Advanced-starter-in-2-mins-installation-with-cli](https://youtu.be/1zMab64WzfE)
+##### [Start gapi a graphql server with Workers advanced(DOCKER)](https://youtu.be/FEDtxkjqXJA)
+##### [Start gapi a graphql server with Workers in 2 minutes(DOCKER)](https://www.youtube.com/watch?v=3Td0jj__Ztk)
 
 #### Integrated external modules:
 
@@ -19,13 +61,63 @@
 ##### [@Gapi-Angular-Client](https://github.com/Stradivario/gapi-angular-client)
 ##### [@Gapi-Amqp-PubSub](https://github.com/Stradivario/gapi-amqp) (Internally)
 
+
 ## Installation and basic examples:
 ##### To install this library, run:
 
 ```bash
-$ npm install Stradivario/gapi --save
+npm install Stradivario/gapi
 ```
 
+## Simplest Gapi server
+
+```typescript
+import {
+  GapiObjectType, GraphQLScalarType, GraphQLInt, GraphQLNonNull,
+  GapiController, Type, Query, GapiModule, Bootstrap
+} from 'gapi';
+
+@GapiObjectType()
+export class UserType {
+    readonly id: number | GraphQLScalarType = GraphQLInt;
+}
+export const UserObjectType = new UserType();
+
+@GapiController()
+export class UserQueriesController {
+
+    @Type(UserObjectType)
+    @Query({
+        id: {
+            type: new GraphQLNonNull(GraphQLInt)
+        }
+    })
+    findUser(root, { id }, context): UserType {
+        return {id: id};
+    }
+
+}
+
+@GapiModule({
+    imports: [
+        UserQueriesController
+    ]
+})
+export class AppModule { }
+
+Bootstrap(AppModule);
+```
+
+Execute
+
+```bash
+ts-node index.ts
+```
+
+
+
+## With CLI
+##### Next create project using CLI or read above how to bootstrap your custom application
 ## Consuming gapi
 
 ##### First we need to install ts-node and nodemon globally
@@ -38,9 +130,6 @@ npm install -g nodemon ts-node
 ```bash
 npm install gapi-cli -g
 ```
-##### Next create project using CLI or read above how to bootstrap your custom application
-
-## With CLI
 
 ##### To skip the following steps creating project and bootstraping from scratch you can type the following command:
 It may take 20 seconds because it will install project dependencies.
@@ -1004,6 +1093,7 @@ query {
   }
 }
 ```
+
 
 
 

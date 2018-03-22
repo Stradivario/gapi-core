@@ -1,4 +1,6 @@
 import { createError } from '../error/error.service';
+import { Container } from '../../../../core/utils/container/index';
+import { ConfigService } from '../../services/config/config.service';
 
 function MakeError() {
     throw new createError('unauthorized', 'You are unable to fetch data');
@@ -29,11 +31,13 @@ export class HookService {
         HookService.AuthenticationHooks(resolver, root, args, context, info);
     }
     static AddHooks(resolver) {
-        const resolve = resolver.resolve;
-        resolver.resolve = async (root, args, context, info) => {
-            HookService.ResolverHooks(resolver, root, args, context, info);
-            return await resolve(root, args, context, info);
-        };
+        if(Container.get(ConfigService).cert) {
+            const resolve = resolver.resolve;
+            resolver.resolve = async (root, args, context, info) => {
+                HookService.ResolverHooks(resolver, root, args, context, info);
+                return await resolve(root, args, context, info);
+            };  
+        }
     }
 }
 

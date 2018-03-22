@@ -22,7 +22,7 @@ let ConfigService = ConfigService_1 = class ConfigService {
         };
         this.APP_CONFIG = {
             graphiql: process.env.GRAPHIQL === 'true' ? true : false,
-            cert: fs_1.readFileSync(process.env.API_CERT) || new Buffer(1),
+            cert: this.cert,
             schema: null,
             uploadFolder: '',
             // tslint:disable-next-line:max-line-length
@@ -37,10 +37,10 @@ let ConfigService = ConfigService_1 = class ConfigService {
             ethereumApi: process.env.ETHEREUM_API || 'http://localhost:7545' || 'http://pub-node1.etherscan.io:8545'
         };
         try {
-            fs_1.readFileSync(process.env.API_CERT);
+            this.cert = fs_1.readFileSync(process.env.API_CERT || './cert.key');
         }
         catch (e) {
-            console.error(`Error: missing cert file api authentication will not work! set env variable API_CERT or add it inside gapi-cli.conf.yml filename: "${process.env.API_CERT}"`);
+            this.cert = null;
         }
     }
     getApp() {

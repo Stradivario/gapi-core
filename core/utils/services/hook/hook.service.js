@@ -9,6 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const error_service_1 = require("../error/error.service");
+const index_1 = require("../../../../core/utils/container/index");
+const config_service_1 = require("../../services/config/config.service");
 function MakeError() {
     throw new error_service_1.createError('unauthorized', 'You are unable to fetch data');
 }
@@ -37,11 +39,13 @@ class HookService {
         HookService.AuthenticationHooks(resolver, root, args, context, info);
     }
     static AddHooks(resolver) {
-        const resolve = resolver.resolve;
-        resolver.resolve = (root, args, context, info) => __awaiter(this, void 0, void 0, function* () {
-            HookService.ResolverHooks(resolver, root, args, context, info);
-            return yield resolve(root, args, context, info);
-        });
+        if (index_1.Container.get(config_service_1.ConfigService).cert) {
+            const resolve = resolver.resolve;
+            resolver.resolve = (root, args, context, info) => __awaiter(this, void 0, void 0, function* () {
+                HookService.ResolverHooks(resolver, root, args, context, info);
+                return yield resolve(root, args, context, info);
+            });
+        }
     }
 }
 exports.HookService = HookService;
