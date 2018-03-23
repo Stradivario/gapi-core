@@ -3,18 +3,30 @@ import { GapiModuleSymbol } from "./gapi-module.symbol";
 import { ApplyServicesHook } from '../../utils/services/apply/apply.service';
 import 'reflect-metadata';
 import Container from '../../utils/container/index';
+import { ServiceMetadata } from "../../../core/utils/container";
 
 function importModules(modules, original, status) {
-    modules.forEach(module => {
+    modules.forEach((module) => {
         if (!module) {
             throw new Error(`Incorrect importing "${status}" inside ${original.name}`)
         }
-        let name = module.name;
-        if (name === 'f') {
-            name = module.constructor.name;
+        if (module.constructor === Object) {
+            if (module.provide && module.useClass) {
+                Container.set(module.provide, new module.useClass());
+            } else if (module.provide && module.useFactory) {
+                Container.set(module.provide, module.useFactory());
+            } else {
+                throw new Error('Wrong injectable');
+            }
+        } else {
+            let name = module.name;
+            if (name === 'f') {
+                name = module.constructor.name;
+            }
+            Object.defineProperty(module, 'name', { value: name, writable: true });
+            Container.get(module)
         }
-        Object.defineProperty(module, 'name', { value: name, writable: true });
-        Container.get(module)        
+
     });
 }
 
@@ -22,7 +34,7 @@ export function GapiModule<T, K extends keyof T>(options: GapiModuleArguments) {
     return (target) => {
         const original = target;
         function construct(constructor, args) {
-            const c: any = function() {
+            const c: any = function () {
 
                 if (options.imports) {
                     importModules(options.imports, original, 'imports');
@@ -36,9 +48,9 @@ export function GapiModule<T, K extends keyof T>(options: GapiModuleArguments) {
                 this.options = options;
                 return new constructor();
             };
-   
-            c.prototype = constructor.prototype; 
-            Object.defineProperty(c, 'name', {value: constructor.name, writable: true});
+
+            c.prototype = constructor.prototype;
+            Object.defineProperty(c, 'name', { value: constructor.name, writable: true });
             return Container.get(c);
 
         }
@@ -46,9 +58,9 @@ export function GapiModule<T, K extends keyof T>(options: GapiModuleArguments) {
             console.log('Loaded Module: ' + original.name);
             return construct(original, args);
         };
-        f.prototype = original.prototype; 
-        if(original.forRoot) {
-            f.forRoot = original.forRoot; 
+        f.prototype = original.prototype;
+        if (original.forRoot) {
+            f.forRoot = original.forRoot;
         }
         return f;
     };

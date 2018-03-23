@@ -6,6 +6,7 @@ import { ConfigService } from "../../services/config/config.service";
 import { SchemaService } from "../../services/schema/schema.service";
 import { GapiServerModule } from "../../../modules/server/server.module";
 import { HookService } from '../../services/hook/hook.service';
+import { controllerHooks } from '../controller-service/controller-hooks';
 
 async function getAllFields() {
     const controllerContainerService = Container.get(ControllerContainerService);
@@ -17,6 +18,8 @@ async function getAllFields() {
                 currentCtrl.getAllDescriptors().forEach(descriptor => {
                     const desc = currentCtrl.getDescriptor(descriptor).value();
                     Fields[desc.method_type][desc.method_name] = desc;
+                    const t = controllerHooks.getHook(controller);
+                    console.log('dadadaad', t)
                     const originalResolve = desc.resolve.bind(desc.target);
                     desc.resolve = function resolve(...args: any[]) {
                         return originalResolve.apply(desc.target, args)

@@ -3,16 +3,29 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
 const index_1 = require("../../utils/container/index");
 function importModules(modules, original, status) {
-    modules.forEach(module => {
+    modules.forEach((module) => {
         if (!module) {
             throw new Error(`Incorrect importing "${status}" inside ${original.name}`);
         }
-        let name = module.name;
-        if (name === 'f') {
-            name = module.constructor.name;
+        if (module.constructor === Object) {
+            if (module.provide && module.useClass) {
+                index_1.default.set(module.provide, new module.useClass());
+            }
+            else if (module.provide && module.useFactory) {
+                index_1.default.set(module.provide, module.useFactory());
+            }
+            else {
+                throw new Error('Wrong injectable');
+            }
         }
-        Object.defineProperty(module, 'name', { value: name, writable: true });
-        index_1.default.get(module);
+        else {
+            let name = module.name;
+            if (name === 'f') {
+                name = module.constructor.name;
+            }
+            Object.defineProperty(module, 'name', { value: name, writable: true });
+            index_1.default.get(module);
+        }
     });
 }
 function GapiModule(options) {

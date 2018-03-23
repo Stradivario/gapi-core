@@ -4,6 +4,7 @@ const Token_1 = require("./Token");
 const ServiceNotFoundError_1 = require("./error/ServiceNotFoundError");
 const MissingProvidedServiceTypeError_1 = require("./error/MissingProvidedServiceTypeError");
 const Container_1 = require("./Container");
+const controller_hooks_1 = require("../services/controller-service/controller-hooks");
 /**
  * TypeDI can have multiple containers.
  * One container is ContainerInstance.
@@ -184,6 +185,10 @@ class ContainerInstance {
             // need to be injected, and user can use provided container to get instances he needs
             params.push(this);
             value = new (type.bind.apply(type, params))();
+            if (type.prototype.controller) {
+                controller_hooks_1.controllerHooks.setHook(type.name, value);
+                console.log(type.name, type.prototype.controller);
+            }
         }
         if (service && !service.transient && value)
             service.value = value;

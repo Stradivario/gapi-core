@@ -1,5 +1,6 @@
 import { GraphQLObjectType, GraphQLNonNull } from "graphql";
 import { Service } from '../../../utils/container/index';
+import { Subject } from "rxjs/Subject";
 
 export class ControllerMappingSettings {
     scope?: string[] = ['ADMIN'];
@@ -26,7 +27,7 @@ export class ControllerMapping {
     _controller_name: string;
     _settings: ControllerMappingSettings = new ControllerMappingSettings();
     _descriptors: Map<string, TypedPropertyDescriptor<() => GenericGapiResolversType>> = new Map();
-
+    _ready: Subject<boolean> = new Subject();
     constructor(name: string) {
         this._controller_name = name;
     }
@@ -67,4 +68,9 @@ export class ControllerContainerService {
         }
 
     }
+
+    controllerReady(name: string) {
+        this.getController(name)._ready.next(true);
+    }
+
 }

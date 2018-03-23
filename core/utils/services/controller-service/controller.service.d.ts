@@ -1,4 +1,5 @@
 import { GraphQLObjectType, GraphQLNonNull } from "graphql";
+import { Subject } from "rxjs/Subject";
 export declare class ControllerMappingSettings {
     scope?: string[];
     type?: GraphQLObjectType;
@@ -21,6 +22,7 @@ export declare class ControllerMapping {
     _controller_name: string;
     _settings: ControllerMappingSettings;
     _descriptors: Map<string, TypedPropertyDescriptor<() => GenericGapiResolversType>>;
+    _ready: Subject<boolean>;
     constructor(name: string);
     setSettings(settings: ControllerMappingSettings): void;
     setDescriptor(name: string, descriptor: TypedPropertyDescriptor<() => GenericGapiResolversType>): void;
@@ -31,4 +33,5 @@ export declare class ControllerContainerService {
     controllers: Map<string, ControllerMapping>;
     getController(name: string): ControllerMapping;
     createController(name: string): ControllerMapping;
+    controllerReady(name: string): void;
 }

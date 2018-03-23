@@ -1,10 +1,12 @@
-import {ServiceMetadata} from "./types/ServiceMetadata";
-import {ObjectType} from "./types/ObjectType";
-import {Token} from "./Token";
-import {ServiceIdentifier} from "./types/ServiceIdentifier";
-import {ServiceNotFoundError} from "./error/ServiceNotFoundError";
-import {MissingProvidedServiceTypeError} from "./error/MissingProvidedServiceTypeError";
-import {Container} from "./Container";
+import { ServiceMetadata } from "./types/ServiceMetadata";
+import { ObjectType } from "./types/ObjectType";
+import { Token } from "./Token";
+import { ServiceIdentifier } from "./types/ServiceIdentifier";
+import { ServiceNotFoundError } from "./error/ServiceNotFoundError";
+import { MissingProvidedServiceTypeError } from "./error/MissingProvidedServiceTypeError";
+import { Container } from "./Container";
+import { ControllerContainerService } from "..";
+import { controllerHooks } from "../services/controller-service/controller-hooks";
 
 /**
  * TypeDI can have multiple containers.
@@ -127,7 +129,7 @@ export class ContainerInstance {
      * Gets all instances registered in the container of the given service identifier.
      * Used when service defined with multiple: true flag.
      */
-    getMany<T>(id: string|Token<T>): T[] {
+    getMany<T>(id: string | Token<T>): T[] {
         return this.filterServices(id).map(service => this.getServiceValue(id, service));
     }
 
@@ -159,7 +161,7 @@ export class ContainerInstance {
     /**
      * Sets a value for the given type or service name in the container.
      */
-    set(identifierOrServiceMetadata: ServiceIdentifier|ServiceMetadata<any, any>|(ServiceMetadata<any, any>[]), value?: any): this {
+    set(identifierOrServiceMetadata: ServiceIdentifier | ServiceMetadata<any, any> | (ServiceMetadata<any, any>[]), value?: any): this {
         if (identifierOrServiceMetadata instanceof Array) {
             identifierOrServiceMetadata.forEach((v: any) => this.set(v));
             return this;
@@ -225,7 +227,7 @@ export class ContainerInstance {
     /**
      * Finds registered service in the with a given service identifier.
      */
-    private findService(identifier: ServiceIdentifier): ServiceMetadata<any, any>|undefined {
+    private findService(identifier: ServiceIdentifier): ServiceMetadata<any, any> | undefined {
         return this.services.find(service => {
             if (service.id)
                 return service.id === identifier;
@@ -240,7 +242,7 @@ export class ContainerInstance {
     /**
      * Gets service value.
      */
-    private getServiceValue(identifier: ServiceIdentifier, service: ServiceMetadata<any, any>|undefined): any {
+    private getServiceValue(identifier: ServiceIdentifier, service: ServiceMetadata<any, any> | undefined): any {
 
         // find if instance of this object already initialized in the container and return it if it is
         if (service && service.value !== null && service.value !== undefined)
@@ -308,6 +310,11 @@ export class ContainerInstance {
             params.push(this);
 
             value = new (type.bind.apply(type, params))();
+            if (type.prototype.controller) {
+                controllerHooks.setHook(type.name, value);
+                console.log(type.name, type.prototype.controller);
+            }
+
         }
 
         if (service && !service.transient && value)

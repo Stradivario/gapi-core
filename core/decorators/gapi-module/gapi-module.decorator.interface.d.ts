@@ -1,5 +1,10 @@
+import { Token } from "../../utils/container/Token";
+export interface Containers {
+    token: Token<any>;
+    useFactory: () => any;
+}
 export interface GapiModuleArguments {
-    imports?: Array<any>;
-    services?: Array<any>;
-    controllers?: Array<any>;
+    imports?: Array<Containers | any>;
+    services?: Array<Containers | any>;
+    controllers?: Array<Containers | any>;
 }

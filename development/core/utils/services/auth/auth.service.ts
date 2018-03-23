@@ -20,13 +20,10 @@ export class AuthService {
     }
     constructor(
         private config: ConfigService
-    ) {
-        this.config.APP_CONFIG.cyper.iv = new Buffer(this.config.APP_CONFIG.cyper.iv);
-        this.config.APP_CONFIG.cyper.key = new Buffer(this.config.APP_CONFIG.cyper.privateKey);
-    }
+    ) {}
 
     validateToken(token: string) {
-        return {id: 1, user: {id: 1, type: 'ADMIN'}};
+        return {id: 1, type: 'ADMIN'};
     }
 
     verifyToken(token): TokenData {

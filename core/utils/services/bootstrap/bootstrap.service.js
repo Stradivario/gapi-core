@@ -15,6 +15,7 @@ const config_service_1 = require("../../services/config/config.service");
 const schema_service_1 = require("../../services/schema/schema.service");
 const server_module_1 = require("../../../modules/server/server.module");
 const hook_service_1 = require("../../services/hook/hook.service");
+const controller_hooks_1 = require("../controller-service/controller-hooks");
 function getAllFields() {
     return __awaiter(this, void 0, void 0, function* () {
         const controllerContainerService = index_1.default.get(controller_service_1.ControllerContainerService);
@@ -26,6 +27,8 @@ function getAllFields() {
                 currentCtrl.getAllDescriptors().forEach(descriptor => {
                     const desc = currentCtrl.getDescriptor(descriptor).value();
                     Fields[desc.method_type][desc.method_name] = desc;
+                    const t = controller_hooks_1.controllerHooks.getHook(controller);
+                    console.log('dadadaad', t);
                     const originalResolve = desc.resolve.bind(desc.target);
                     desc.resolve = function resolve(...args) {
                         return originalResolve.apply(desc.target, args);

@@ -7,6 +7,7 @@ import {Container} from "../Container";
 export function GapiController<T, K extends keyof T>(optionsOrServiceName?: ControllerMappingSettings): Function {
     return function (target) {
         const original = target;
+        original.prototype.controller = true;
         Object.assign(original.prototype, new original())
         const service: ServiceMetadata<T, K> = {
             type: original

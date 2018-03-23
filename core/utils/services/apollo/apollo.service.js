@@ -55,6 +55,7 @@ const graphqlHapi = function (server, options, next) {
                     options.graphqlOptions.context = yield serviceUtilsService.modifyFunctions.validateToken(request.headers.authorization);
                 }
                 catch (e) {
+                    console.log('dadada', e);
                     return reply(Boom.unauthorized());
                 }
             }

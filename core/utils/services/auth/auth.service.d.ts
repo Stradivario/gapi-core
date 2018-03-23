@@ -13,10 +13,7 @@ export declare class AuthService {
     constructor(config: ConfigService);
     validateToken(token: string): {
         id: number;
-        user: {
-            id: number;
-            type: string;
-        };
+        type: string;
     };
     verifyToken(token: any): TokenData;
     decrypt(password: string): string;

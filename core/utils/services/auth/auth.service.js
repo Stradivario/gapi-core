@@ -20,11 +20,9 @@ let AuthService = class AuthService {
         this.modifyFunctions = {
             validateToken: this.validateToken
         };
-        this.config.APP_CONFIG.cyper.iv = new Buffer(this.config.APP_CONFIG.cyper.iv);
-        this.config.APP_CONFIG.cyper.key = new Buffer(this.config.APP_CONFIG.cyper.privateKey);
     }
     validateToken(token) {
-        return { id: 1, user: { id: 1, type: 'ADMIN' } };
+        return { id: 1, type: 'ADMIN' };
     }
     verifyToken(token) {
         let result;
