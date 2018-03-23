@@ -60,7 +60,7 @@ const graphqlHapi: IRegister = function (server: Server, options: HapiPluginOpti
     path: options.path || '/graphql',
     config: options.route || {},
     handler: async (request, reply) => {
-      if (request.headers.authorization !== 'undefined') {
+      if (request.headers.authorization && request.headers.authorization !== 'undefined') {
         try {
           const serviceUtilsService: AuthService = Container.get(AuthService);
           options.graphqlOptions.context = await serviceUtilsService.modifyFunctions.validateToken(request.headers.authorization);

@@ -24,7 +24,7 @@
 
 
 ***
-**Part of the frameworks and techniques used for creation of this project without which Gapi would not exist :love_letter:**
+**Part of the frameworks and techniques used without which Gapi would not exist :love_letter:**
 
 - [Inversion of control pattern](https://martinfowler.com/articles/injection.html#InversionOfControl)
 IOC explanation taken from [this](https://stackoverflow.com/a/6551303) article: 
@@ -66,7 +66,7 @@ IOC explanation taken from [this](https://stackoverflow.com/a/6551303) article:
 ##### To install this library, run:
 
 ```bash
-npm install Stradivario/gapi
+npm install @gapi/core
 ```
 
 ## Simplest Gapi server
@@ -99,7 +99,7 @@ export class UserQueriesController {
 }
 
 @GapiModule({
-    imports: [
+    controllers: [
         UserQueriesController
     ]
 })
@@ -128,7 +128,7 @@ npm install -g nodemon ts-node
 ##### Next install gapi globally using npm
 
 ```bash
-npm install gapi-cli -g
+npm install @gapi/cli -g
 ```
 
 ##### To skip the following steps creating project and bootstraping from scratch you can type the following command:
@@ -160,7 +160,7 @@ http://localhost:9000/graphiql
 
 ### Testing
 
-###### To start developing with testing GAPI uses JEST and gapi-cli is preconfigurated for your needs! :)
+###### To start developing with testing GAPI uses JEST and @gapi/cli is preconfigurated for your needs! :)
 
 #### To run single test type:
 ```bash

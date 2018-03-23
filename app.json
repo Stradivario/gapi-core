@@ -1,0 +1,18 @@
+{
+    "name": "Gapi starter",
+    "description": "Node.js app using Hapi and Graphql",
+    "repository": "https://github.com/Stradivario/gapi-starter",
+    "logo": "https://node-js-sample.herokuapp.com/node.svg",
+    "keywords": ["node", "gapi", "hapi", "graphql"],
+    "env": {
+        "DEPLOY_PLATFORM": "heroku",
+        "API_CERT": "./cert.key",
+        "GRAPHIQL_TOKEN": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImtyaXN0aXFuLnRhY2hldkBnbWFpbC5jb20iLCJpZCI6MSwic2NvcGUiOlsiQURNSU4iXSwiaWF0IjoxNTIwMjkxMzkyfQ.9hpIDPkSiGvjTmUEyg_R_izW-ra2RzzLbe3Uh3IFsZg",
+        "GRAPHIQL_WS_PATH": {
+            "description": "Please enter your heroku expected address 'your-app-name.herokuapp.com'",
+            "required": true
+        },
+        "GRAPHIQL_WS_SSH": "true",
+        "NODE_ENV": "development"
+    }
+  }

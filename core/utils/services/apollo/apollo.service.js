@@ -49,7 +49,7 @@ const graphqlHapi = function (server, options, next) {
         path: options.path || '/graphql',
         config: options.route || {},
         handler: (request, reply) => __awaiter(this, void 0, void 0, function* () {
-            if (request.headers.authorization !== 'undefined') {
+            if (request.headers.authorization && request.headers.authorization !== 'undefined') {
                 try {
                     const serviceUtilsService = index_1.default.get(auth_service_1.AuthService);
                     options.graphqlOptions.context = yield serviceUtilsService.modifyFunctions.validateToken(request.headers.authorization);
