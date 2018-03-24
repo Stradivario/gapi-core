@@ -14,7 +14,11 @@ function importModules(modules, original, status) {
             if (module.provide && module.useClass) {
                 Container.set(module.provide, new module.useClass());
             } else if (module.provide && module.useFactory) {
-                Container.set(module.provide, module.useFactory());
+                if(module.useFactory.constructor === Function) {
+                    Container.set(module.provide, module.useFactory());
+                } else {
+                    Container.set(module.provide, module.useFactory)
+                }
             } else {
                 throw new Error('Wrong injectable');
             }
