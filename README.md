@@ -1162,6 +1162,91 @@ export class UserQueriesController {
 }
 ```
 
+
+**You can put also Observable as a value**
+```typescript
+import { GapiModule } from '@gapi/core';
+import { UserModule } from './user/user.module';
+import { CoreModule } from './core/core.module';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
+@GapiModule({
+    imports: [
+        UserModule,
+        CoreModule
+    ],
+    services: [
+        {
+            provide: 'Observable',
+            useValue: new BehaviorSubject(1)
+        }
+    ]
+})
+export class AppModule { }
+```
+
+**Then inject this service somewhere in your application**
+
+```typescript
+import {
+    GapiController, GapiPubSubService, Type, Subscribe, Subscription,
+    withFilter, Scope, GraphQLInt, GraphQLNonNull, Injector, Inject
+} from '@gapi/core';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
+@GapiController()
+export class UserSubscriptionsController {
+
+    constructor(
+        @Inject('Observable') private observable: BehaviorSubject<number>,
+        private pubsub: GapiPubSubService
+    ) {
+        setInterval(() => {
+            this.pubsub.publish('CREATE_SIGNAL_BASIC', `Signal Published message: ${this.observable.getValue()}`);
+        }, 1000);
+    }
+}
+```
+
+**Then you can put it inside another service and emit values**
+
+```typescript
+import { Service, Inject } from '@gapi/core';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
+@Service()
+export class UserService {
+    constructor(
+        @Inject('Observable') private observable: BehaviorSubject<number>
+    ) {
+        let count = 0;
+        setInterval(() => {
+            count++;
+            this.observable.next(count);
+        }, 1000);
+    }
+```
+
+
+**You can see the subscription when you subscribe to basic chanel inside GraphiQL dev panel**
+
+```typescript
+subscription {
+  subscribeToUserMessagesBasic {
+    message
+  }
+}
+```
+
+**The result will be**
+```json
+{
+  "subscribeToUserMessagesBasic": {
+    "message": "Signal Published message: 495"
+  }
+}
+```
+
 TODO: Better documentation...
 
 Enjoy ! :)
