@@ -1113,9 +1113,9 @@ query {
 ```typescript
 
 import { GapiModule } from '@gapi/core';
+import { Token } from '@gapi/core/utils/container/Token';
 import { UserModule } from './user/user.module';
 import { CoreModule } from './core/core.module';
-import { Token } from '@gapi/core/core/utils/container/Token';
 
 class UserId {
     id: number;
