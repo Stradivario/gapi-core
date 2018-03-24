@@ -1,6 +1,6 @@
 {
   "name": "@gapi/core",
-  "version": "0.6.1",
+  "version": "0.6.3",
   "repository": {
     "type": "git",
     "url": "http://gitlab.youvolio.com/open-source/gapi.git"

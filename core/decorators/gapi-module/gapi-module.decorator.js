@@ -5,7 +5,7 @@ const index_1 = require("../../utils/container/index");
 function importModules(modules, original, status) {
     modules.forEach((module) => {
         if (!module) {
-            throw new Error(`Incorrect importing "${status}" inside ${original.name}`);
+            throw new Error(`Incorrect importing '${status}' inside ${original.name}`);
         }
         if (module.constructor === Object) {
             if (module.provide && module.useClass) {
@@ -16,11 +16,14 @@ function importModules(modules, original, status) {
                     index_1.default.set(module.provide, module.useFactory());
                 }
                 else {
-                    index_1.default.set(module.provide, module.useFactory);
+                    throw new Error(`Wrong Factory function ${module.provide ? JSON.stringify(module.provide) : ''} inside module: ${original.name}`);
                 }
             }
+            else if (module.provide && module.useValue) {
+                index_1.default.set(module.provide, module.useValue);
+            }
             else {
-                throw new Error('Wrong injectable');
+                throw new Error(`Wrong Injectable '${status}' ${module.provide ? JSON.stringify(module.provide) : ''} inside module: ${original.name}`);
             }
         }
         else {
@@ -33,21 +36,24 @@ function importModules(modules, original, status) {
         }
     });
 }
-function GapiModule(options) {
+function GapiModule(module) {
     return (target) => {
         const original = target;
         function construct(constructor, args) {
             const c = function () {
-                if (options.imports) {
-                    importModules(options.imports, original, 'imports');
+                if (module.types) {
+                    importModules(module.types, original, 'types');
                 }
-                if (options.services) {
-                    importModules(options.services, original, 'services');
+                if (module.services) {
+                    importModules(module.services, original, 'services');
                 }
-                if (options.controllers) {
-                    importModules(options.controllers, original, 'controllers');
+                if (module.imports) {
+                    importModules(module.imports, original, 'imports');
                 }
-                this.options = options;
+                if (module.controllers) {
+                    importModules(module.controllers, original, 'controllers');
+                }
+                this.injectables = module;
                 return new constructor();
             };
             c.prototype = constructor.prototype;

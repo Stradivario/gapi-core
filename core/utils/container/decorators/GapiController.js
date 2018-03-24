@@ -5,11 +5,11 @@ const Container_1 = require("../Container");
 function GapiController(optionsOrServiceName) {
     return function (target) {
         const original = target;
-        original.prototype.controller = true;
+        original.prototype._controller = true;
         const service = {
             type: original
         };
-        if (typeof optionsOrServiceName === "string" || optionsOrServiceName instanceof Token_1.Token) {
+        if (typeof optionsOrServiceName === 'string' || optionsOrServiceName instanceof Token_1.Token) {
             service.multiple = optionsOrServiceName.multiple;
             service.global = optionsOrServiceName.global || false;
             service.transient = optionsOrServiceName.transient;

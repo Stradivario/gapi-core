@@ -1,18 +1,18 @@
-import { ServiceMetadata } from "../types/ServiceMetadata";
-import { ServiceOptions } from "../types/ServiceOptions";
-import { ControllerMappingSettings, ControllerContainerService } from "../../services/controller-service/controller.service";
-import { Token } from "../Token";
-import {Container} from "../Container";
+import { ServiceMetadata } from '../types/ServiceMetadata';
+import { ServiceOptions } from '../types/ServiceOptions';
+import { ControllerMappingSettings, ControllerContainerService } from '../../services/controller-service/controller.service';
+import { Token } from '../Token';
+import { Container } from '../Container';
 
 export function GapiController<T, K extends keyof T>(optionsOrServiceName?: ControllerMappingSettings): Function {
     return function (target) {
         const original = target;
-        original.prototype.controller = true;
+        original.prototype._controller = true;
         const service: ServiceMetadata<T, K> = {
             type: original
         };
 
-        if (typeof optionsOrServiceName === "string" || optionsOrServiceName instanceof Token) {
+        if (typeof optionsOrServiceName === 'string' || optionsOrServiceName instanceof Token) {
             service.multiple = (optionsOrServiceName as ServiceOptions<T, K>).multiple;
             service.global = (optionsOrServiceName as ServiceOptions<T, K>).global || false;
             service.transient = (optionsOrServiceName as ServiceOptions<T, K>).transient;

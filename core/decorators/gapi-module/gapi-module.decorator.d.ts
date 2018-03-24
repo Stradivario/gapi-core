@@ -1,3 +1,3 @@
-import { GapiModuleArguments } from "./gapi-module.decorator.interface";
+import { GapiModuleArguments } from './gapi-module.decorator.interface';
 import 'reflect-metadata';
-export declare function GapiModule<T, K extends keyof T>(options: GapiModuleArguments): (target: any) => any;
+export declare function GapiModule<T, K extends keyof T>(module: GapiModuleArguments): (target: any) => any;

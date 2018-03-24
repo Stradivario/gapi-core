@@ -71,6 +71,7 @@ function onExitProcess(server) {
 }
 exports.Bootstrap = (App) => {
     console.log(`Bootstrapping application...`);
+    Object.defineProperty(App, 'name', { value: 'AppModule', writable: true });
     index_1.default.get(App);
     console.log('Finished!\nStarting application...');
     getAllFields()

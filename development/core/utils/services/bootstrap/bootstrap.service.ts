@@ -63,6 +63,7 @@ function onExitProcess(server: GapiServerModule) {
 
 export const Bootstrap = (App) => {
     console.log(`Bootstrapping application...`);
+    Object.defineProperty(App, 'name', { value: 'AppModule', writable: true });
     Container.get(App);
     console.log('Finished!\nStarting application...');
     getAllFields()

@@ -310,7 +310,7 @@ export class ContainerInstance {
             params.push(this);
 
             value = new (type.bind.apply(type, params))();
-            if (type.prototype.controller) {
+            if (type.prototype._controller) {
                 controllerHooks.setHook(type.name, value);
             }
         }
