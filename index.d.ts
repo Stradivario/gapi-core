@@ -1,4 +1,6 @@
-export * from './core/index';
-export * from './core/utils/container/';
+export * from './decorators/index';
+export * from './modules/index';
+export * from './utils/index';
 export * from 'graphql';
 export * from 'graphql-subscriptions';
+import 'reflect-metadata';

@@ -1,6 +1,6 @@
 {
   "name": "@gapi/core",
-  "version": "0.5.8",
+  "version": "0.6.6",
   "repository": {
     "type": "git",
     "url": "http://gitlab.youvolio.com/open-source/gapi.git"
@@ -40,7 +40,7 @@
     "apollo-upload-server": "^4.0.2",
     "banyan": "github:Stradivario/banyan",
     "boom": "^7.2.0",
-    "graphql": "^0.13.1",
+    "graphql": "^0.13.2",
     "graphql-tools": "^2.14.1",
     "hapi": "^16.6.2",
     "jsonwebtoken": "^8.1.0",
