@@ -4,6 +4,7 @@ import { ApplyServicesHook } from '../../utils/services/apply/apply.service';
 import 'reflect-metadata';
 import Container from '../../utils/container/index';
 import { ServiceMetadata } from '../../utils/container';
+import { ModuleContainerService } from '../../utils/services/module/module.service';
 
 function importModules(modules, original, status) {
     modules.forEach((module) => {
@@ -54,6 +55,7 @@ export function GapiModule<T, K extends keyof T>(module: GapiModuleArguments) {
                     importModules(module.controllers, original, 'controllers');
                 }
                 this.injectables = module;
+                Container.get(ModuleContainerService).createModule(original.name, this.injectables);
                 return new constructor();
             };
 
