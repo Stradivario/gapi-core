@@ -1,1 +1,1 @@
-export declare const GapiModuleSymbol: symbol;
+export declare const GapiModuleSymbol: unique symbol;

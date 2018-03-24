@@ -12,7 +12,12 @@ function importModules(modules, original, status) {
                 index_1.default.set(module.provide, new module.useClass());
             }
             else if (module.provide && module.useFactory) {
-                index_1.default.set(module.provide, module.useFactory());
+                if (module.useFactory.constructor === Function) {
+                    index_1.default.set(module.provide, module.useFactory());
+                }
+                else {
+                    index_1.default.set(module.provide, module.useFactory);
+                }
             }
             else {
                 throw new Error('Wrong injectable');

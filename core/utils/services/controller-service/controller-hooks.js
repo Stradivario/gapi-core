@@ -4,9 +4,7 @@ class ControllerHooks {
     constructor() {
         this.controllers = new Map();
     }
-    init() {
-        // console.log('Hooks initied')
-    }
+    init() { }
     setHook(name, target) {
         this.controllers.set(name, target);
     }

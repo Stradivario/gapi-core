@@ -478,25 +478,28 @@ export const UserTokenObjectType = new UserTokenType();
 ## Query
 ##### Folder root/src/user/query.controller.ts
 ```typescript
-import { Query, GraphQLNonNull, Scope, Type, GraphQLObjectType, Mutation, GapiController, Service, GraphQLInt, Injector } from "gapi";
+import { Query, GraphQLNonNull, Type, GapiController, GraphQLInt, GraphQLString } from '@gapi/core';
 import { UserService } from './services/user.service';
-import { UserObjectType } from './services/type/user.type';
+import { UserObjectType } from './types/user.type';
 import { UserTokenObjectType } from './types/user-login.type';
-import { UserMessageType } from './user.subscription.controller';
+import { AuthPrivateService } from '../core/services/auth/auth.service';
+import { IUserType, IUserTokenType } from '../core/api-introspection/index';
 
 @GapiController()
 export class UserQueriesController {
 
-    @Injector(UserService) userService: UserService;
+    constructor(
+        private userService: UserService,
+        private authService: AuthPrivateService
+    ) {}
 
-    @Scope('ADMIN')
     @Type(UserObjectType)
     @Query({
         id: {
             type: new GraphQLNonNull(GraphQLInt)
         }
     })
-    findUser(root, { id }, context) {
+    findUser(root, { id }, context): IUserType  {
         return this.userService.findUser(id);
     }
 
@@ -555,8 +558,10 @@ import { UserMessageType, UserMessage } from "./types/user-message.type";
 @GapiController()
 export class UserMutationsController {
 
-    @Injector(UserService) private userService: UserService;
-    @Injector(GapiPubSubService) private pubsub: GapiPubSubService;
+    constructor(
+        private userService: UserService
+        private pubsub: GapiPubSubService
+    ) {}
 
     @Scope('ADMIN')
     @Type(UserObjectType)
@@ -625,8 +630,11 @@ import { UserMessageType, UserMessage } from './types/user-message.type';
 @GapiController()
 export class UserSubscriptionsController {
 
-    @Injector(UserService) private userService: UserService;
     @Injector(GapiPubSubService) private static pubsub: GapiPubSubService;
+
+    constructor(
+        private userService: UserService
+    ) {}
 
     @Scope('USER')
     @Type(UserMessageType)
@@ -784,22 +792,21 @@ export class CoreModule {}
 
 ```typescript
 
-import { Service, ConnectionHookService, AuthService, Injector, Container, TokenData } from "gapi";
+import { Service, ConnectionHookService, AuthService, TokenData } from '@gapi/core';
 import * as Boom from 'boom';
 
-
 interface UserInfo extends TokenData {
-    scope: ['ADMIN', 'USER']
+    scope: ['ADMIN', 'USER'];
     type: 'ADMIN' | 'USER';
 }
 
 @Service()
 export class AuthPrivateService {
 
-    @Injector(AuthService) private authService: AuthService
-    @Injector(ConnectionHookService) private connectionHookService: ConnectionHookService
-
-    constructor() {
+    constructor(
+        private authService: AuthService,
+        private connectionHookService: ConnectionHookService
+    ) {
         this.connectionHookService.modifyHooks.onSubConnection = this.onSubConnection.bind(this);
         this.authService.modifyFunctions.validateToken = this.validateToken.bind(this);
     }
@@ -815,7 +822,7 @@ export class AuthPrivateService {
     validateToken(token: string, requestType: 'Query' | 'Subscription' = 'Query'): UserInfo {
         const user = <UserInfo>this.verifyToken(token);
         user.type = user.scope[0];
-        console.log(`${requestType} from: ${JSON.stringify(user)}`)
+        console.log(`${requestType} from: ${JSON.stringify(user)}`);
         if (user) {
             return user;
         } else {
@@ -827,7 +834,11 @@ export class AuthPrivateService {
         return this.authService.verifyToken(token);
     }
 
-    signJWTtoken(): string {
+    signJWTtoken(tokenData: TokenData): string {
+        return this.authService.sign(tokenData);
+    }
+
+    issueJWTToken(tokenData: TokenData) {
         const jwtToken = this.authService.sign({
             email: '',
             id: 1,
@@ -837,11 +848,11 @@ export class AuthPrivateService {
     }
 
     decryptPassword(password: string): string {
-        return this.authService.decrypt(password)
+        return this.authService.decrypt(password);
     }
 
     encryptPassword(password: string): string {
-        return this.authService.encrypt(password)
+        return this.authService.encrypt(password);
     }
 
 }

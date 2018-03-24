@@ -5,4 +5,5 @@ function __export(m) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./core/index"));
 __export(require("./core/utils/container/"));
+__export(require("graphql"));
 __export(require("graphql-subscriptions"));
