@@ -1108,6 +1108,60 @@ query {
 
 
 
+** Dependency Injection **
+
+```typescript
+
+import { GapiModule } from '@gapi/core';
+import { UserModule } from './user/user.module';
+import { CoreModule } from './core/core.module';
+import { Token } from '@gapi/core/core/utils/container/Token';
+
+class UserId {
+    id: number;
+}
+
+const UserIdToken = new Token<UserId>('UserId');
+
+@GapiModule({
+    imports: [
+        UserModule,
+        CoreModule
+    ],
+    services: [
+        {
+            provide: 'UserId',
+            useValue: {id: 1}
+        },
+        {
+            provide: UserIdToken,
+            useFactory: () => {
+                return {id: 1};
+            }
+        },
+        {
+            provide: UserIdToken,
+            useClass: UserId
+        }
+    ]
+})
+export class AppModule { }
+```
+
+```typescript
+@GapiController()
+export class UserQueriesController {
+    constructor(
+        @Inject('UserId') private userId: {id: number}, // Value injection
+        @Inject(UserIdToken) private userId: UserId, // Token injection
+        @Inject(UserIdToken) private userId: UserId, // Class injection
+    ) {
+        console.log(this.userId.id);
+        // Will print 1
+    }
+}
+```
+
 TODO: Better documentation...
 
 Enjoy ! :)
