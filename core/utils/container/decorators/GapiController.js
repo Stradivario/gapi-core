@@ -6,7 +6,6 @@ function GapiController(optionsOrServiceName) {
     return function (target) {
         const original = target;
         original.prototype.controller = true;
-        Object.assign(original.prototype, new original());
         const service = {
             type: original
         };

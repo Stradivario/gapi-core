@@ -187,7 +187,6 @@ class ContainerInstance {
             value = new (type.bind.apply(type, params))();
             if (type.prototype.controller) {
                 controller_hooks_1.controllerHooks.setHook(type.name, value);
-                console.log(type.name, type.prototype.controller);
             }
         }
         if (service && !service.transient && value)

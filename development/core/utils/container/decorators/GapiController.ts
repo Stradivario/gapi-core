@@ -8,7 +8,6 @@ export function GapiController<T, K extends keyof T>(optionsOrServiceName?: Cont
     return function (target) {
         const original = target;
         original.prototype.controller = true;
-        Object.assign(original.prototype, new original())
         const service: ServiceMetadata<T, K> = {
             type: original
         };

@@ -18,11 +18,10 @@ async function getAllFields() {
                 currentCtrl.getAllDescriptors().forEach(descriptor => {
                     const desc = currentCtrl.getDescriptor(descriptor).value();
                     Fields[desc.method_type][desc.method_name] = desc;
-                    const t = controllerHooks.getHook(controller);
-                    console.log('dadadaad', t)
-                    const originalResolve = desc.resolve.bind(desc.target);
+                    const c = controllerHooks.getHook(controller);
+                    const originalResolve = desc.resolve.bind(c);
                     desc.resolve = function resolve(...args: any[]) {
-                        return originalResolve.apply(desc.target, args)
+                        return originalResolve.apply(c, args)
                     }
                 })
             });

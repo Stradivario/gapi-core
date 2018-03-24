@@ -68,7 +68,6 @@ const graphqlHapi: IRegister = function (server: Server, options: HapiPluginOpti
           options.graphqlOptions.context = await serviceUtilsService.modifyFunctions.validateToken(request.headers.authorization);
    
         } catch (e) {
-          console.log('dadada', e);
           return reply(Boom.unauthorized());
         }
       } else {

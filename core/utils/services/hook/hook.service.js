@@ -22,7 +22,7 @@ class HookService {
             }
             const resolvers = type.getFields();
             Object.keys(resolvers).forEach(resolver => {
-                resolvers[resolver].scope = resolvers[resolver].scope || ['ADMIN'];
+                resolvers[resolver].scope = resolvers[resolver].scope || [process.env.APP_DEFAULT_SCOPE || 'ADMIN'];
                 if (!resolvers[resolver].public) {
                     HookService.AddHooks(resolvers[resolver]);
                 }

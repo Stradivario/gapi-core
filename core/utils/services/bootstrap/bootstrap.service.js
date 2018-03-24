@@ -27,11 +27,10 @@ function getAllFields() {
                 currentCtrl.getAllDescriptors().forEach(descriptor => {
                     const desc = currentCtrl.getDescriptor(descriptor).value();
                     Fields[desc.method_type][desc.method_name] = desc;
-                    const t = controller_hooks_1.controllerHooks.getHook(controller);
-                    console.log('dadadaad', t);
-                    const originalResolve = desc.resolve.bind(desc.target);
+                    const c = controller_hooks_1.controllerHooks.getHook(controller);
+                    const originalResolve = desc.resolve.bind(c);
                     desc.resolve = function resolve(...args) {
-                        return originalResolve.apply(desc.target, args);
+                        return originalResolve.apply(c, args);
                     };
                 });
             });

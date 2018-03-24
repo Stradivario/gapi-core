@@ -2,9 +2,7 @@
 export class ControllerHooks {
     controllers: Map<string, any> = new Map();
 
-    init() {
-        console.log('Hooks initied')
-    }
+    init() {}
 
     setHook(name: string, target: any) {
         this.controllers.set(name, target);
