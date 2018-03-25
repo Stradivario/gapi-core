@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
 const index_1 = require("../../utils/container/index");
+const module_service_1 = require("../../utils/services/module/module.service");
 function importModules(modules, original, status) {
     modules.forEach((module) => {
         if (!module) {
@@ -54,6 +55,7 @@ function GapiModule(module) {
                     importModules(module.controllers, original, 'controllers');
                 }
                 this.injectables = module;
+                index_1.default.get(module_service_1.ModuleContainerService).createModule(original.name, this.injectables);
                 return new constructor();
             };
             c.prototype = constructor.prototype;
