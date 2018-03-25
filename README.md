@@ -1201,9 +1201,7 @@ export class UserSubscriptionsController {
         @Inject('Observable') private observable: BehaviorSubject<number>,
         private pubsub: GapiPubSubService
     ) {
-        setInterval(() => {
-            this.pubsub.publish('CREATE_SIGNAL_BASIC', `Signal Published message: ${this.observable.getValue()}`);
-        }, 1000);
+        this.observable.subscribe(() => this.pubsub.publish('CREATE_SIGNAL_BASIC', `Signal Published message: ${this.observable.getValue()}`));
     }
 }
 ```
@@ -1213,20 +1211,16 @@ export class UserSubscriptionsController {
 ```typescript
 import { Service, Inject } from '@gapi/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { TimerObservable } from 'rxjs/observable/TimerObservable';
 
 @Service()
 export class UserService {
     constructor(
         @Inject('Observable') private observable: BehaviorSubject<number>
     ) {
-        let count = 0;
-        setInterval(() => {
-            count++;
-            this.observable.next(count);
-        }, 1000);
+        TimerObservable.create(0, 1000).subscribe((t) => this.observable.next(t))
     }
 ```
-
 
 **You can see the subscription when you subscribe to basic chanel inside GraphiQL dev panel**
 
