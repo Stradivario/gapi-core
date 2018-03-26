@@ -11,4 +11,5 @@ export { ServiceOptions } from './types/ServiceOptions';
 export { ServiceIdentifier } from './types/ServiceIdentifier';
 export { ServiceMetadata } from './types/ServiceMetadata';
 export { ObjectType } from './types/ObjectType';
+export * from './Token';
 export default Container;

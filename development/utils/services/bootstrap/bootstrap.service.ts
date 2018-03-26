@@ -7,10 +7,18 @@ import { SchemaService } from "../../services/schema/schema.service";
 import { GapiServerModule } from "../../../modules/server/server.module";
 import { HookService } from '../../services/hook/hook.service';
 import { controllerHooks } from '../controller-service/controller-hooks';
+import { ModuleContainerService } from '../module/module.service';
 
 async function getAllFields() {
     const controllerContainerService = Container.get(ControllerContainerService);
+    const moduleContainerService = Container.get(ModuleContainerService);
     return new Promise((resolve, reject) => {
+        Array.from(moduleContainerService.modules.keys()).forEach(module => {
+            console.log(module);
+            const currentModule = moduleContainerService.getModule(module);
+            currentModule.resolveDependencyHandlers();
+        });
+
         const Fields = { query: {}, mutation: {}, subscription: {} };
         Array.from(controllerContainerService.controllers.keys())
             .forEach(controller => {

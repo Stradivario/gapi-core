@@ -16,10 +16,17 @@ const schema_service_1 = require("../../services/schema/schema.service");
 const server_module_1 = require("../../../modules/server/server.module");
 const hook_service_1 = require("../../services/hook/hook.service");
 const controller_hooks_1 = require("../controller-service/controller-hooks");
+const module_service_1 = require("../module/module.service");
 function getAllFields() {
     return __awaiter(this, void 0, void 0, function* () {
         const controllerContainerService = index_1.default.get(controller_service_1.ControllerContainerService);
+        const moduleContainerService = index_1.default.get(module_service_1.ModuleContainerService);
         return new Promise((resolve, reject) => {
+            Array.from(moduleContainerService.modules.keys()).forEach(module => {
+                console.log(module);
+                const currentModule = moduleContainerService.getModule(module);
+                currentModule.resolveDependencyHandlers();
+            });
             const Fields = { query: {}, mutation: {}, subscription: {} };
             Array.from(controllerContainerService.controllers.keys())
                 .forEach(controller => {

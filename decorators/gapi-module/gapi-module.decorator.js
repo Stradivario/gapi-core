@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
 const index_1 = require("../../utils/container/index");
 const module_service_1 = require("../../utils/services/module/module.service");
+const moduleContainerService = index_1.default.get(module_service_1.ModuleContainerService);
 function importModules(modules, original, status) {
     modules.forEach((module) => {
         if (!module) {
@@ -14,6 +15,21 @@ function importModules(modules, original, status) {
             }
             else if (module.provide && module.useFactory) {
                 if (module.useFactory.constructor === Function) {
+                    // moduleContainerService.createModule(original.name, null).registerDependencyHandler(module);
+                    let injectables = [...module.deps];
+                    let resolvedInjectables = [];
+                    injectables.forEach(i => {
+                        if (i.constructor === Function) {
+                            resolvedInjectables.push(index_1.default.get(i));
+                        }
+                        else {
+                            resolvedInjectables.push(i);
+                        }
+                    });
+                    const originalFactory = module.useFactory;
+                    module.useFactory = function () {
+                        return originalFactory(...resolvedInjectables);
+                    };
                     index_1.default.set(module.provide, module.useFactory());
                 }
                 else {
@@ -55,7 +71,7 @@ function GapiModule(module) {
                     importModules(module.controllers, original, 'controllers');
                 }
                 this.injectables = module;
-                index_1.default.get(module_service_1.ModuleContainerService).createModule(original.name, this.injectables);
+                moduleContainerService.createModule(original.name, this.injectables);
                 return new constructor();
             };
             c.prototype = constructor.prototype;

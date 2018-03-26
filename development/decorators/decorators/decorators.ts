@@ -43,7 +43,8 @@ export const PROP_METADATA = '__prop__metadata__';
  */
 export function makeDecorator(
     name: string, props?: (...args: any[]) => any, parentClass?: any,
-    chainFn?: (fn: Function) => void, typeFn?: (type: Type<any>, ...args: any[]) => void):
+    chainFn?: (fn: Function) => void, typeFn?: (type: Type<any>, ...args: any[]) => void
+  ):
     {new (...args: any[]): any; (...args: any[]): any; (...args: any[]): (cls: any) => any;} {
   const metaCtor = makeMetadataCtor(props);
 

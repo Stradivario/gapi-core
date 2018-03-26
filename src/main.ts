@@ -16,12 +16,12 @@ export class Test {
 
 export const UserObjectType = new UserType();
 
-const UserToken = new Token<UserType>('UserId');
+const UserToken = new Token<Test>('UserId');
 
 @Service()
 export class TestService {
     constructor(
-        @Inject(UserToken) public userType: UserType
+        @Inject(UserToken) public userType: Test
     ) {
         console.log(this);
     }
@@ -46,7 +46,7 @@ export class UserQueriesController {
     })
     findUser(root, { id }, context) {
         return {
-            id: this.testService.userType.id
+            // id: this.testService.userType.id
         };
     }
 
@@ -59,7 +59,11 @@ export class UserQueriesController {
     services: [
         {
             provide: UserToken,
-            useValue: {id: 5}
+            deps: [TestService, 5, 6, 7, 7],
+            useFactory: (d, a,b,v) => {
+                console.log('Stana li ?', d,a,b,v);
+                return {id: 6};
+            }
         }
     ]
 })
