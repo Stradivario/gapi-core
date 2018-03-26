@@ -6,7 +6,7 @@ interface ResolveMetadata<T> {
     key?: string;
 }
   
-export function GapiObjectType<T>(input?: boolean): Function {
+export function GapiObjectType<T>(options?: {input: boolean, raw: boolean}): Function {
     return function(target: any, propertyName: string, index?: number) {
         const userTypes = new target();
         const type = Object.create({fields: {}, name: target.name});
@@ -15,8 +15,13 @@ export function GapiObjectType<T>(input?: boolean): Function {
         if (target.prototype._metadata && target.prototype._metadata.length) {
             target.prototype._metadata.forEach(meta => type.fields[meta.key].resolve = meta.resolve.bind(target.prototype))
         }
-        return function() {
-            return input ? new GraphQLInputObjectType(type) : new GraphQLObjectType(type);
-        };
+        if (options && options.raw) {
+            return target;
+        } else {
+            return function() {
+                return options && options.input ? new GraphQLInputObjectType(type) : new GraphQLObjectType(type);
+            };
+        }
+
     };
 }
