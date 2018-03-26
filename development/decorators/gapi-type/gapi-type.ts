@@ -2,7 +2,11 @@ import { ControllerContainerService } from "../../utils/services/controller-serv
 import Container from '../../utils/container/index';
 import { GenericGapiResolversType } from "../../utils/services/controller-service/controller.service";
 export function Type<T>(type): Function {
-    type = { type: type };
+    const currentType = new type();
+    if (!Container.has(currentType.name)) {
+        Container.set(currentType.name, currentType)
+    }
+    type = { type:  Container.get(currentType.name) };
     return (t: any, propKey: string, descriptor: TypedPropertyDescriptor<any>) => {
         const self = t;
         const originalMethod = descriptor.value;

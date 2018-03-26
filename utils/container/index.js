@@ -13,6 +13,5 @@ exports.Container = Container_2.Container;
 var ContainerInstance_1 = require("./ContainerInstance");
 exports.ContainerInstance = ContainerInstance_1.ContainerInstance;
 var Token_1 = require("./Token");
-exports.InjectionToken = Token_1.InjectionToken;
-__export(require("./Token"));
+exports.InjectionToken = Token_1.Token;
 exports.default = Container_1.Container;

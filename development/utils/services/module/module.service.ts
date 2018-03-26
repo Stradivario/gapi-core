@@ -31,7 +31,6 @@ export class ModuleMapping {
             let injectables = [...handler.deps];
             let resolvedInjectables = [];
             injectables.forEach(i => {
-                console.log('AAA', i);
                 if (i.constructor === Function) {
                     // resolvedInjectables = [...resolvedInjectables, Container.get(i)];
                 } else {
@@ -44,6 +43,7 @@ export class ModuleMapping {
                 return originalFactory(...resolvedInjectables);
             }
             Container.set(handler.provide, handler.useFactory())
+            console.log(Container.get(handler.provide))
         });
         return await true;
     }

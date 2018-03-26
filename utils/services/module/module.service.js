@@ -40,7 +40,6 @@ class ModuleMapping {
                 let injectables = [...handler.deps];
                 let resolvedInjectables = [];
                 injectables.forEach(i => {
-                    console.log('AAA', i);
                     if (i.constructor === Function) {
                         // resolvedInjectables = [...resolvedInjectables, Container.get(i)];
                     }
@@ -54,6 +53,7 @@ class ModuleMapping {
                     return originalFactory(...resolvedInjectables);
                 };
                 container_1.Container.set(handler.provide, handler.useFactory());
+                console.log(container_1.Container.get(handler.provide));
             });
             return yield true;
         });

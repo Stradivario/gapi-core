@@ -4,6 +4,18 @@ require("reflect-metadata");
 const index_1 = require("../../utils/container/index");
 const module_service_1 = require("../../utils/services/module/module.service");
 const moduleContainerService = index_1.default.get(module_service_1.ModuleContainerService);
+function getInjectables(module) {
+    let injectables = [];
+    module.deps.forEach(i => {
+        if (i.constructor === Function) {
+            injectables.push(index_1.default.get(i));
+        }
+        else {
+            injectables.push(i);
+        }
+    });
+    return injectables;
+}
 function importModules(modules, original, status) {
     modules.forEach((module) => {
         if (!module) {
@@ -11,25 +23,17 @@ function importModules(modules, original, status) {
         }
         if (module.constructor === Object) {
             if (module.provide && module.useClass) {
-                index_1.default.set(module.provide, new module.useClass());
+                const original = module.useClass;
+                const f = () => new original(...getInjectables(module));
+                index_1.default.set(module.provide, new f.constructor());
             }
             else if (module.provide && module.useFactory) {
                 if (module.useFactory.constructor === Function) {
-                    // moduleContainerService.createModule(original.name, null).registerDependencyHandler(module);
-                    let injectables = [...module.deps];
-                    let resolvedInjectables = [];
-                    injectables.forEach(i => {
-                        if (i.constructor === Function) {
-                            resolvedInjectables.push(index_1.default.get(i));
-                        }
-                        else {
-                            resolvedInjectables.push(i);
-                        }
-                    });
-                    const originalFactory = module.useFactory;
-                    module.useFactory = function () {
-                        return originalFactory(...resolvedInjectables);
-                    };
+                    if (module.deps && module.deps.length) {
+                        const originalFactory = module.useFactory;
+                        module.useFactory = () => originalFactory(...getInjectables(module));
+                    }
+                    moduleContainerService.createModule(original.name, null).registerDependencyHandler(module);
                     index_1.default.set(module.provide, module.useFactory());
                 }
                 else {

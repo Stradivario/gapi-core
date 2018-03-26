@@ -8,6 +8,18 @@ import { ModuleContainerService } from '../../utils/services/module/module.servi
 
 const moduleContainerService = Container.get(ModuleContainerService);
 
+function getInjectables(module) {
+    let injectables = [];
+    module.deps.forEach(i => {
+        if (i.constructor === Function) {
+            injectables.push(Container.get(i));
+        } else {
+            injectables.push(i);
+        }
+    })
+    return injectables;
+}
+
 function importModules(modules, original, status) {
     modules.forEach((module) => {
         if (!module) {
@@ -15,23 +27,16 @@ function importModules(modules, original, status) {
         }
         if (module.constructor === Object) {
             if (module.provide && module.useClass) {
-                Container.set(module.provide, new module.useClass());
+                const original = module.useClass;
+                const f: any = () => new original(...getInjectables(module));
+                Container.set(module.provide, new f.constructor());
             } else if (module.provide && module.useFactory) {
                 if (module.useFactory.constructor === Function) {
-                    // moduleContainerService.createModule(original.name, null).registerDependencyHandler(module);
-                    let injectables = [...module.deps];
-                    let resolvedInjectables = [];
-                    injectables.forEach(i => {
-                        if (i.constructor === Function) {
-                            resolvedInjectables.push(Container.get(i));
-                        } else {
-                            resolvedInjectables.push(i);
-                        }
-                    })
-                    const originalFactory = module.useFactory;
-                    module.useFactory = function () {
-                        return originalFactory(...resolvedInjectables);
+                    if (module.deps && module.deps.length) {
+                        const originalFactory = module.useFactory;
+                        module.useFactory = () => originalFactory(...getInjectables(module))
                     }
+                    moduleContainerService.createModule(original.name, null).registerDependencyHandler(module);
                     Container.set(module.provide, module.useFactory());
                 } else {
                     throw new Error(`Wrong Factory function ${module.provide ? JSON.stringify(module.provide) : ''} inside module: ${original.name}`);

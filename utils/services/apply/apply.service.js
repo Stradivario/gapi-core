@@ -12,3 +12,7 @@ exports.ApplyServicesHook = (self, options) => {
         options.controllers.forEach(m => index_1.default.get(m));
     }
 };
+function GetType(type) {
+    return index_1.default.get(type);
+}
+exports.GetType = GetType;

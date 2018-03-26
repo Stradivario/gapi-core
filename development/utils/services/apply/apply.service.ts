@@ -13,3 +13,8 @@ export const ApplyServicesHook = (self, options: GapiModuleArguments) => {
         options.controllers.forEach(m => Container.get(m));
     }
 }
+
+
+export function GetType<T, K extends keyof T>(type: T) {
+    return Container.get(type);
+}
