@@ -1,44 +1,40 @@
-import { Inject, Service, GapiController, Bootstrap } from "../index";
+import { Inject, Service, GapiController, Bootstrap, Resolve } from "../index";
 import { Token } from "../";
 import { GraphQLScalarType, GraphQLInt, GraphQLNonNull } from "graphql";
 import { GapiObjectType, Type, Query, GapiModule } from '../index';
 import { TimerObservable } from 'rxjs/observable/TimerObservable';
+import { $TypeInjector } from "../decorators";
 
-TimerObservable
 @GapiObjectType()
-export class UserType {
-    readonly id: number | GraphQLScalarType = GraphQLInt;
+export class UserType2 {
+    readonly id9: number | GraphQLScalarType = GraphQLInt;
 }
-
-export class Test {
-    id = 666
-}
-
-export const UserObjectType = new UserType();
-
-const UserToken = new Token<Test>('UserId');
 
 @Service()
-export class TestService {
-    constructor(
-        @Inject(UserToken) public userType: Test
-    ) {
-        console.log(this);
+class Gosho {
+    pesho() {
+        return 1111;
     }
 }
 
+@GapiObjectType()
+export class UserType {
+    readonly gosho: UserType2 = $TypeInjector(UserType2);
+    readonly gosho2: UserType2 = $TypeInjector(UserType2);
+    readonly id4: number | GraphQLScalarType = GraphQLInt;
+    readonly id5: number | GraphQLScalarType = GraphQLInt;
+}
 
 @GapiController()
 export class UserQueriesController {
-
-
     constructor(
-        private testService: TestService
+        private userType: UserType
     ) {
-        console.log(this);
+
+        console.log(this.userType);
     }
 
-    @Type(UserObjectType)
+    @Type(UserType)
     @Query({
         id: {
             type: new GraphQLNonNull(GraphQLInt)
@@ -50,6 +46,34 @@ export class UserQueriesController {
         };
     }
 
+    @Type(UserType)
+    @Query({
+        id: {
+            type: new GraphQLNonNull(GraphQLInt)
+        }
+    })
+    findUser2(root, { id }, context) {
+        return {
+            // id: this.testService.userType.id
+        };
+    }
+
+    @Type(UserType)
+    @Query({
+        id: {
+            type: new GraphQLNonNull(GraphQLInt)
+        }
+    })
+    findUser3(root, { id }, context) {
+        return {
+            // id: this.testService.userType.id
+        };
+    }
+
+}
+
+class Pesho {
+    id = 1;
 }
 
 @GapiModule({
@@ -58,12 +82,8 @@ export class UserQueriesController {
     ],
     services: [
         {
-            provide: UserToken,
-            deps: [TestService, 5, 6, 7, 7],
-            useFactory: (d, a,b,v) => {
-                console.log('Stana li ?', d,a,b,v);
-                return {id: 6};
-            }
+            provide: 'Pesho',
+            useClass: Pesho
         }
     ]
 })
@@ -71,5 +91,3 @@ export class AppModule { }
 
 
 Bootstrap(AppModule);
-
-

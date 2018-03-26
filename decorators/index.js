@@ -8,6 +8,7 @@ __export(require("./gapi-controller/index"));
 __export(require("./gapi-query/index"));
 __export(require("./gapi-mutation/index"));
 __export(require("./gapi-type/index"));
+__export(require("./gapi-type-injector/index"));
 __export(require("./gapi-scope/index"));
 __export(require("./gapi-args/index"));
 __export(require("./gapi-injector/index"));

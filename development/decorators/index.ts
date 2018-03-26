@@ -3,6 +3,7 @@ export * from './gapi-controller/index';
 export * from './gapi-query/index';
 export * from './gapi-mutation/index';
 export * from './gapi-type/index';
+export * from './gapi-type-injector/index';
 export * from './gapi-scope/index';
 export * from './gapi-args/index';
 export * from './gapi-injector/index';

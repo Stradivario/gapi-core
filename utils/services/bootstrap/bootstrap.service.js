@@ -23,7 +23,6 @@ function getAllFields() {
         const moduleContainerService = index_1.default.get(module_service_1.ModuleContainerService);
         return new Promise((resolve, reject) => {
             Array.from(moduleContainerService.modules.keys()).forEach(module => {
-                console.log(module);
                 const currentModule = moduleContainerService.getModule(module);
                 currentModule.resolveDependencyHandlers();
             });

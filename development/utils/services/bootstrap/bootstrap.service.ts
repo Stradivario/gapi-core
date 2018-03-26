@@ -14,7 +14,6 @@ async function getAllFields() {
     const moduleContainerService = Container.get(ModuleContainerService);
     return new Promise((resolve, reject) => {
         Array.from(moduleContainerService.modules.keys()).forEach(module => {
-            console.log(module);
             const currentModule = moduleContainerService.getModule(module);
             currentModule.resolveDependencyHandlers();
         });

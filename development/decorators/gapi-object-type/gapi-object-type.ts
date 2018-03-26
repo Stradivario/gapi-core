@@ -16,7 +16,7 @@ export function GapiObjectType<T>(input?: boolean): Function {
             target.prototype._metadata.forEach(meta => type.fields[meta.key].resolve = meta.resolve.bind(target.prototype))
         }
         return function() {
-            return input ? new GraphQLInputObjectType(type) : new GraphQLObjectType(type)
+            return input ? new GraphQLInputObjectType(type) : new GraphQLObjectType(type);
         };
     };
 }

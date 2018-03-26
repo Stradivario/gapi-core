@@ -81,12 +81,11 @@ import {
 export class UserType {
     readonly id: number | GraphQLScalarType = GraphQLInt;
 }
-export const UserObjectType = new UserType();
 
 @GapiController()
 export class UserQueriesController {
 
-    @Type(UserObjectType)
+    @Type(UserType)
     @Query({
         id: {
             type: new GraphQLNonNull(GraphQLInt)
@@ -399,21 +398,19 @@ export class UserModule {}
 ##### If you remove @Resolve decorator it will be passed value returned from the first root resolver
 
 ```typescript
-import { GraphQLObjectType, GraphQLString, GraphQLInt, GapiObjectType, Type, Resolve, GraphQLScalarType } from "gapi";
+import { GraphQLObjectType, GraphQLString, GraphQLInt, InjectType, GapiObjectType, Type, Resolve, GraphQLScalarType } from "gapi";
 import { UserSettingsObjectType } from './user-settings.type';
 
 @GapiObjectType()
 export class UserType {
     id: number | GraphQLScalarType = GraphQLInt;
-    settings: string | UserSettings = UserSettingsObjectType;
+    settings: string | UserSettings = InjectType(UserSettingsType);
     
     @Resolve('id')
     getId?(root, payload, context) {
         return 5;
     }
 }
-
-export const UserObjectType = new UserType();
 ```
 
 ## UserSettings Schema
@@ -441,8 +438,6 @@ export class UserSettings {
     }
 
 }
-
-export const UserSettingsObjectType = new UserSettings();
 ```
 
 
@@ -455,23 +450,19 @@ import { GapiObjectType, GraphQLScalarType, GraphQLString } from '@gapi/core';
 export class UserMessage {
     readonly message: number | GraphQLScalarType = GraphQLString;
 }
-
-export const UserMessageType = new UserMessage();
 ```
 
 ## UserToken
 
 ```typescript
-import { GapiObjectType, GraphQLScalarType, GraphQLString } from '@gapi/core';
-import { UserType, UserObjectType } from './user.type';
+import { GapiObjectType, GraphQLScalarType, GraphQLString, InjectType } from '@gapi/core';
+import { UserType } from './user.type';
 
 @GapiObjectType()
 export class UserTokenType {
     readonly token: string | GraphQLScalarType = GraphQLString;
-    readonly user: UserType = UserObjectType;
+    readonly user: UserType = InjectType(UserType);
 }
-
-export const UserTokenObjectType = new UserTokenType();
 ```
 
 
@@ -480,8 +471,8 @@ export const UserTokenObjectType = new UserTokenType();
 ```typescript
 import { Query, GraphQLNonNull, Type, GapiController, GraphQLInt, GraphQLString } from '@gapi/core';
 import { UserService } from './services/user.service';
-import { UserObjectType } from './types/user.type';
-import { UserTokenObjectType } from './types/user-login.type';
+import { UserType } from './types/user.type';
+import { UserTokenType } from './types/user-login.type';
 import { AuthPrivateService } from '../core/services/auth/auth.service';
 import { IUserType, IUserTokenType } from '../core/api-introspection/index';
 
@@ -493,7 +484,7 @@ export class UserQueriesController {
         private authService: AuthPrivateService
     ) {}
 
-    @Type(UserObjectType)
+    @Type(UserType)
     @Query({
         id: {
             type: new GraphQLNonNull(GraphQLInt)
@@ -503,7 +494,7 @@ export class UserQueriesController {
         return this.userService.findUser(id);
     }
 
-    @Type(UserTokenObjectType)
+    @Type(UserTokenType)
     @Query({
         email: {
             type: new GraphQLNonNull(GraphQLString)
@@ -552,8 +543,8 @@ export class UserQueriesController {
 ```typescript
 import { Query, GraphQLNonNull, Scope, Type, GraphQLObjectType, Mutation, GapiController, Service, GraphQLInt, Container, Injector, GapiPubSubService, GraphQLString } from "gapi";
 import { UserService } from './services/user.service';
-import { UserObjectType, UserType } from './types/user.type';
-import { UserMessageType, UserMessage } from "./types/user-message.type";
+import { UserType } from './types/user.type';
+import { UserMessage } from "./types/user-message.type";
 
 @GapiController()
 export class UserMutationsController {
@@ -564,7 +555,7 @@ export class UserMutationsController {
     ) {}
 
     @Scope('ADMIN')
-    @Type(UserObjectType)
+    @Type(UserType)
     @Mutation({
         id: {
             type: new GraphQLNonNull(GraphQLInt)
@@ -575,7 +566,7 @@ export class UserMutationsController {
     }
 
     @Scope('ADMIN')
-    @Type(UserObjectType)
+    @Type(UserType)
     @Mutation({
         id: {
             type: new GraphQLNonNull(GraphQLInt)
@@ -586,7 +577,7 @@ export class UserMutationsController {
     }
 
     @Scope('ADMIN')
-    @Type(UserObjectType)
+    @Type(UserType)
     @Mutation({
         id: {
             type: new GraphQLNonNull(GraphQLInt)
@@ -598,7 +589,7 @@ export class UserMutationsController {
 
 
     @Scope('ADMIN')
-    @Type(UserMessageType)
+    @Type(UserMessage)
     @Mutation({
         message: {
             type: new GraphQLNonNull(GraphQLString)
@@ -625,7 +616,7 @@ import {
     GapiPubSubService, Type, Injector, Subscribe, Subscription, withFilter, Scope, GraphQLInt, GraphQLNonNull
 } from '@gapi/core';
 import { UserService } from './services/user.service';
-import { UserMessageType, UserMessage } from './types/user-message.type';
+import { UserMessage } from './types/user-message.type';
 
 @GapiController()
 export class UserSubscriptionsController {
@@ -637,7 +628,7 @@ export class UserSubscriptionsController {
     ) {}
 
     @Scope('USER')
-    @Type(UserMessageType)
+    @Type(UserMessage)
     @Subscribe(() => UserSubscriptionsController.pubsub.asyncIterator('CREATE_SIGNAL_BASIC'))
     @Subscription()
     subscribeToUserMessagesBasic(message): UserMessage {
@@ -645,7 +636,7 @@ export class UserSubscriptionsController {
     }
 
     @Scope('ADMIN')
-    @Type(UserMessageType)
+    @Type(UserMessage)
     @Subscribe(
         withFilter(
             () => UserSubscriptionsController.pubsub.asyncIterator('CREATE_SIGNAL_WITH_FILTER'),
@@ -878,10 +869,143 @@ export class AppModule { }
 
 
 
+##### Dependency Injection
+
+```typescript
+
+import { GapiModule, InjectionToken } from '@gapi/core';
+import { UserModule } from './user/user.module';
+import { CoreModule } from './core/core.module';
+
+class UserId {
+    id: number;
+}
+
+const UserIdToken = new InjectionToken<UserId>('UserId');
+
+@GapiModule({
+    imports: [
+        UserModule,
+        CoreModule
+    ],
+    services: [
+        {
+            provide: 'UserId',
+            useValue: {id: 1}
+        },
+        {
+            provide: UserIdToken,
+            useFactory: () => {
+                return {id: 1};
+            }
+        },
+        {
+            provide: UserIdToken,
+            useClass: UserId
+        }
+    ]
+})
+export class AppModule { }
+```
+
+```typescript
+@GapiController()
+export class UserQueriesController {
+    constructor(
+        @Inject('UserId') private userId: {id: number}, // Value injection
+        @Inject(UserIdToken) private userId: UserId, // Token injection
+        @Inject(UserIdToken) private userId: UserId, // Class injection
+    ) {
+        console.log(this.userId.id);
+        // Will print 1
+    }
+}
+```
+
+
+**You can put also Observable as a value**
+```typescript
+import { GapiModule } from '@gapi/core';
+import { UserModule } from './user/user.module';
+import { CoreModule } from './core/core.module';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
+@GapiModule({
+    imports: [
+        UserModule,
+        CoreModule
+    ],
+    services: [
+        {
+            provide: 'Observable',
+            useValue: new BehaviorSubject(1)
+        }
+    ]
+})
+export class AppModule { }
+```
+
+**Then inject this service somewhere in your application**
+
+```typescript
+import {
+    GapiController, GapiPubSubService, Type, Subscribe, Subscription,
+    withFilter, Scope, GraphQLInt, GraphQLNonNull, Injector, Inject
+} from '@gapi/core';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
+@GapiController()
+export class UserSubscriptionsController {
+
+    constructor(
+        @Inject('Observable') private observable: BehaviorSubject<number>,
+        private pubsub: GapiPubSubService
+    ) {
+        this.observable.subscribe(() => this.pubsub.publish('CREATE_SIGNAL_BASIC', `Signal Published message: ${this.observable.getValue()}`));
+    }
+}
+```
+
+**Then you can put it inside another service and emit values**
+
+```typescript
+import { Service, Inject } from '@gapi/core';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { TimerObservable } from 'rxjs/observable/TimerObservable';
+
+@Service()
+export class UserService {
+    constructor(
+        @Inject('Observable') private observable: BehaviorSubject<number>
+    ) {
+        TimerObservable.create(0, 1000).subscribe((t) => this.observable.next(t))
+    }
+```
+
+**You can see the subscription when you subscribe to basic chanel inside GraphiQL dev panel**
+
+```typescript
+subscription {
+  subscribeToUserMessagesBasic {
+    message
+  }
+}
+```
+
+**The result will be**
+```json
+{
+  "subscribeToUserMessagesBasic": {
+    "message": "Signal Published message: 495"
+  }
+}
+```
+
+
 ##### Complex schema object with nested schemas of same type
 
 ```typescript
-import { GraphQLObjectType, GraphQLString, GraphQLInt, GapiObjectType, Type, Resolve, GraphQLList, GraphQLBoolean } from "gapi";
+import { GraphQLObjectType, GraphQLString, GraphQLInt, InjectType, GapiObjectType, Type, Resolve, GraphQLList, GraphQLBoolean } from "gapi";
 import { GraphQLScalarType } from "graphql";
 
 @GapiObjectType()
@@ -892,16 +1016,14 @@ export class UserSettingsType {
     readonly sidebar: boolean | GraphQLScalarType = GraphQLBoolean;
 }
 
-export const UserSettingsObjectType = new UserSettingsType();
-
 @GapiObjectType()
 export class UserWalletSettingsType {
     readonly type: string | GraphQLScalarType = GraphQLString;
     readonly private: string | GraphQLScalarType = GraphQLString;
     readonly security: string | GraphQLScalarType = GraphQLString;
-    readonly nested: UserSettingsType = UserSettingsObjectType;
-    readonly nested2: UserSettingsType = UserSettingsObjectType;
-    readonly nested3: UserSettingsType = UserSettingsObjectType;
+    readonly nested: UserSettingsType = InjectType(UserSettingsType);
+    readonly nested2: UserSettingsType = InjectType(UserSettingsType);
+    readonly nested3: UserSettingsType = InjectType(UserSettingsType);
 
     // If you want you can change every value where you want with @Resolve decorator
     @Resolve('type')
@@ -927,17 +1049,13 @@ export class UserWalletSettingsType {
     }
 }
 
-export const UserWalletSettingsObjectType = new UserWalletSettingsType();
-
 
 @GapiObjectType()
 export class UserWalletType {
     readonly id: number | GraphQLScalarType = GraphQLInt;
     readonly address: string | GraphQLScalarType = GraphQLString;
-    readonly settings: string | UserWalletSettingsType = UserWalletSettingsObjectType;
+    readonly settings: string | UserWalletSettingsType = InjectType(UserWalletSettingsType);
 }
-
-export const UserWalletObjectType = new UserWalletType();
 
 
 @GapiObjectType()
@@ -946,11 +1064,9 @@ export class UserType {
     readonly email: string | GraphQLScalarType = GraphQLString;
     readonly firstname: string | GraphQLScalarType = GraphQLString;
     readonly lastname: string | GraphQLScalarType = GraphQLString;
-    readonly settings: string | UserSettingsType = UserSettingsObjectType;
-    readonly wallets: UserWalletType = new GraphQLList(UserWalletObjectType);
+    readonly settings: string | UserSettingsType = InjectType(UserWalletSettingsType);
+    readonly wallets: UserWalletType = new GraphQLList(InjectType(UserWalletType));
 }
-
-export const UserObjectType = new UserType();
 
 ```
 
@@ -1106,140 +1222,6 @@ query {
 ```
 
 
-
-
-** Dependency Injection **
-
-```typescript
-
-import { GapiModule } from '@gapi/core';
-import { Token } from '@gapi/core/utils/container/Token';
-import { UserModule } from './user/user.module';
-import { CoreModule } from './core/core.module';
-
-class UserId {
-    id: number;
-}
-
-const UserIdToken = new Token<UserId>('UserId');
-
-@GapiModule({
-    imports: [
-        UserModule,
-        CoreModule
-    ],
-    services: [
-        {
-            provide: 'UserId',
-            useValue: {id: 1}
-        },
-        {
-            provide: UserIdToken,
-            useFactory: () => {
-                return {id: 1};
-            }
-        },
-        {
-            provide: UserIdToken,
-            useClass: UserId
-        }
-    ]
-})
-export class AppModule { }
-```
-
-```typescript
-@GapiController()
-export class UserQueriesController {
-    constructor(
-        @Inject('UserId') private userId: {id: number}, // Value injection
-        @Inject(UserIdToken) private userId: UserId, // Token injection
-        @Inject(UserIdToken) private userId: UserId, // Class injection
-    ) {
-        console.log(this.userId.id);
-        // Will print 1
-    }
-}
-```
-
-
-**You can put also Observable as a value**
-```typescript
-import { GapiModule } from '@gapi/core';
-import { UserModule } from './user/user.module';
-import { CoreModule } from './core/core.module';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-
-@GapiModule({
-    imports: [
-        UserModule,
-        CoreModule
-    ],
-    services: [
-        {
-            provide: 'Observable',
-            useValue: new BehaviorSubject(1)
-        }
-    ]
-})
-export class AppModule { }
-```
-
-**Then inject this service somewhere in your application**
-
-```typescript
-import {
-    GapiController, GapiPubSubService, Type, Subscribe, Subscription,
-    withFilter, Scope, GraphQLInt, GraphQLNonNull, Injector, Inject
-} from '@gapi/core';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-
-@GapiController()
-export class UserSubscriptionsController {
-
-    constructor(
-        @Inject('Observable') private observable: BehaviorSubject<number>,
-        private pubsub: GapiPubSubService
-    ) {
-        this.observable.subscribe(() => this.pubsub.publish('CREATE_SIGNAL_BASIC', `Signal Published message: ${this.observable.getValue()}`));
-    }
-}
-```
-
-**Then you can put it inside another service and emit values**
-
-```typescript
-import { Service, Inject } from '@gapi/core';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { TimerObservable } from 'rxjs/observable/TimerObservable';
-
-@Service()
-export class UserService {
-    constructor(
-        @Inject('Observable') private observable: BehaviorSubject<number>
-    ) {
-        TimerObservable.create(0, 1000).subscribe((t) => this.observable.next(t))
-    }
-```
-
-**You can see the subscription when you subscribe to basic chanel inside GraphiQL dev panel**
-
-```typescript
-subscription {
-  subscribeToUserMessagesBasic {
-    message
-  }
-}
-```
-
-**The result will be**
-```json
-{
-  "subscribeToUserMessagesBasic": {
-    "message": "Signal Published message: 495"
-  }
-}
-```
 
 TODO: Better documentation...
 
