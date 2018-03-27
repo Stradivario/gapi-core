@@ -1,12 +1,12 @@
-import { ServiceMetadata } from "./types/ServiceMetadata";
-import { ObjectType } from "./types/ObjectType";
-import { Token } from "./Token";
-import { ServiceIdentifier } from "./types/ServiceIdentifier";
-import { ServiceNotFoundError } from "./error/ServiceNotFoundError";
-import { MissingProvidedServiceTypeError } from "./error/MissingProvidedServiceTypeError";
-import { Container } from "./Container";
-import { ControllerContainerService } from "..";
-import { controllerHooks } from "../services/controller-service/controller-hooks";
+import { ServiceMetadata } from './types/ServiceMetadata';
+import { ObjectType } from './types/ObjectType';
+import { Token } from './Token';
+import { ServiceIdentifier } from './types/ServiceIdentifier';
+import { ServiceNotFoundError } from './error/ServiceNotFoundError';
+import { MissingProvidedServiceTypeError } from './error/MissingProvidedServiceTypeError';
+import { Container } from './Container';
+import { ControllerContainerService } from '..';
+import { controllerHooks } from '../services/controller-service/controller-hooks';
 
 /**
  * TypeDI can have multiple containers.
@@ -95,8 +95,8 @@ export class ContainerInstance {
     get<T>(identifier: ServiceIdentifier): T {
 
         const globalContainer = Container.of(undefined);
-        let service = globalContainer.findService(identifier);
-        let scopedService = this.findService(identifier);
+        const service = globalContainer.findService(identifier);
+        const scopedService = this.findService(identifier);
 
         if (service && service.global === true)
             return this.getServiceValue(identifier, service);
@@ -166,14 +166,14 @@ export class ContainerInstance {
             identifierOrServiceMetadata.forEach((v: any) => this.set(v));
             return this;
         }
-        if (typeof identifierOrServiceMetadata === "string" || identifierOrServiceMetadata instanceof Token) {
+        if (typeof identifierOrServiceMetadata === 'string' || identifierOrServiceMetadata instanceof Token) {
             return this.set({ id: identifierOrServiceMetadata, value: value });
         }
         if (identifierOrServiceMetadata instanceof Function) {
             return this.set({ type: identifierOrServiceMetadata, id: identifierOrServiceMetadata, value: value });
         }
 
-        // const newService: ServiceMetadata<any, any> = arguments.length === 1 && typeof identifierOrServiceMetadata === "object"  && !(identifierOrServiceMetadata instanceof Token) ? identifierOrServiceMetadata : undefined;
+        // const newService: ServiceMetadata<any, any> = arguments.length === 1 && typeof identifierOrServiceMetadata === 'object'  && !(identifierOrServiceMetadata instanceof Token) ? identifierOrServiceMetadata : undefined;
         const newService: ServiceMetadata<any, any> = identifierOrServiceMetadata;
         const service = this.findService(newService.id);
         if (service && service.multiple !== true) {
@@ -252,7 +252,7 @@ export class ContainerInstance {
         // this means service was not pre-registered and we throw an exception
         if ((!service || !service.type) &&
             (!service || !service.factory) &&
-            (typeof identifier === "string" || identifier instanceof Token))
+            (typeof identifier === 'string' || identifier instanceof Token))
             throw new ServiceNotFoundError(identifier);
 
         // at this point we either have type in service registered, either identifier is a target type
@@ -277,7 +277,7 @@ export class ContainerInstance {
         }
 
         // setup constructor parameters for a newly initialized service
-        const paramTypes = type && Reflect && (Reflect as any).getMetadata ? (Reflect as any).getMetadata("design:paramtypes", type) : undefined;
+        const paramTypes = type && Reflect && (Reflect as any).getMetadata ? (Reflect as any).getMetadata('design:paramtypes', type) : undefined;
         let params: any[] = paramTypes ? this.initializeParams(type, paramTypes) : [];
 
         // if factory is set then use it to create service instance
@@ -290,8 +290,8 @@ export class ContainerInstance {
             params = params.filter(param => param !== undefined);
 
             if (service.factory instanceof Array) {
-                // use special [Type, "create"] syntax to allow factory services
-                // in this case Type instance will be obtained from Container and its method "create" will be called
+                // use special [Type, 'create'] syntax to allow factory services
+                // in this case Type instance will be obtained from Container and its method 'create' will be called
                 value = (this.get(service.factory[0]) as any)[service.factory[1]](...params);
 
             } else { // regular factory function
@@ -304,7 +304,7 @@ export class ContainerInstance {
 
             params.unshift(null);
 
-            // "extra feature" - always pass container instance as the last argument to the service function
+            // 'extra feature' - always pass container instance as the last argument to the service function
             // this allows us to support javascript where we don't have decorators and emitted metadata about dependencies
             // need to be injected, and user can use provided container to get instances he needs
             params.push(this);
@@ -345,7 +345,7 @@ export class ContainerInstance {
      * Checks if given type is primitive (e.g. string, boolean, number, object).
      */
     private isTypePrimitive(param: string): boolean {
-        return ["string", "boolean", "number", "object"].indexOf(param.toLowerCase()) !== -1;
+        return ['string', 'boolean', 'number', 'object'].indexOf(param.toLowerCase()) !== -1;
     }
 
     /**
@@ -353,7 +353,7 @@ export class ContainerInstance {
      */
     private applyPropertyHandlers(target: Function, instance: { [key: string]: any }) {
         Container.handlers.forEach(handler => {
-            if (typeof handler.index === "number") return;
+            if (typeof handler.index === 'number') return;
             if (handler.object.constructor !== target && !(target.prototype instanceof handler.object.constructor))
                 return;
 

@@ -1,8 +1,8 @@
-import { ServiceMetadata } from "../types/ServiceMetadata";
-import { Container } from "../Container";
-import { ServiceOptions } from "../types/ServiceOptions";
-import { Token } from "../Token";
-import { ControllerMappingSettings, ControllerContainerService } from "../../services/controller-service/controller.service";
+import { ServiceMetadata } from '../types/ServiceMetadata';
+import { Container } from '../Container';
+import { ServiceOptions } from '../types/ServiceOptions';
+import { Token } from '../Token';
+import { ControllerMappingSettings, ControllerContainerService } from '../../services/controller-service/controller.service';
 
 /**
  * Marks class as a service that can be injected using Container.
@@ -34,7 +34,7 @@ export function Service<T, K extends keyof T>(optionsOrServiceName?: ServiceOpti
             type: target
         };
 
-        if (typeof optionsOrServiceName === "string" || optionsOrServiceName instanceof Token) {
+        if (typeof optionsOrServiceName === 'string' || optionsOrServiceName instanceof Token) {
             service.id = optionsOrServiceName;
             service.multiple = (optionsOrServiceName as ServiceOptions<T, K>).multiple;
             service.global = (optionsOrServiceName as ServiceOptions<T, K>).global || false;

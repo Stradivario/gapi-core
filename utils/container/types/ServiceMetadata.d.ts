@@ -1,5 +1,5 @@
-import { ObjectType } from "./ObjectType";
-import { Token } from "../Token";
+import { ObjectType } from './ObjectType';
+import { Token } from '../Token';
 /**
  * Service metadata is used to initialize service and store its state.
  */
@@ -29,8 +29,8 @@ export interface ServiceMetadata<T, K extends keyof T> {
     id?: Token<any> | string | Function;
     /**
      * Factory function used to initialize this service.
-     * Can be regular function ("createCar" for example),
-     * or other service which produces this instance ([CarFactory, "createCar"] for example).
+     * Can be regular function ('createCar' for example),
+     * or other service which produces this instance ([CarFactory, 'createCar'] for example).
      */
     factory?: [ObjectType<T>, K] | ((...params: any[]) => any);
     /**

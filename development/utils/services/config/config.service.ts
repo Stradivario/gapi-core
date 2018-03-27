@@ -1,11 +1,11 @@
-import { readFileSync } from "fs";
+import { readFileSync } from 'fs';
 import { AmqpConfigInterface, AppConfigInterface } from './config.interface';
-import { GraphQLObjectType } from "graphql";
-import { ControllerContainerService } from "../../services/controller-service/controller.service";
-import { SchemaService } from "../../services/schema/schema.service";
-import { Service } from "../../../utils/container/index";
-import { Container } from "../../container/Container";
-import { ConnectionHookService } from "../../services/connection-hook/connection-hook.service";
+import { GraphQLObjectType } from 'graphql';
+import { ControllerContainerService } from '../../services/controller-service/controller.service';
+import { SchemaService } from '../../services/schema/schema.service';
+import { Service } from '../../../utils/container/index';
+import { Container } from '../../container/Container';
+import { ConnectionHookService } from '../../services/connection-hook/connection-hook.service';
 
 @Service()
 export class ConfigService {
@@ -37,7 +37,7 @@ export class ConfigService {
             this.cert = readFileSync(process.env.API_CERT || './cert.key');
             this.APP_CONFIG.cert = this.cert;
         } catch (e) {
-            console.log('This server will be runned without authentication!')
+            console.log('This server will be runned without authentication!');
             this.cert = null;
             this.APP_CONFIG.cert = null;
         }

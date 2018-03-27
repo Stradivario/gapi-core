@@ -37,7 +37,7 @@ class ModuleMapping {
     resolveDependencyHandlers() {
         return __awaiter(this, void 0, void 0, function* () {
             this._handlers.getValue().forEach(handler => {
-                let injectables = [...handler.deps];
+                const injectables = [...handler.deps];
                 let resolvedInjectables = [];
                 injectables.forEach(i => {
                     if (i.constructor === Function) {

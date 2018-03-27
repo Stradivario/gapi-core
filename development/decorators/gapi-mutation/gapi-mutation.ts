@@ -1,6 +1,6 @@
-import { ControllerContainerService } from "../../utils/services/controller-service/controller.service";
+import { ControllerContainerService } from '../../utils/services/controller-service/controller.service';
 import Container from '../../utils/container/index';
-import { GenericGapiResolversType } from "../../utils/services/controller-service/controller.service";
+import { GenericGapiResolversType } from '../../utils/services/controller-service/controller.service';
 
 
 export function Mutation(options?: any) {
@@ -21,5 +21,5 @@ export function Mutation(options?: any) {
             .createController(target.constructor.name)
             .setDescriptor(propertyKey, descriptor);
         return descriptor;
-    }
+    };
 }

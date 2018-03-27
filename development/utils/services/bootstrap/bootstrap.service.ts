@@ -1,10 +1,10 @@
 import Container, { Service } from '../../../utils/container/index';
-import { ControllerContainerService } from "../../services/controller-service/controller.service";
-import { ServerUtilService } from "../../services/server/server.service";
-import { GraphQLSchema, GraphQLObjectType } from "graphql";
-import { ConfigService } from "../../services/config/config.service";
-import { SchemaService } from "../../services/schema/schema.service";
-import { GapiServerModule } from "../../../modules/server/server.module";
+import { ControllerContainerService } from '../../services/controller-service/controller.service';
+import { ServerUtilService } from '../../services/server/server.service';
+import { GraphQLSchema, GraphQLObjectType } from 'graphql';
+import { ConfigService } from '../../services/config/config.service';
+import { SchemaService } from '../../services/schema/schema.service';
+import { GapiServerModule } from '../../../modules/server/server.module';
 import { HookService } from '../../services/hook/hook.service';
 import { controllerHooks } from '../controller-service/controller-hooks';
 import { ModuleContainerService } from '../module/module.service';
@@ -28,9 +28,9 @@ async function getAllFields() {
                     const c = controllerHooks.getHook(controller);
                     const originalResolve = desc.resolve.bind(c);
                     desc.resolve = function resolve(...args: any[]) {
-                        return originalResolve.apply(c, args)
-                    }
-                })
+                        return originalResolve.apply(c, args);
+                    };
+                });
             });
         function generateType(query, name, description) {
             if (!Object.keys(query).length) {
@@ -40,7 +40,7 @@ async function getAllFields() {
                 name: name,
                 description: description,
                 fields: query
-            })
+            });
         }
         const query = generateType(Fields.query, 'Query', 'Query type for all get requests which will not change persistent data');
         const mutation = generateType(Fields.mutation, 'Mutation', 'Mutation type for all requests which will change persistent data');
@@ -48,12 +48,12 @@ async function getAllFields() {
         HookService.AttachHooks([query, mutation, subscription ]);
         const schema = Container.get(SchemaService).generateSchema(query, mutation, subscription);
         resolve(schema);
-    })
+    });
 }
 
 function onExitProcess(server: GapiServerModule) {
     process.on(<any>'cleanup', () => {
-        console.log('App stopped')
+        console.log('App stopped');
         server.stop();
     });
     process.on('exit', function () {
@@ -84,7 +84,7 @@ export const Bootstrap = (App) => {
                 console.log('Application started!');
             })
             .catch(e => console.log(e));
-        })
+        });
 
     return App;
 };

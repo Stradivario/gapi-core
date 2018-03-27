@@ -129,7 +129,7 @@ export class ServerUtilService {
         this.connect(configContainer.APP_CONFIG);
         this.initGraphQl();
         const self = this;
-        const connectionHookService = Container.get(ConnectionHookService)
+        const connectionHookService = Container.get(ConnectionHookService);
         return new Promise((resolve, reject) => {
             this.server.start((err) => {
                 if (err) {
@@ -176,15 +176,15 @@ function exitHandler(options, err) {
     }
 }
 
-//do something when app is closing
+// do something when app is closing
 process.on('exit', exitHandler.bind(null, { cleanup: true }));
 
-//catches ctrl+c event
+// catches ctrl+c event
 process.on('SIGINT', exitHandler.bind(null, { exit: true }));
 
 // catches "kill pid" (for example: nodemon restart)
 process.on('SIGUSR1', exitHandler.bind(null, { exit: true }));
 process.on('SIGUSR2', exitHandler.bind(null, { exit: true }));
 
-//catches uncaught exceptions
+// catches uncaught exceptions
 process.on('uncaughtException', exitHandler.bind(null, { exit: true }));

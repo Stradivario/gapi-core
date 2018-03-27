@@ -1,5 +1,5 @@
-import { GapiModuleArguments } from "../../../decorators/gapi-module/gapi-module.decorator.interface";
-import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import { GapiModuleArguments } from '../../../decorators/gapi-module/gapi-module.decorator.interface';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 export declare class ModuleMapping {
     _module_name: string;
     _injectables: GapiModuleArguments;

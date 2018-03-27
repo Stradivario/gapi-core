@@ -1,9 +1,9 @@
-import { Inject, Service, GapiController, Bootstrap, Resolve } from "../index";
-import { Token } from "../";
-import { GraphQLScalarType, GraphQLInt, GraphQLNonNull } from "graphql";
+import { Inject, Service, GapiController, Bootstrap, Resolve } from '../index';
+import { Token } from '../';
+import { GraphQLScalarType, GraphQLInt, GraphQLNonNull } from 'graphql';
 import { GapiObjectType, Type, Query, GapiModule } from '../index';
 import { TimerObservable } from 'rxjs/observable/TimerObservable';
-import { $TypeInjector } from "../decorators";
+import { $TypeInjector } from '../decorators';
 
 @GapiObjectType()
 export class UserType2 {

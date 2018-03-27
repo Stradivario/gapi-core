@@ -7,13 +7,13 @@ const Token_1 = require("../Token");
 class ServiceNotFoundError extends Error {
     constructor(identifier) {
         super();
-        this.name = "ServiceNotFoundError";
-        if (typeof identifier === "string") {
-            this.message = `Service "${identifier}" was not found, looks like it was not registered in the container. ` +
-                `Register it by calling Container.set("${identifier}", ...) before using service.`;
+        this.name = 'ServiceNotFoundError';
+        if (typeof identifier === 'string') {
+            this.message = `Service '${identifier}' was not found, looks like it was not registered in the container. ` +
+                `Register it by calling Container.set('${identifier}', ...) before using service.`;
         }
         else if (identifier instanceof Token_1.Token && identifier.name) {
-            this.message = `Service "${identifier.name}" was not found, looks like it was not registered in the container. ` +
+            this.message = `Service '${identifier.name}' was not found, looks like it was not registered in the container. ` +
                 `Register it by calling Container.set before using service.`;
         }
         else if (identifier instanceof Token_1.Token) {

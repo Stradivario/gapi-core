@@ -3,7 +3,7 @@ import Container from '../../utils/container/index';
 function InjectTypePrivate<T>(Type) {
     const currentType = new Type();
     if (!Container.has(currentType.name)) {
-        Container.set(currentType.name, currentType)
+        Container.set(currentType.name, currentType);
     }
     return Container.get<T>(currentType.name);
 }

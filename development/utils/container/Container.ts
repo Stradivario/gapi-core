@@ -1,9 +1,9 @@
-import {ServiceMetadata} from "./types/ServiceMetadata";
-import {ObjectType} from "./types/ObjectType";
-import {Handler} from "./types/Handler";
-import {Token} from "./Token";
-import {ServiceIdentifier} from "./types/ServiceIdentifier";
-import {ContainerInstance} from "./ContainerInstance";
+import { ServiceMetadata } from './types/ServiceMetadata';
+import { ObjectType } from './types/ObjectType';
+import { Handler } from './types/Handler';
+import { Token } from './Token';
+import { ServiceIdentifier } from './types/ServiceIdentifier';
+import { ContainerInstance } from './ContainerInstance';
 
 /**
  * Service container.
@@ -117,7 +117,7 @@ export class Container {
      * Gets all instances registered in the container of the given service identifier.
      * Used when service defined with multiple: true flag.
      */
-    static getMany<T>(id: string|Token<T>): T[] {
+    static getMany<T>(id: string | Token<T>): T[] {
         return this.globalInstance.getMany(id as any);
     }
 
@@ -149,7 +149,7 @@ export class Container {
     /**
      * Sets a value for the given type or service name in the container.
      */
-    static set(identifierOrServiceMetadata: ServiceIdentifier|ServiceMetadata<any, any>|(ServiceMetadata<any, any>[]), value?: any): Container {
+    static set(identifierOrServiceMetadata: ServiceIdentifier | ServiceMetadata<any, any> | (ServiceMetadata<any, any>[]), value?: any): Container {
         this.globalInstance.set(identifierOrServiceMetadata as any, value);
         return this;
     }

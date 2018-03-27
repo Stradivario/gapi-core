@@ -1,4 +1,4 @@
-import { Service } from "../../container";
+import { Service } from '../../container';
 
 @Service()
 export class ConnectionHookService {
@@ -6,7 +6,7 @@ export class ConnectionHookService {
     modifyHooks: {onSubConnection?: Function, onSubOperation?: Function} = {
         onSubConnection: this.onSubConnection,
         onSubOperation: this.onSubOperation
-    }
+    };
 
     onSubOperation(message, params, webSocket) {
         return params;

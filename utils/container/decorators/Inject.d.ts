@@ -1,4 +1,4 @@
-import { Token } from "../Token";
+import { Token } from '../Token';
 /**
  * Injects a service into a class property or constructor parameter.
  */

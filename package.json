@@ -7,7 +7,9 @@
   },
   "author": "Kristian Tachev <kristiqn.tachev@gmail.com> (Stradivario)",
   "scripts": {
-    "lint": "echo lint",
+    "lint": "tslint -c tslint.json 'development/**/*.{ts,tsx}'",
+    "pretest":"npm run lint",
+    "test":"jest",
     "ammend": "git add . && git commit --amend && git push -f && git push -f git@github.com:Stradivario/gapi.git"
   },
   "keywords": [
@@ -49,7 +51,8 @@
     "reflect-metadata": "^0.1.12",
     "rxjs": "^5.5.6",
     "sequelize": "^4.35.2",
-    "sequelize-typescript": "^0.6.2"
+    "sequelize-typescript": "^0.6.2",
+    "typescript": "^2.7.1"
   },
   "jest": {
     "testEnvironment": "node",
@@ -71,7 +74,7 @@
     "transform": {
       "\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
-    "testRegex": "/graphql/.*\\.spec.(ts|tsx|js)$",
+    "testRegex": "/development/.*\\.spec.(ts|tsx|js)$",
     "verbose": true,
     "collectCoverage": true
   },

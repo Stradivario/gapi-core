@@ -1,9 +1,9 @@
-import { ServiceMetadata } from "./types/ServiceMetadata";
-import { ObjectType } from "./types/ObjectType";
-import { Handler } from "./types/Handler";
-import { Token } from "./Token";
-import { ServiceIdentifier } from "./types/ServiceIdentifier";
-import { ContainerInstance } from "./ContainerInstance";
+import { ServiceMetadata } from './types/ServiceMetadata';
+import { ObjectType } from './types/ObjectType';
+import { Handler } from './types/Handler';
+import { Token } from './Token';
+import { ServiceIdentifier } from './types/ServiceIdentifier';
+import { ContainerInstance } from './ContainerInstance';
 /**
  * Service container.
  */

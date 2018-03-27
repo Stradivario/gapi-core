@@ -1,7 +1,7 @@
-import { ControllerContainerService } from "../../utils/services/controller-service/controller.service";
+import { ControllerContainerService } from '../../utils/services/controller-service/controller.service';
 import Container from '../../utils/container/index';
-import { GenericGapiResolversType } from "../../utils/services/controller-service/controller.service";
-import { GapiPubSubService } from "../../utils/services/pub-sub/pub-sub.service";
+import { GenericGapiResolversType } from '../../utils/services/controller-service/controller.service';
+import { GapiPubSubService } from '../../utils/services/pub-sub/pub-sub.service';
 
 export function Subscription(options?: any) {
     return (t: any, propKey: string, descriptor: TypedPropertyDescriptor<any>) => {
@@ -21,5 +21,5 @@ export function Subscription(options?: any) {
             .createController(target.constructor.name)
             .setDescriptor(propertyKey, descriptor);
         return descriptor;
-    }
+    };
 }

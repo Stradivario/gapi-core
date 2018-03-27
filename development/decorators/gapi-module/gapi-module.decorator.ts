@@ -9,14 +9,14 @@ import { ModuleContainerService } from '../../utils/services/module/module.servi
 const moduleContainerService = Container.get(ModuleContainerService);
 
 function getInjectables(module) {
-    let injectables = [];
+    const injectables = [];
     module.deps.forEach(i => {
         if (i.constructor === Function) {
             injectables.push(Container.get(i));
         } else {
             injectables.push(i);
         }
-    })
+    });
     return injectables;
 }
 
@@ -34,7 +34,7 @@ function importModules(modules, original, status) {
                 if (module.useFactory.constructor === Function) {
                     if (module.deps && module.deps.length) {
                         const originalFactory = module.useFactory;
-                        module.useFactory = () => originalFactory(...getInjectables(module))
+                        module.useFactory = () => originalFactory(...getInjectables(module));
                     }
                     moduleContainerService.createModule(original.name, null).registerDependencyHandler(module);
                     Container.set(module.provide, module.useFactory());

@@ -1,5 +1,5 @@
-import { ServiceOptions } from "../types/ServiceOptions";
-import { Token } from "../Token";
+import { ServiceOptions } from '../types/ServiceOptions';
+import { Token } from '../Token';
 /**
  * Marks class as a service that can be injected using Container.
  */

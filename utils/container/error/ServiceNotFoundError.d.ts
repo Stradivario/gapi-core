@@ -1,4 +1,4 @@
-import { ServiceIdentifier } from "../types/ServiceIdentifier";
+import { ServiceIdentifier } from '../types/ServiceIdentifier';
 /**
  * Thrown when requested service was not found.
  */

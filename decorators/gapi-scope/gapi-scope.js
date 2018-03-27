@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const controller_service_1 = require("../../utils/services/controller-service/controller.service");
 const index_1 = require("../../utils/container/index");
 function Scope(...arg) {
-    let scope = { scope: arg };
+    const scope = { scope: arg };
     // TypedPropertyDescriptor<(id: T) => T>
     return (t, propKey, desc) => {
         const descriptor = desc;
@@ -11,7 +11,7 @@ function Scope(...arg) {
         const propertyKey = propKey;
         const self = t;
         descriptor.value = function (...args) {
-            let returnValue = originalMethod.apply(args);
+            const returnValue = originalMethod.apply(args);
             Object.assign(returnValue, scope);
             return returnValue;
         };

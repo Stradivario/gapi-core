@@ -1,6 +1,6 @@
 /// <reference types="node" />
-import { GraphQLSchema } from "graphql";
-import { ConnectionHookService } from "../../services/connection-hook/connection-hook.service";
+import { GraphQLSchema } from 'graphql';
+import { ConnectionHookService } from '../../services/connection-hook/connection-hook.service';
 export interface AmqpConfigInterface {
     host: string;
     port: string | number;

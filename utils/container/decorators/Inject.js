@@ -9,14 +9,14 @@ const CannotInjectError_1 = require("../error/CannotInjectError");
 function Inject(typeOrName) {
     return function (target, propertyName, index) {
         if (!typeOrName)
-            typeOrName = () => Reflect.getMetadata("design:type", target, propertyName);
+            typeOrName = () => Reflect.getMetadata('design:type', target, propertyName);
         Container_1.Container.registerHandler({
             object: target,
             propertyName: propertyName,
             index: index,
             value: containerInstance => {
                 let identifier;
-                if (typeof typeOrName === "string") {
+                if (typeof typeOrName === 'string') {
                     identifier = typeOrName;
                 }
                 else if (typeOrName instanceof Token_1.Token) {

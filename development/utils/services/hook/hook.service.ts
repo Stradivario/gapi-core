@@ -9,7 +9,7 @@ function MakeError() {
 export class HookService {
     static AttachHooks(graphQLFields) {
         graphQLFields.forEach(type => {
-            if(!type) {
+            if (!type) {
                 return;
             }
             const resolvers = type.getFields();
@@ -31,12 +31,12 @@ export class HookService {
         HookService.AuthenticationHooks(resolver, root, args, context, info);
     }
     static AddHooks(resolver) {
-        if(Container.get(ConfigService).cert) {
+        if (Container.get(ConfigService).cert) {
             const resolve = resolver.resolve;
             resolver.resolve = async (root, args, context, info) => {
                 HookService.ResolverHooks(resolver, root, args, context, info);
                 return await resolve(root, args, context, info);
-            };  
+            };
         }
     }
 }

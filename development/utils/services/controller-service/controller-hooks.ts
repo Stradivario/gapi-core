@@ -2,19 +2,18 @@
 export class ControllerHooks {
     controllers: Map<string, any> = new Map();
 
-    init() {}
+    init() { }
 
     setHook(name: string, target: any) {
         this.controllers.set(name, target);
     }
 
     getHook(name) {
-        if(this.hasHook(name)) {
+        if (this.hasHook(name)) {
             return this.controllers.get(name);
         } else {
-            throw new Error('Hook not found!')
+            throw new Error('Hook not found!');
         }
-        
     }
 
     hasHook(name: string) {

@@ -1,9 +1,9 @@
-import { GraphQLObjectType, GraphQLNonNull } from "graphql";
+import { GraphQLObjectType, GraphQLNonNull } from 'graphql';
 import { Service } from '../../../utils/container/index';
-import { Subject } from "rxjs/Subject";
-import { GapiModuleArguments } from "../../../decorators/gapi-module/gapi-module.decorator.interface";
-import { BehaviorSubject } from "rxjs/BehaviorSubject";
-import { Container } from "../../container";
+import { Subject } from 'rxjs/Subject';
+import { GapiModuleArguments } from '../../../decorators/gapi-module/gapi-module.decorator.interface';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Container } from '../../container';
 
 export class ModuleMapping {
     _module_name: string;
@@ -19,7 +19,7 @@ export class ModuleMapping {
         const originalFactory = module.useFactory;
         module.useFactory = function () {
             return originalFactory(...module.deps);
-        }
+        };
         Container.set(module.provide, module.useFactory());
         this._handlers.next([...this._handlers.getValue(), module]);
 
@@ -28,7 +28,7 @@ export class ModuleMapping {
 
     async resolveDependencyHandlers(): Promise<any> {
         this._handlers.getValue().forEach(handler => {
-            let injectables = [...handler.deps];
+            const injectables = [...handler.deps];
             let resolvedInjectables = [];
             injectables.forEach(i => {
                 if (i.constructor === Function) {
@@ -36,14 +36,14 @@ export class ModuleMapping {
                 } else {
                     resolvedInjectables = [...resolvedInjectables, i];
                 }
-            })
+            });
             const originalFactory = handler.useFactory;
             handler.useFactory = function () {
-                console.log(resolvedInjectables)
+                console.log(resolvedInjectables);
                 return originalFactory(...resolvedInjectables);
-            }
-            Container.set(handler.provide, handler.useFactory())
-            console.log(Container.get(handler.provide))
+            };
+            Container.set(handler.provide, handler.useFactory());
+            console.log(Container.get(handler.provide));
         });
         return await true;
     }

@@ -1,5 +1,5 @@
-import { GraphQLObjectType, GraphQLNonNull } from "graphql";
-import { Subject } from "rxjs/Subject";
+import { GraphQLObjectType, GraphQLNonNull } from 'graphql';
+import { Subject } from 'rxjs/Subject';
 export declare class ControllerMappingSettings {
     scope?: string[];
     type?: GraphQLObjectType;

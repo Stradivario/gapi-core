@@ -5,7 +5,7 @@ const index_1 = require("../../utils/container/index");
 const module_service_1 = require("../../utils/services/module/module.service");
 const moduleContainerService = index_1.default.get(module_service_1.ModuleContainerService);
 function getInjectables(module) {
-    let injectables = [];
+    const injectables = [];
     module.deps.forEach(i => {
         if (i.constructor === Function) {
             injectables.push(index_1.default.get(i));

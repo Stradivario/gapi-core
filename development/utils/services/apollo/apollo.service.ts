@@ -3,7 +3,7 @@ import { Server, Response, Request, ReplyNoContinue } from 'hapi';
 import * as GraphiQL from 'apollo-server-module-graphiql';
 import { runHttpQuery, HttpQueryError } from 'apollo-server-core';
 import { ServerUtilService } from '../server/server.service';
-import { Container, Service} from '../../../utils/container/index';
+import { Container, Service } from '../../../utils/container/index';
 import { AuthService } from '../../services/auth/auth.service';
 
 export interface IRegister {
@@ -62,11 +62,11 @@ const graphqlHapi: IRegister = function (server: Server, options: HapiPluginOpti
     handler: async (request, reply) => {
       if (request.headers.authorization && request.headers.authorization !== 'undefined') {
         try {
-          
+
           const serviceUtilsService: AuthService = Container.get(AuthService);
-         
+
           options.graphqlOptions.context = await serviceUtilsService.modifyFunctions.validateToken(request.headers.authorization);
-   
+
         } catch (e) {
           return reply(Boom.unauthorized());
         }
@@ -110,9 +110,9 @@ const graphiqlHapi: IRegister = function (server: Server, options: HapiGraphiQLP
     handler: (request, reply) => {
       const query = request.query;
       GraphiQL.resolveGraphiQLString(query, options.graphiqlOptions, request)
-      .then(graphiqlString => {
-        reply(graphiqlString).header('Content-Type', 'text/html');
-      }, error => reply(error));
+        .then(graphiqlString => {
+          reply(graphiqlString).header('Content-Type', 'text/html');
+        }, error => reply(error));
     },
   });
 

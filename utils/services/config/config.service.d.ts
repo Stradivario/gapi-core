@@ -1,6 +1,6 @@
 /// <reference types="node" />
 import { AmqpConfigInterface, AppConfigInterface } from './config.interface';
-import { ConnectionHookService } from "../../services/connection-hook/connection-hook.service";
+import { ConnectionHookService } from '../../services/connection-hook/connection-hook.service';
 export declare class ConfigService {
     private connectionHookService;
     cert: Buffer;

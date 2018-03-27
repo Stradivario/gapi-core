@@ -2,7 +2,7 @@ import { sign, verify } from 'jsonwebtoken';
 import { readFileSync } from 'fs';
 import { createDecipheriv, createCipheriv, randomBytes, createHash, pseudoRandomBytes } from 'crypto';
 import * as Moment from 'moment';
-import Container, {Service} from '../../../utils/container/index';
+import { Container, Service } from '../../../utils/container/index';
 import { ConfigService } from '../../services/config/config.service';
 
 export let iv, key;
@@ -15,15 +15,15 @@ export interface TokenData {
 
 @Service()
 export class AuthService {
-    modifyFunctions: {validateToken?: Function} = {
+    modifyFunctions: { validateToken?: Function } = {
         validateToken: this.validateToken
-    }
+    };
     constructor(
         private config: ConfigService
-    ) {}
+    ) { }
 
     validateToken(token: string) {
-        return {id: 1, type: 'ADMIN'};
+        return { id: 1, type: 'ADMIN' };
     }
 
     verifyToken(token): TokenData {

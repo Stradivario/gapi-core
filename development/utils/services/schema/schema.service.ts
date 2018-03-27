@@ -1,5 +1,5 @@
 import { GraphQLSchema } from 'graphql';
-import Container, {Service} from '../../../utils/container/index';
+import { Container, Service } from '../../../utils/container/index';
 
 @Service()
 export class SchemaService {
@@ -14,6 +14,6 @@ export class SchemaService {
         if (Subscription) {
             schema.subscription = Subscription;
         }
-        return new GraphQLSchema(schema)
+        return new GraphQLSchema(schema);
     }
 }

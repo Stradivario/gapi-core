@@ -1,6 +1,6 @@
-import Container, {Service} from '../../../utils/container/index';
-import { GapiModuleArguments } from "../../../decorators/gapi-module/gapi-module.decorator.interface";
-import { GapiServerModule } from "../../../modules/server/server.module";
+import { Container, Service } from '../../../utils/container/index';
+import { GapiModuleArguments } from '../../../decorators/gapi-module/gapi-module.decorator.interface';
+import { GapiServerModule } from '../../../modules/server/server.module';
 
 export const ApplyServicesHook = (self, options: GapiModuleArguments) => {
     if (options.imports) {
@@ -12,7 +12,7 @@ export const ApplyServicesHook = (self, options: GapiModuleArguments) => {
     if (options.controllers) {
         options.controllers.forEach(m => Container.get(m));
     }
-}
+};
 
 
 export function GetType<T, K extends keyof T>(type: T) {

@@ -13,7 +13,7 @@ function Type(type) {
         const originalMethod = descriptor.value;
         const propertyKey = propKey;
         descriptor.value = function (...args) {
-            let returnValue = originalMethod.apply(args);
+            const returnValue = originalMethod.apply(args);
             Object.assign(returnValue, type);
             return returnValue;
         };

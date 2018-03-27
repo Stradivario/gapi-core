@@ -9,7 +9,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const index_1 = require("../../utils/container/index");
 const config_service_1 = require("../../utils/services/config/config.service");
 const server_service_1 = require("../../utils/services/server/server.service");
-;
 const utilService = index_1.Container.get(server_service_1.ServerUtilService);
 let GapiServerModule = GapiServerModule_1 = class GapiServerModule {
     start() {

@@ -1,5 +1,5 @@
-import { ObjectType } from "./ObjectType";
-import { Token } from "../Token";
+import { ObjectType } from './ObjectType';
+import { Token } from '../Token';
 /**
  * Service options passed to the @Service() decorator.
  * Allows to specify service id and/or factory used to create this service.

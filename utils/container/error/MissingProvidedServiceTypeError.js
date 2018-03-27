@@ -5,8 +5,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
  */
 class MissingProvidedServiceTypeError extends Error {
     constructor(identifier) {
-        super(`Cannot determine a class of the requesting service "${identifier}"`);
-        this.name = "ServiceNotFoundError";
+        super(`Cannot determine a class of the requesting service '${identifier}'`);
+        this.name = 'ServiceNotFoundError';
         Object.setPrototypeOf(this, MissingProvidedServiceTypeError.prototype);
     }
 }

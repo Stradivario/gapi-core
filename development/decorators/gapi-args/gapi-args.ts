@@ -32,7 +32,7 @@
 export function Args(arg): Function {
     Object.keys(arg).forEach(a => {
         arg[a] = {type: arg[a]};
-    })
+    });
     const originalDecoratorArguments = {args: arg};
     return (t: any, propertyName: string, descriptor) => {
         const target = t;

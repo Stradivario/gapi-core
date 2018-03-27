@@ -1,6 +1,6 @@
-import { GraphQLObjectType, GraphQLNonNull } from "graphql";
+import { GraphQLObjectType, GraphQLNonNull } from 'graphql';
 import { Service } from '../../../utils/container/index';
-import { Subject } from "rxjs/Subject";
+import { Subject } from 'rxjs/Subject';
 
 export class ControllerMappingSettings {
     scope?: string[] = ['ADMIN'];
@@ -14,12 +14,12 @@ export interface GenericGapiResolversType {
     method_name?: string;
     method_type?: 'query' | 'subscription' | 'mutation';
     type: GraphQLObjectType;
-    resolve?(root: any, args: Object, context: any)
+    resolve?(root: any, args: Object, context: any);
     args?: {
         [key: string]: {
             [type: string]: GraphQLObjectType | GraphQLNonNull<any>;
         };
-    }
+    };
 }
 
 
@@ -51,9 +51,9 @@ export class ControllerMapping {
 
 @Service()
 export class ControllerContainerService {
-    controllers: Map<string, ControllerMapping> = new Map()
+    controllers: Map<string, ControllerMapping> = new Map();
     getController(name: string): ControllerMapping {
-        if(!this.controllers.has(name)) {
+        if (!this.controllers.has(name)) {
             return this.createController(name);
         } else {
             return this.controllers.get(name);

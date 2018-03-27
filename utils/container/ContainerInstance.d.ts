@@ -1,7 +1,7 @@
-import { ServiceMetadata } from "./types/ServiceMetadata";
-import { ObjectType } from "./types/ObjectType";
-import { Token } from "./Token";
-import { ServiceIdentifier } from "./types/ServiceIdentifier";
+import { ServiceMetadata } from './types/ServiceMetadata';
+import { ObjectType } from './types/ObjectType';
+import { Token } from './Token';
+import { ServiceIdentifier } from './types/ServiceIdentifier';
 /**
  * TypeDI can have multiple containers.
  * One container is ContainerInstance.

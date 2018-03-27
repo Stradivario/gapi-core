@@ -10,7 +10,7 @@ function Service(optionsOrServiceName) {
         const service = {
             type: target
         };
-        if (typeof optionsOrServiceName === "string" || optionsOrServiceName instanceof Token_1.Token) {
+        if (typeof optionsOrServiceName === 'string' || optionsOrServiceName instanceof Token_1.Token) {
             service.id = optionsOrServiceName;
             service.multiple = optionsOrServiceName.multiple;
             service.global = optionsOrServiceName.global || false;

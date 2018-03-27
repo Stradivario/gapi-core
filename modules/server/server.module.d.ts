@@ -1,5 +1,5 @@
-import { AppConfigInterface } from "../../utils/services/config/config.interface";
-import { GraphQLSchema } from "graphql";
+import { AppConfigInterface } from '../../utils/services/config/config.interface';
+import { GraphQLSchema } from 'graphql';
 export interface Config {
     port: string;
     cert: any;
