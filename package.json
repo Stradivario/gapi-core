@@ -1,13 +1,13 @@
 {
   "name": "@gapi/core",
-  "version": "0.7.15",
+  "version": "0.7.16",
   "repository": {
     "type": "git",
     "url": "http://gitlab.youvolio.com/open-source/gapi.git"
   },
   "author": "Kristian Tachev <kristiqn.tachev@gmail.com> (Stradivario)",
   "scripts": {
-    "postpublish":"git push ssh://git@gitlab.youvolio.com:522/gapi/gapi.git",
+    "postpublish": "git push ssh://git@gitlab.youvolio.com:522/gapi/gapi.git",
     "lint": "tslint -c tslint.json 'development/**/*.{ts,tsx}'",
     "pretest": "npm run lint",
     "test": "jest",
