@@ -25,8 +25,8 @@ class ClassTestProvider {
 }
 
 
-interface TestingMutation {
-    resolve: () => void;
+class TestingMutation {
+    resolve: <T>(root, payload, context) => T;
     args: {[key: string]: {type: any}};
     method_type: string;
     method_name: string;
@@ -46,6 +46,8 @@ describe('Decorators: @GapiMutation', () => {
         expect(mutation.type).toBeInstanceOf(GraphQLObjectType);
         expect(mutation.type.name).toBe('UserType');
         expect(mutation.scope[0]).toBe('ADMIN');
+        const returnResult: {id: number} = mutation.resolve(null, {}, null);
+        expect(returnResult.id).toBe(1);
         done();
     });
 });
