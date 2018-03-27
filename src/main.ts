@@ -3,7 +3,8 @@ import { Token } from '../';
 import { GraphQLScalarType, GraphQLInt, GraphQLNonNull } from 'graphql';
 import { GapiObjectType, Type, Query, GapiModule } from '../index';
 import { TimerObservable } from 'rxjs/observable/TimerObservable';
-import { $TypeInjector } from '../decorators';
+import { InjectType } from '../decorators';
+import { Container } from '../utils';
 
 @GapiObjectType()
 export class UserType2 {
@@ -17,21 +18,24 @@ class Gosho {
     }
 }
 
-@GapiObjectType()
+@GapiObjectType({name: 'pesho'})
 export class UserType {
-    readonly gosho: UserType2 = $TypeInjector(UserType2);
-    readonly gosho2: UserType2 = $TypeInjector(UserType2);
+    readonly gosho: UserType2 = InjectType(UserType2);
+    readonly gosho2: UserType2 = InjectType(UserType2);
     readonly id4: number | GraphQLScalarType = GraphQLInt;
     readonly id5: number | GraphQLScalarType = GraphQLInt;
 }
 
+@GapiObjectType({model: true})
+export class Test extends UserType {}
+
+// console.log(Container.get(Test));
+
 @GapiController()
 export class UserQueriesController {
     constructor(
-        private userType: UserType
     ) {
-
-        console.log(this.userType);
+        console.log(this);
     }
 
     @Type(UserType)
