@@ -1,6 +1,6 @@
 {
   "name": "@gapi/core",
-  "version": "0.7.14",
+  "version": "0.7.15",
   "repository": {
     "type": "git",
     "url": "http://gitlab.youvolio.com/open-source/gapi.git"
@@ -8,8 +8,8 @@
   "author": "Kristian Tachev <kristiqn.tachev@gmail.com> (Stradivario)",
   "scripts": {
     "lint": "tslint -c tslint.json 'development/**/*.{ts,tsx}'",
-    "pretest":"npm run lint",
-    "test":"jest",
+    "pretest": "npm run lint",
+    "test": "jest",
     "ammend": "git add . && git commit --amend && git push -f && git push -f git@github.com:Stradivario/gapi.git"
   },
   "keywords": [
