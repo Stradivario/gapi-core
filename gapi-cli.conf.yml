@@ -98,3 +98,4 @@ commands:
 #   your-cli:
 #     my-command: 'npm -v'
 # This command can be executed as "gapi your-cli my-command"
+
