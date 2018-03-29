@@ -122,7 +122,7 @@ class ContainerInstance {
             if (service.id)
                 return service.id === identifier;
             if (service.type && identifier instanceof Function)
-                return service.type === identifier || identifier.prototype instanceof service.type;
+                return service.type === identifier; // || identifier.prototype instanceof service.type;
             return false;
         });
     }

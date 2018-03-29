@@ -6,5 +6,5 @@ export declare class ServerUtilService {
     connect(options: any): void;
     onRequest(): void;
     startServer(): Promise<{}>;
-    stopServer(): Promise<Error>;
+    stopServer(): any;
 }

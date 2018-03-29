@@ -16,8 +16,8 @@ export declare class AuthService {
         type: string;
     };
     verifyToken(token: any): TokenData;
-    decrypt(password: string): string;
-    encrypt(password: string): string;
+    decrypt(password: string): any;
+    encrypt(password: string): any;
     validate(token: any, callback: any): any;
     sign(tokenData: TokenData): string;
 }
