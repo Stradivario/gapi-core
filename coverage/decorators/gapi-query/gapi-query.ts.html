@@ -20,31 +20,31 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">17.65% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>3/17</span>
+        <span class='fraction'>17/17</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/2</span>
+        <span class='fraction'>2/2</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/3</span>
+        <span class='fraction'>3/3</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">17.65% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>3/17</span>
+        <span class='fraction'>17/17</span>
       </div>
     </div>
     <p class="quiet">
       Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
     </p>
   </div>
-  <div class='status-line low'></div>
+  <div class='status-line high'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -70,53 +70,53 @@
 <a name='L22'></a><a href='#L22'>22</a>
 <a name='L23'></a><a href='#L23'>23</a>
 <a name='L24'></a><a href='#L24'>24</a>
-<a name='L25'></a><a href='#L25'>25</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<a name='L25'></a><a href='#L25'>25</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { ControllerContainerService } from '../../utils/services/controller-service/controller.service';
 import Container from '../../utils/container/index';
 import { GenericGapiResolversType } from '../../utils/services/controller-service/controller.service';
 &nbsp;
 &nbsp;
-<span class="fstat-no" title="function not covered" >export function Query&lt;T&gt;(</span>options?: any) {
-<span class="cstat-no" title="statement not covered" >    return <span class="fstat-no" title="function not covered" >(t</span>: any, propKey: string, descriptor: TypedPropertyDescriptor&lt;any&gt;) =&gt; {</span>
-        const originalMethod = <span class="cstat-no" title="statement not covered" >descriptor.value;</span>
-        const target = <span class="cstat-no" title="statement not covered" >t;</span>
-        const propertyKey = <span class="cstat-no" title="statement not covered" >propKey;</span>
-<span class="cstat-no" title="statement not covered" >        descriptor.value = <span class="fstat-no" title="function not covered" >function (</span>...args: any[]) {</span>
-            const returnValue = <span class="cstat-no" title="statement not covered" >Object.create({});</span>
-<span class="cstat-no" title="statement not covered" >            returnValue.resolve = originalMethod;</span>
-<span class="cstat-no" title="statement not covered" >            returnValue.args = options ? options : null;</span>
-<span class="cstat-no" title="statement not covered" >            returnValue.method_type = 'query';</span>
-<span class="cstat-no" title="statement not covered" >            returnValue.method_name = propertyKey;</span>
-<span class="cstat-no" title="statement not covered" >            returnValue.target = target;</span>
-<span class="cstat-no" title="statement not covered" >            return returnValue;</span>
+export function Query&lt;T&gt;(options?: any) {
+    return (t: any, propKey: string, descriptor: TypedPropertyDescriptor&lt;any&gt;) =&gt; {
+        const originalMethod = descriptor.value;
+        const target = t;
+        const propertyKey = propKey;
+        descriptor.value = function (...args: any[]) {
+            const returnValue = Object.create({});
+            returnValue.resolve = originalMethod;
+            returnValue.args = options ? options : null;
+            returnValue.method_type = 'query';
+            returnValue.method_name = propertyKey;
+            returnValue.target = target;
+            return returnValue;
         };
-<span class="cstat-no" title="statement not covered" >        Container.get(ControllerContainerService)</span>
+        Container.get(ControllerContainerService)
             .createController(target.constructor.name)
             .setDescriptor(propertyKey, descriptor);
-<span class="cstat-no" title="statement not covered" >        return descriptor;</span>
+        return descriptor;
     };
 }</pre></td></tr>
 </table></pre>
@@ -124,7 +124,7 @@ import { GenericGapiResolversType } from '../../utils/services/controller-servic
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Tue Mar 27 2018 04:58:09 GMT+0300 (EEST)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Mar 30 2018 18:51:45 GMT+0300 (EEST)
 </div>
 </div>
 <script src="../../prettify.js"></script>

@@ -36,7 +36,7 @@ class TestingMutation {
 }
 
 
-describe('Decorators: @GapiMutation', () => {
+describe('Decorators: @Mutation', () => {
     it('Should decorate target descriptor with appropriate values', (done) => {
         const mutation: TestingMutation = <any>Container.get(ClassTestProvider).mutation(null, {id: null}, null);
         expect(JSON.stringify(mutation.args.id.type)).toBe(JSON.stringify(new GraphQLNonNull(GraphQLInt)));

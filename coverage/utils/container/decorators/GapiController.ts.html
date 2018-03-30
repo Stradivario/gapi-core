@@ -20,31 +20,31 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">16.67% </span>
+        <span class="strong">55.56% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>3/18</span>
+        <span class='fraction'>10/18</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">40% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/10</span>
+        <span class='fraction'>4/10</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">100% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/2</span>
+        <span class='fraction'>2/2</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">16.67% </span>
+        <span class="strong">55.56% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>3/18</span>
+        <span class='fraction'>10/18</span>
       </div>
     </div>
     <p class="quiet">
       Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
     </p>
   </div>
-  <div class='status-line low'></div>
+  <div class='status-line medium'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -77,30 +77,30 @@
 <a name='L29'></a><a href='#L29'>29</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { ServiceMetadata } from '../types/ServiceMetadata';
 import { ServiceOptions } from '../types/ServiceOptions';
@@ -108,27 +108,27 @@ import { ControllerMappingSettings, ControllerContainerService } from '../../ser
 import { Token } from '../Token';
 import { Container } from '../Container';
 &nbsp;
-<span class="fstat-no" title="function not covered" >export function GapiController&lt;T, K extends keyof T&gt;(</span>optionsOrServiceName?: ControllerMappingSettings): Function {
-<span class="cstat-no" title="statement not covered" >    return <span class="fstat-no" title="function not covered" >function (</span>target) {</span>
-        const original = <span class="cstat-no" title="statement not covered" >target;</span>
-<span class="cstat-no" title="statement not covered" >        original.prototype._controller = true;</span>
-        const service: ServiceMetadata&lt;T, K&gt; = <span class="cstat-no" title="statement not covered" >{</span>
+export function GapiController&lt;T, K extends keyof T&gt;(optionsOrServiceName?: ControllerMappingSettings): Function {
+    return function (target) {
+        const original = target;
+        original.prototype._controller = true;
+        const service: ServiceMetadata&lt;T, K&gt; = {
             type: original
         };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        if (typeof optionsOrServiceName === 'string' || optionsOrServiceName instanceof Token) {</span>
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (typeof optionsOrServiceName === 'string' || optionsOrServiceName instanceof Token) {
 <span class="cstat-no" title="statement not covered" >            service.multiple = (optionsOrServiceName as ServiceOptions&lt;T, K&gt;).multiple;</span>
 <span class="cstat-no" title="statement not covered" >            service.global = (optionsOrServiceName as ServiceOptions&lt;T, K&gt;).global || false;</span>
 <span class="cstat-no" title="statement not covered" >            service.transient = (optionsOrServiceName as ServiceOptions&lt;T, K&gt;).transient;</span>
 &nbsp;
-        } else <span class="cstat-no" title="statement not covered" >if (optionsOrServiceName) { // ServiceOptions</span>
+        } else <span class="missing-if-branch" title="if path not taken" >I</span>if (optionsOrServiceName) { // ServiceOptions
 <span class="cstat-no" title="statement not covered" >            service.id = (optionsOrServiceName as ServiceOptions&lt;T, K&gt;).id;</span>
 <span class="cstat-no" title="statement not covered" >            service.factory = (optionsOrServiceName as ServiceOptions&lt;T, K&gt;).factory;</span>
 <span class="cstat-no" title="statement not covered" >            service.multiple = (optionsOrServiceName as ServiceOptions&lt;T, K&gt;).multiple;</span>
 <span class="cstat-no" title="statement not covered" >            service.global = (optionsOrServiceName as ServiceOptions&lt;T, K&gt;).global || false;</span>
 <span class="cstat-no" title="statement not covered" >            service.transient = (optionsOrServiceName as ServiceOptions&lt;T, K&gt;).transient;</span>
         }
-<span class="cstat-no" title="statement not covered" >        Container.set(service);</span>
+        Container.set(service);
     };
 }</pre></td></tr>
 </table></pre>
@@ -136,7 +136,7 @@ import { Container } from '../Container';
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Tue Mar 27 2018 04:58:09 GMT+0300 (EEST)
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Fri Mar 30 2018 18:51:45 GMT+0300 (EEST)
 </div>
 </div>
 <script src="../../../prettify.js"></script>
