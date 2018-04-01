@@ -1,9 +1,9 @@
 import { Inject, Service, GapiController, Bootstrap, Resolve } from '../index';
-import { Token } from '../';
+import { InjectionToken } from '../';
 import { GraphQLScalarType, GraphQLInt, GraphQLNonNull } from 'graphql';
 import { GapiObjectType, Type, Query, GapiModule } from '../index';
 import { TimerObservable } from 'rxjs/observable/TimerObservable';
-import { $TypeInjector } from '../decorators';
+import { InjectType } from '../decorators';
 
 @GapiObjectType()
 export class UserType2 {
@@ -19,8 +19,8 @@ class Gosho {
 
 @GapiObjectType()
 export class UserType {
-    readonly gosho: UserType2 = $TypeInjector(UserType2);
-    readonly gosho2: UserType2 = $TypeInjector(UserType2);
+    readonly gosho: UserType2 = InjectType(UserType2);
+    readonly gosho2: UserType2 = InjectType(UserType2);
     readonly id4: number | GraphQLScalarType = GraphQLInt;
     readonly id5: number | GraphQLScalarType = GraphQLInt;
 }
@@ -42,7 +42,7 @@ export class UserQueriesController {
     })
     findUser(root, { id }, context) {
         return {
-            // id: this.testService.userType.id
+            id: 1
         };
     }
 

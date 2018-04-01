@@ -1,4 +1,13 @@
 "use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -17,6 +26,36 @@ const server_module_1 = require("../../../modules/server/server.module");
 const hook_service_1 = require("../../services/hook/hook.service");
 const controller_hooks_1 = require("../controller-service/controller-hooks");
 const module_service_1 = require("../module/module.service");
+const ngx_cache_layer_service_1 = require("../events/ngx-cache-layer.service");
+index_1.default.set(ngx_cache_layer_service_1.CacheService, new ngx_cache_layer_service_1.CacheService());
+const events = index_1.default.get(ngx_cache_layer_service_1.CacheService).createLayer({ name: 'gapi_events' });
+function OfType(type) {
+    return (target, propertyKey, descriptor) => {
+        const subscription = events.getItemObservable(type)
+            .subscribe((item) => {
+            const originalDescriptor = descriptor.value;
+            descriptor.value = function () {
+                return originalDescriptor.call(...item.data);
+            };
+            descriptor.value();
+        });
+    };
+}
+let Pesho = class Pesho {
+    findUser(args, context, info) {
+        console.log(args, context, info);
+    }
+};
+__decorate([
+    OfType('findUser'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object, Object]),
+    __metadata("design:returntype", void 0)
+], Pesho.prototype, "findUser", null);
+Pesho = __decorate([
+    index_1.Service()
+], Pesho);
+index_1.default.get(Pesho);
 function getAllFields() {
     return __awaiter(this, void 0, void 0, function* () {
         const controllerContainerService = index_1.default.get(controller_service_1.ControllerContainerService);
@@ -36,6 +75,7 @@ function getAllFields() {
                     const c = controller_hooks_1.controllerHooks.getHook(controller);
                     const originalResolve = desc.resolve.bind(c);
                     desc.resolve = function resolve(...args) {
+                        events.putItem({ key: desc.method_name, data: args });
                         return originalResolve.apply(c, args);
                     };
                 });

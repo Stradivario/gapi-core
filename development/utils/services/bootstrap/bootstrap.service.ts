@@ -8,6 +8,39 @@ import { GapiServerModule } from '../../../modules/server/server.module';
 import { HookService } from '../../services/hook/hook.service';
 import { controllerHooks } from '../controller-service/controller-hooks';
 import { ModuleContainerService } from '../module/module.service';
+import { CacheService } from '../events/ngx-cache-layer.service';
+import { Subscription } from 'rxjs';
+Container.set(CacheService, new CacheService());
+
+const events = Container.get(CacheService).createLayer<Array<any>>({ name: 'gapi_events' });
+
+interface EventType {
+    type: string;
+}
+
+function OfType(type: string) {
+    return (target, propertyKey, descriptor) => {
+        const subscription = events.getItemObservable(type)
+        .subscribe((item) => {
+            const originalDescriptor = descriptor.value;
+            descriptor.value = function() {
+                return originalDescriptor.call(...item.data);
+            };
+            descriptor.value();
+        });
+    };
+}
+
+@Service()
+class Pesho {
+
+    @OfType('findUser')
+    findUser(args, context, info) {
+        console.log(args, context, info);
+    }
+}
+
+Container.get(Pesho);
 
 async function getAllFields() {
     const controllerContainerService = Container.get(ControllerContainerService);
@@ -28,6 +61,7 @@ async function getAllFields() {
                     const c = controllerHooks.getHook(controller);
                     const originalResolve = desc.resolve.bind(c);
                     desc.resolve = function resolve(...args: any[]) {
+                        events.putItem({ key: desc.method_name, data: args });
                         return originalResolve.apply(c, args);
                     };
                 });
@@ -45,7 +79,7 @@ async function getAllFields() {
         const query = generateType(Fields.query, 'Query', 'Query type for all get requests which will not change persistent data');
         const mutation = generateType(Fields.mutation, 'Mutation', 'Mutation type for all requests which will change persistent data');
         const subscription = generateType(Fields.subscription, 'Subscription', 'Subscription type for all rabbitmq subscriptions via pub sub');
-        HookService.AttachHooks([query, mutation, subscription ]);
+        HookService.AttachHooks([query, mutation, subscription]);
         const schema = Container.get(SchemaService).generateSchema(query, mutation, subscription);
         resolve(schema);
     });
@@ -79,11 +113,11 @@ export const Bootstrap = (App) => {
             configService.APP_CONFIG.schema = schema;
             const server = Container.get(GapiServerModule.forRoot(configService.APP_CONFIG));
             server.start()
-            .then((data) => {
-                onExitProcess(server);
-                console.log('Application started!');
-            })
-            .catch(e => console.log(e));
+                .then((data) => {
+                    onExitProcess(server);
+                    console.log('Application started!');
+                })
+                .catch(e => console.log(e));
         });
 
     return App;
