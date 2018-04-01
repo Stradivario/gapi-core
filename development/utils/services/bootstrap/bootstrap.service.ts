@@ -18,9 +18,9 @@ interface EventType {
     type: string;
 }
 
-function OfType(type: string) {
+function OfType<T>(type: T) {
     return (target, propertyKey, descriptor) => {
-        const subscription = events.getItemObservable(type)
+        const subscription = events.getItemObservable(<any>type)
         .subscribe((item) => {
             const originalDescriptor = descriptor.value;
             descriptor.value = function() {
@@ -31,16 +31,29 @@ function OfType(type: string) {
     };
 }
 
-@Service()
-class Pesho {
+function strEnum<T extends string>(o: Array<T>): {[K in T]: K} {
+    return o.reduce((res, key) => {
+        res[key] = key;
+        return res;
+    }, Object.create(null));
+}
 
-    @OfType('findUser')
+const GapiEffects = strEnum([
+    'findUser'
+]);
+
+type GapiEffects = keyof typeof GapiEffects;
+
+@Service()
+class UserEffectsService {
+
+    @OfType<GapiEffects>(GapiEffects.findUser)
     findUser(args, context, info) {
-        console.log(args, context, info);
+        console.log(args, context);
     }
 }
 
-Container.get(Pesho);
+Container.get(UserEffectsService);
 
 async function getAllFields() {
     const controllerContainerService = Container.get(ControllerContainerService);

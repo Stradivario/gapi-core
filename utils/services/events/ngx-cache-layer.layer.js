@@ -94,7 +94,6 @@ class CacheLayer {
         this.items.next(newLayerItems);
     }
     getItemObservable(key) {
-        this.map.has(key) ? null : console.error(`Key: ${key} ${FRIENDLY_ERROR_MESSAGES.MISSING_OBSERVABLE_ITEM}`);
         return this.items.asObservable().filter(() => this.map.has(key)).map(res => res[0]);
     }
     flushCache() {

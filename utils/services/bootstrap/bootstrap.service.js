@@ -41,21 +41,30 @@ function OfType(type) {
         });
     };
 }
-let Pesho = class Pesho {
+function strEnum(o) {
+    return o.reduce((res, key) => {
+        res[key] = key;
+        return res;
+    }, Object.create(null));
+}
+const GapiEffects = strEnum([
+    'findUser'
+]);
+let UserEffectsService = class UserEffectsService {
     findUser(args, context, info) {
-        console.log(args, context, info);
+        console.log(args, context);
     }
 };
 __decorate([
-    OfType('findUser'),
+    OfType(GapiEffects.findUser),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object, Object]),
     __metadata("design:returntype", void 0)
-], Pesho.prototype, "findUser", null);
-Pesho = __decorate([
+], UserEffectsService.prototype, "findUser", null);
+UserEffectsService = __decorate([
     index_1.Service()
-], Pesho);
-index_1.default.get(Pesho);
+], UserEffectsService);
+index_1.default.get(UserEffectsService);
 function getAllFields() {
     return __awaiter(this, void 0, void 0, function* () {
         const controllerContainerService = index_1.default.get(controller_service_1.ControllerContainerService);
