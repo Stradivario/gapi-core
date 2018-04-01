@@ -11,7 +11,7 @@
     "lint": "tslint -c tslint.json 'development/**/*.{ts,tsx}'",
     "pretest": "npm run lint",
     "test": "jest",
-    "ammend": "git add . && git commit --amend && git push -f && git push -f git@github.com:Stradivario/gapi.git"
+    "ammend": "git add . && git commit --amend && git push -f && git push -f git@github.com:Stradivario/gapi-core.git"
   },
   "keywords": [
     "graphql",
