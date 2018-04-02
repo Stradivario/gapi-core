@@ -5,8 +5,9 @@ const ngx_events_layer_service_1 = require("../../utils/services/events/ngx-even
 function OfType(type) {
     return (target, propertyKey, descriptor) => {
         index_1.Container.get(ngx_events_layer_service_1.CacheService)
-            .createLayer({ name: 'gapi_events' })
+            .getLayer(type)
             .getItemObservable(type)
+            .skip(1)
             .subscribe(item => descriptor.value.call(...item.data));
     };
 }

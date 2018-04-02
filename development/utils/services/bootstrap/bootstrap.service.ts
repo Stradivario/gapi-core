@@ -40,7 +40,7 @@ async function getAllFields() {
           const originalResolve = desc.resolve.bind(c);
           desc.resolve = function resolve(...args: any[]) {
             events
-              .createLayer<Array<any>>({ name: 'gapi_events' })
+              .getLayer<Array<any>>(desc.method_name)
               .putItem({ key: desc.method_name, data: args });
             return originalResolve.apply(c, args);
           };

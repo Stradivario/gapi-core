@@ -10,6 +10,7 @@ const BehaviorSubject_1 = require("rxjs/BehaviorSubject");
 const Observable_1 = require("rxjs/Observable");
 const ngx_events_layer_layer_1 = require("./ngx-events-layer.layer");
 const index_1 = require("../../container/index");
+const __1 = require("../..");
 const INTERNAL_PROCEDURE_CACHE_NAME = 'cache_layers';
 const FRIENDLY_ERROR_MESSAGES = {
     TRY_TO_UNSUBSCRIBE: 'Someone try to unsubscribe from collection directly... agghhh.. read docs! Blame: ',
@@ -120,4 +121,35 @@ CacheService = CacheService_1 = __decorate([
     index_1.Service()
 ], CacheService);
 exports.CacheService = CacheService;
+const methods = [
+    { name: 'findUser1', args: { user: { id: 1 }, args: { id: 1 } } },
+    { name: 'findUser2', args: { user: { id: 1 }, args: { id: 1 } } },
+    { name: 'findUser3', args: { user: { id: 1 }, args: { id: 1 } } },
+    { name: 'findUser4', args: { user: { id: 1 }, args: { id: 1 } } },
+];
+const layers = __1.Container.get(CacheService);
+methods.forEach(method => {
+    const currentLayer = layers.createLayer({ name: method.name });
+    currentLayer.putItem({
+        key: method.name,
+        data: method.args
+    });
+});
+layers.getLayer('findUser2').getItemObservable('findUser2').skip(1).subscribe((stream) => {
+    console.log(stream, '1');
+});
+layers.getLayer('findUser3').getItemObservable('findUser3').skip(1).subscribe((stream) => {
+    console.log(stream.data, '777');
+});
+setTimeout(() => {
+    console.log('finished');
+}, 10000);
+setInterval(() => {
+    layers.getLayer('findUser2').putItem({ key: 'findUser2', data: { context: { user: { id: 1 } }, args: { id: 1 } } });
+}, 3000);
+let count = 0;
+setInterval(() => {
+    count++;
+    layers.getLayer('findUser3').putItem({ key: 'findUser3', data: { context: { user: { id: count } }, args: { id: 1 } } });
+}, 200);
 var CacheService_1;

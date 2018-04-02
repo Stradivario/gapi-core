@@ -4,8 +4,9 @@ import { CacheService } from '../../utils/services/events/ngx-events-layer.servi
 export function OfType<T>(type: T) {
   return (target, propertyKey, descriptor) => {
     Container.get(CacheService)
-      .createLayer<Array<any>>({ name: 'gapi_events' })
+      .getLayer<Array<any>>(<any>type)
       .getItemObservable(<any>type)
+      .skip(1)
       .subscribe(item => descriptor.value.call(...item.data));
   };
 }

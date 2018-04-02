@@ -3,6 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { CacheLayer } from './ngx-events-layer.layer';
 import { CacheLayerInterface, CacheServiceConfigInterface, CacheLayerItem } from './ngx-events-layer.interfaces';
 import { Service } from '../../container/index';
+import { Container } from '../..';
 
 const INTERNAL_PROCEDURE_CACHE_NAME = 'cache_layers';
 
@@ -122,3 +123,43 @@ export class CacheService {
   }
 
 }
+
+
+const methods = [
+  {name: 'findUser1', args: {user: {id: 1}, args: {id: 1}}},
+  {name: 'findUser2', args: {user: {id: 1}, args: {id: 1}}},
+  {name: 'findUser3', args: {user: {id: 1}, args: {id: 1}}},
+  {name: 'findUser4', args: {user: {id: 1}, args: {id: 1}}},
+];
+const layers = Container.get(CacheService);
+
+methods.forEach(method => {
+  const currentLayer = layers.createLayer({name: method.name});
+  currentLayer.putItem({
+    key: method.name,
+    data: method.args
+  });
+});
+
+
+
+layers.getLayer('findUser2').getItemObservable('findUser2').skip(1).subscribe((stream) => {
+  console.log(stream, '1');
+});
+
+layers.getLayer('findUser3').getItemObservable('findUser3').skip(1).subscribe((stream) => {
+  console.log(stream.data, '777');
+});
+
+setTimeout(() => {
+  console.log('finished');
+}, 10000);
+
+setInterval(() => {
+  layers.getLayer('findUser2').putItem({key: 'findUser2', data: {context: {user: {id: 1}}, args: {id: 1}}});
+}, 3000);
+let count = 0;
+setInterval(() => {
+  count++;
+  layers.getLayer('findUser3').putItem({key: 'findUser3', data: {context: {user: {id: count}}, args: {id: 1}}});
+}, 200);

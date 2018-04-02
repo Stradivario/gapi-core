@@ -43,7 +43,7 @@ function getAllFields() {
                     const originalResolve = desc.resolve.bind(c);
                     desc.resolve = function resolve(...args) {
                         events
-                            .createLayer({ name: 'gapi_events' })
+                            .getLayer(desc.method_name)
                             .putItem({ key: desc.method_name, data: args });
                         return originalResolve.apply(c, args);
                     };
