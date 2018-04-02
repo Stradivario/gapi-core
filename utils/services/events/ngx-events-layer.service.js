@@ -8,7 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 const BehaviorSubject_1 = require("rxjs/BehaviorSubject");
 const Observable_1 = require("rxjs/Observable");
-const ngx_cache_layer_layer_1 = require("./ngx-cache-layer.layer");
+const ngx_events_layer_layer_1 = require("./ngx-events-layer.layer");
 const index_1 = require("../../container/index");
 const INTERNAL_PROCEDURE_CACHE_NAME = 'cache_layers';
 const FRIENDLY_ERROR_MESSAGES = {
@@ -22,7 +22,7 @@ let CacheService = CacheService_1 = class CacheService {
         this.config = {};
     }
     static createCacheInstance(cacheLayer) {
-        return new ngx_cache_layer_layer_1.CacheLayer(cacheLayer);
+        return new ngx_events_layer_layer_1.CacheLayer(cacheLayer);
     }
     static isLocalStorageUsable() {
         const error = [];

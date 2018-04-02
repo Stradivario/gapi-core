@@ -1,7 +1,7 @@
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
-import { CacheLayer } from 'events';
-import { CacheLayerInterface, CacheLayerItem } from './ngx-cache-layer.interfaces';
+import { CacheLayer } from './ngx-events-layer.layer';
+import { CacheLayerInterface, CacheLayerItem } from './ngx-events-layer.interfaces';
 export declare class CacheService {
     _cachedLayers: BehaviorSubject<CacheLayer<CacheLayerItem<any>>[]>;
     private map;

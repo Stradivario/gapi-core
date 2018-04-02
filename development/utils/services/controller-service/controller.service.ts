@@ -12,7 +12,7 @@ export interface GenericGapiResolversType {
     scope?: string[];
     target?: any;
     method_name?: string;
-    method_type?: 'query' | 'subscription' | 'mutation';
+    method_type?: 'query' | 'subscription' | 'mutation' | 'event';
     type: GraphQLObjectType;
     resolve?(root: any, args: Object, context: any);
     args?: {
@@ -26,10 +26,12 @@ export interface GenericGapiResolversType {
 export class ControllerMapping {
     _controller_name: string;
     _settings: ControllerMappingSettings = new ControllerMappingSettings();
+    _type: string;
     _descriptors: Map<string, TypedPropertyDescriptor<() => GenericGapiResolversType>> = new Map();
     _ready: Subject<boolean> = new Subject();
-    constructor(name: string) {
+    constructor(name: string, type?: string) {
         this._controller_name = name;
+        this._type = type;
     }
 
     setSettings(settings: ControllerMappingSettings) {
@@ -47,6 +49,7 @@ export class ControllerMapping {
     getAllDescriptors(): string[] {
         return Array.from(this._descriptors.keys());
     }
+
 }
 
 @Service()

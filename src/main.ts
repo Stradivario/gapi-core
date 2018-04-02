@@ -4,18 +4,45 @@ import { GraphQLScalarType, GraphQLInt, GraphQLNonNull } from 'graphql';
 import { GapiObjectType, Type, Query, GapiModule } from '../index';
 import { TimerObservable } from 'rxjs/observable/TimerObservable';
 import { InjectType } from '../decorators';
+import { OfType } from '../';
 
 @GapiObjectType()
 export class UserType2 {
     readonly id9: number | GraphQLScalarType = GraphQLInt;
 }
 
+function strEnum<T extends string>(o: Array<T>): {[K in T]: K} {
+    return o.reduce((res, key) => {
+        res[key] = key;
+        return res;
+    }, Object.create(null));
+}
+
+const GapiEffects = strEnum([
+    'findUser'
+]);
+
+type GapiEffects = keyof typeof GapiEffects;
+
 @Service()
-class Gosho {
-    pesho() {
-        return 1111;
+export class TestServ {
+    test() {
     }
 }
+@Service()
+class UserEffectsService {
+    constructor(
+        private test: TestServ
+    ) {
+        this.test.test();
+    }
+
+    @OfType<GapiEffects>(GapiEffects.findUser)
+    findUser(args, context, info) {
+        console.log(args, context);
+    }
+}
+
 
 @GapiObjectType()
 export class UserType {
@@ -31,7 +58,6 @@ export class UserQueriesController {
         private userType: UserType
     ) {
 
-        console.log(this.userType);
     }
 
     @Type(UserType)
@@ -81,6 +107,8 @@ class Pesho {
         UserQueriesController,
     ],
     services: [
+        UserEffectsService,
+        TestServ,
         {
             provide: 'Pesho',
             useClass: Pesho

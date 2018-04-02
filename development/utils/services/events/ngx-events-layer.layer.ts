@@ -1,4 +1,4 @@
-import { CacheLayerInterface, CacheServiceConfigInterface } from './ngx-cache-layer.interfaces';
+import { CacheLayerInterface, CacheServiceConfigInterface } from './ngx-events-layer.interfaces';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Rx';
 import { Subscription } from 'rxjs/Subscription';

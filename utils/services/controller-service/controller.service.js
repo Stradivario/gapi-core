@@ -15,11 +15,12 @@ class ControllerMappingSettings {
 }
 exports.ControllerMappingSettings = ControllerMappingSettings;
 class ControllerMapping {
-    constructor(name) {
+    constructor(name, type) {
         this._settings = new ControllerMappingSettings();
         this._descriptors = new Map();
         this._ready = new Subject_1.Subject();
         this._controller_name = name;
+        this._type = type;
     }
     setSettings(settings) {
         this._settings = settings;

@@ -1,8 +1,8 @@
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
-
-import { CacheLayer } from './ngx-cache-layer.layer';
-import { CacheLayerInterface, CacheServiceConfigInterface, CacheLayerItem } from './ngx-cache-layer.interfaces';
+import { CacheLayer } from './ngx-events-layer.layer';
+import { CacheLayerInterface, CacheServiceConfigInterface, CacheLayerItem } from './ngx-events-layer.interfaces';
+import { Service } from '../../container/index';
 
 const INTERNAL_PROCEDURE_CACHE_NAME = 'cache_layers';
 
@@ -11,7 +11,7 @@ const FRIENDLY_ERROR_MESSAGES = {
   LOCAL_STORAGE_DISABLED: 'LocalStorage is disabled switching to regular in-memory storage.Please relate issue if you think it is enabled and there is a problem with the library itself.'
 };
 
-
+@Service()
 export class CacheService {
 
   public _cachedLayers: BehaviorSubject<CacheLayer<CacheLayerItem<any>>[]> = new BehaviorSubject([]);
