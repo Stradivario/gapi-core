@@ -1223,7 +1223,7 @@ query {
 @Beta!
 ### Effects OfType
 
-```typecsript
+```typescript
 import { OfType, Service } from '@gapi/core';
 import { EffectTypes } from '../core/api-introspection/EffectTypes';
 
