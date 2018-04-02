@@ -16,7 +16,7 @@ const FRIENDLY_ERROR_MESSAGES = {
 export class CacheService {
 
   public _cachedLayers: BehaviorSubject<CacheLayer<CacheLayerItem<any>>[]> = new BehaviorSubject([]);
-  private map: Map<any, any> = new Map();
+  public map: Map<any, any> = new Map();
   config: any = {};
 
   public static createCacheInstance<T>(cacheLayer): CacheLayer<CacheLayerItem<T>> {

@@ -12,7 +12,6 @@ import { CacheService } from '../events/ngx-events-layer.service';
 import { Subscription } from 'rxjs';
 import { FileService } from '../../services/file';
 
-
 async function getAllFields() {
   const events = Container.get(CacheService);
   const controllerContainerService = Container.get(ControllerContainerService);
@@ -35,13 +34,14 @@ async function getAllFields() {
             Fields[desc.method_type][desc.method_name] = desc;
             methodBasedEffects.push(desc.method_name);
           }
-
           const c = controllerHooks.getHook(controller);
           const originalResolve = desc.resolve.bind(c);
           desc.resolve = function resolve(...args: any[]) {
-            events
-              .getLayer<Array<any>>(desc.method_name)
-              .putItem({ key: desc.method_name, data: args });
+            if (events.map.has(desc.method_name)) {
+              events
+                .getLayer<Array<any>>(desc.method_name)
+                .putItem({ key: desc.method_name, data: args });
+            }
             return originalResolve.apply(c, args);
           };
         });

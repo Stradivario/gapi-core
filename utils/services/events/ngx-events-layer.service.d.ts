@@ -4,7 +4,7 @@ import { CacheLayer } from './ngx-events-layer.layer';
 import { CacheLayerInterface, CacheLayerItem } from './ngx-events-layer.interfaces';
 export declare class CacheService {
     _cachedLayers: BehaviorSubject<CacheLayer<CacheLayerItem<any>>[]>;
-    private map;
+    map: Map<any, any>;
     config: any;
     static createCacheInstance<T>(cacheLayer: any): CacheLayer<CacheLayerItem<T>>;
     static isLocalStorageUsable(): boolean;
