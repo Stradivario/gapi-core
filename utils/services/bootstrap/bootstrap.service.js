@@ -42,12 +42,17 @@ function getAllFields() {
                     const c = controller_hooks_1.controllerHooks.getHook(controller);
                     const originalResolve = desc.resolve.bind(c);
                     desc.resolve = function resolve(...args) {
-                        if (events.map.has(desc.method_name)) {
-                            events
-                                .getLayer(desc.method_name)
-                                .putItem({ key: desc.method_name, data: args });
-                        }
-                        return originalResolve.apply(c, args);
+                        return __awaiter(this, void 0, void 0, function* () {
+                            const result = yield originalResolve.apply(c, args);
+                            if (events.map.has(desc.method_name)) {
+                                let tempArgs = [result, ...args];
+                                tempArgs = tempArgs.filter(i => i && i !== 'undefined');
+                                events
+                                    .getLayer(desc.method_name)
+                                    .putItem({ key: desc.method_name, data: tempArgs });
+                            }
+                            return result;
+                        });
                     };
                 });
             });

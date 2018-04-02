@@ -7,8 +7,7 @@ function OfType(type) {
         index_1.Container.get(ngx_events_layer_service_1.CacheService)
             .getLayer(type)
             .getItemObservable(type)
-            .skip(1)
-            .subscribe(item => descriptor.value.call(...item.data));
+            .subscribe(item => descriptor.value(...item.data));
     };
 }
 exports.OfType = OfType;

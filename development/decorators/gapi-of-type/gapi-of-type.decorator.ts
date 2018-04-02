@@ -6,7 +6,6 @@ export function OfType<T>(type: T) {
     Container.get(CacheService)
       .getLayer<Array<any>>(<any>type)
       .getItemObservable(<any>type)
-      .skip(1)
-      .subscribe(item => descriptor.value.call(...item.data));
+      .subscribe(item => descriptor.value(...item.data));
   };
 }

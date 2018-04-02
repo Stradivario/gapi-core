@@ -36,13 +36,16 @@ async function getAllFields() {
           }
           const c = controllerHooks.getHook(controller);
           const originalResolve = desc.resolve.bind(c);
-          desc.resolve = function resolve(...args: any[]) {
+          desc.resolve = async function resolve(...args: any[]) {
+            const result = await originalResolve.apply(c, args);
             if (events.map.has(desc.method_name)) {
+              let tempArgs = [result, ...args] ;
+              tempArgs = tempArgs.filter(i => i && i !== 'undefined');
               events
                 .getLayer<Array<any>>(desc.method_name)
-                .putItem({ key: desc.method_name, data: args });
+                .putItem({ key: desc.method_name, data: tempArgs });
             }
-            return originalResolve.apply(c, args);
+            return result;
           };
         });
       }
