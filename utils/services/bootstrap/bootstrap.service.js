@@ -18,6 +18,7 @@ const hook_service_1 = require("../../services/hook/hook.service");
 const controller_hooks_1 = require("../controller-service/controller-hooks");
 const module_service_1 = require("../module/module.service");
 const ngx_events_layer_service_1 = require("../events/ngx-events-layer.service");
+const file_1 = require("../../services/file");
 function getAllFields() {
     return __awaiter(this, void 0, void 0, function* () {
         const events = index_1.default.get(ngx_events_layer_service_1.CacheService);
@@ -28,6 +29,7 @@ function getAllFields() {
             //     const currentModule = moduleContainerService.getModule(module);
             //     currentModule.resolveDependencyHandlers();
             // });
+            const methodBasedEffects = [];
             const Fields = { query: {}, mutation: {}, subscription: {} };
             Array.from(controllerContainerService.controllers.keys()).forEach(controller => {
                 const currentCtrl = controllerContainerService.getController(controller);
@@ -35,6 +37,7 @@ function getAllFields() {
                     const desc = currentCtrl.getDescriptor(descriptor).value();
                     if (desc.method_type !== 'event') {
                         Fields[desc.method_type][desc.method_name] = desc;
+                        methodBasedEffects.push(desc.method_name);
                     }
                     const c = controller_hooks_1.controllerHooks.getHook(controller);
                     const originalResolve = desc.resolve.bind(c);
@@ -61,6 +64,12 @@ function getAllFields() {
             const subscription = generateType(Fields.subscription, 'Subscription', 'Subscription type for all rabbitmq subscriptions via pub sub');
             hook_service_1.HookService.AttachHooks([query, mutation, subscription]);
             const schema = index_1.default.get(schema_service_1.SchemaService).generateSchema(query, mutation, subscription);
+            try {
+                index_1.default.get(file_1.FileService).writeEffectTypes(methodBasedEffects);
+            }
+            catch (e) {
+                console.error('Effects are not saved to directory');
+            }
             resolve(schema);
         });
     });

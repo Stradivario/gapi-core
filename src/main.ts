@@ -5,24 +5,12 @@ import { GapiObjectType, Type, Query, GapiModule } from '../index';
 import { TimerObservable } from 'rxjs/observable/TimerObservable';
 import { InjectType } from '../decorators';
 import { OfType } from '../';
+import { EffectTypes } from './app/core/api-introspection/EffectTypes';
 
 @GapiObjectType()
 export class UserType2 {
     readonly id9: number | GraphQLScalarType = GraphQLInt;
 }
-
-function strEnum<T extends string>(o: Array<T>): {[K in T]: K} {
-    return o.reduce((res, key) => {
-        res[key] = key;
-        return res;
-    }, Object.create(null));
-}
-
-const GapiEffects = strEnum([
-    'findUser'
-]);
-
-type GapiEffects = keyof typeof GapiEffects;
 
 @Service()
 export class TestServ {
@@ -31,13 +19,8 @@ export class TestServ {
 }
 @Service()
 class UserEffectsService {
-    constructor(
-        private test: TestServ
-    ) {
-        this.test.test();
-    }
 
-    @OfType<GapiEffects>(GapiEffects.findUser)
+    @OfType<EffectTypes>(EffectTypes.findUser3)
     findUser(args, context, info) {
         console.log(args, context);
     }
@@ -91,6 +74,18 @@ export class UserQueriesController {
         }
     })
     findUser3(root, { id }, context) {
+        return {
+            // id: this.testService.userType.id
+        };
+    }
+
+    @Type(UserType)
+    @Query({
+        id: {
+            type: new GraphQLNonNull(GraphQLInt)
+        }
+    })
+    findUser5(root, { id }, context) {
         return {
             // id: this.testService.userType.id
         };

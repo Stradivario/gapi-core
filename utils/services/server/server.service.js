@@ -19,7 +19,6 @@ const apollo_service_1 = require("../apollo/apollo.service");
 const subscriptions_transport_ws_1 = require("subscriptions-transport-ws");
 const subscription_1 = require("graphql/subscription");
 const execution_1 = require("graphql/execution");
-// import { Credential } from './models/Credential';
 const error_service_1 = require("../error/error.service");
 const index_1 = require("../../../utils/container/index");
 const __1 = require("../..");
@@ -42,25 +41,32 @@ let ServerUtilService = class ServerUtilService {
                     graphqlOptions: {
                         schema: config.APP_CONFIG.schema,
                         graphiql: true,
-                        formatError: error_service_1.attachErrorHandlers,
+                        formatError: error_service_1.attachErrorHandlers
                     }
                 }
             };
             if (process.env.NODE_ENV !== 'production') {
-                this.registerEndpoints([{
+                this.registerEndpoints([
+                    {
                         register: apollo_service_1.graphiqlHapi,
                         options: {
                             path: '/graphiql',
                             graphiqlOptions: {
                                 endpointURL: '/graphql',
-                                passHeader: `'Authorization':'${config.APP_CONFIG.graphiqlToken || process.env.GRAPHIQL_TOKEN}'`,
-                                subscriptionsEndpoint: `${process.env.GRAPHIQL_WS_SSH ? 'wss' : 'ws'}://${process.env.GRAPHIQL_WS_PATH || 'localhost'}${process.env.DEPLOY_PLATFORM === 'heroku' ? '' : `:${config.APP_CONFIG.port || process.env.API_PORT || process.env.PORT}`}/subscriptions`,
+                                passHeader: `'Authorization':'${config.APP_CONFIG.graphiqlToken ||
+                                    process.env.GRAPHIQL_TOKEN}'`,
+                                subscriptionsEndpoint: `${process.env.GRAPHIQL_WS_SSH ? 'wss' : 'ws'}://${process.env.GRAPHIQL_WS_PATH || 'localhost'}${process.env.DEPLOY_PLATFORM === 'heroku'
+                                    ? ''
+                                    : `:${config.APP_CONFIG.port ||
+                                        process.env.API_PORT ||
+                                        process.env.PORT}`}/subscriptions`,
                                 websocketConnectionParams: {
                                     token: config.APP_CONFIG.graphiqlToken || process.env.GRAPHIQL_TOKEN
                                 }
-                            },
-                        },
-                    }]);
+                            }
+                        }
+                    }
+                ]);
             }
             // this.registerEndpoints([{
             //   method: 'POST',
@@ -139,7 +145,7 @@ let ServerUtilService = class ServerUtilService {
         const self = this;
         const connectionHookService = index_1.default.get(__1.ConnectionHookService);
         return new Promise((resolve, reject) => {
-            this.server.start((err) => {
+            this.server.start(err => {
                 if (err) {
                     reject(err);
                     throw err;
@@ -153,10 +159,10 @@ let ServerUtilService = class ServerUtilService {
                     },
                     onOperation: (message, params, webSocket) => {
                         return connectionHookService.modifyHooks.onSubOperation(message, params, webSocket);
-                    },
+                    }
                 }, {
                     server: this.server.listener,
-                    path: '/subscriptions',
+                    path: '/subscriptions'
                 });
                 console.log(`Server running at: http://${this.server.info.address}:${this.server.info.port}, environment: ${process.env.NODE_ENV || 'development'}`);
                 if (process.env.NODE_ENV !== 'production') {
@@ -180,7 +186,8 @@ function exitHandler(options, err) {
     if (err)
         console.log(err.stack);
     if (options.exit) {
-        index_1.default.get(ServerUtilService).stopServer()
+        index_1.default.get(ServerUtilService)
+            .stopServer()
             .then(() => process.exit());
     }
 }
@@ -188,7 +195,7 @@ function exitHandler(options, err) {
 process.on('exit', exitHandler.bind(null, { cleanup: true }));
 // catches ctrl+c event
 process.on('SIGINT', exitHandler.bind(null, { exit: true }));
-// catches "kill pid" (for example: nodemon restart)
+// catches 'kill pid' (for example: nodemon restart)
 process.on('SIGUSR1', exitHandler.bind(null, { exit: true }));
 process.on('SIGUSR2', exitHandler.bind(null, { exit: true }));
 // catches uncaught exceptions

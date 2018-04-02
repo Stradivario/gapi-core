@@ -10,6 +10,8 @@ import { controllerHooks } from '../controller-service/controller-hooks';
 import { ModuleContainerService } from '../module/module.service';
 import { CacheService } from '../events/ngx-events-layer.service';
 import { Subscription } from 'rxjs';
+import { FileService } from '../../services/file';
+
 
 async function getAllFields() {
   const events = Container.get(CacheService);
@@ -20,7 +22,7 @@ async function getAllFields() {
     //     const currentModule = moduleContainerService.getModule(module);
     //     currentModule.resolveDependencyHandlers();
     // });
-
+    const methodBasedEffects = [];
     const Fields = { query: {}, mutation: {}, subscription: {} };
     Array.from(controllerContainerService.controllers.keys()).forEach(
       controller => {
@@ -31,6 +33,7 @@ async function getAllFields() {
           const desc = currentCtrl.getDescriptor(descriptor).value();
           if (desc.method_type !== 'event') {
             Fields[desc.method_type][desc.method_name] = desc;
+            methodBasedEffects.push(desc.method_name);
           }
 
           const c = controllerHooks.getHook(controller);
@@ -75,6 +78,11 @@ async function getAllFields() {
       mutation,
       subscription
     );
+    try {
+      Container.get(FileService).writeEffectTypes(methodBasedEffects);
+    } catch (e) {
+      console.error('Effects are not saved to directory');
+    }
     resolve(schema);
   });
 }
