@@ -7,6 +7,7 @@ import { MissingProvidedServiceTypeError } from './error/MissingProvidedServiceT
 import { Container } from './Container';
 import { ControllerContainerService } from '..';
 import { controllerHooks } from '../services/controller-service/controller-hooks';
+import { effectHooks } from '../services/effect-hook/effect-hooks';
 
 /**
  * TypeDI can have multiple containers.
@@ -310,8 +311,14 @@ export class ContainerInstance {
             params.push(this);
 
             value = new (type.bind.apply(type, params))();
+
             if (type.prototype._controller) {
                 controllerHooks.setHook(type.name, value);
+            }
+
+            if (type.prototype._effect) {
+                console.log(type.name);
+                effectHooks.setHook(type.name, value);
             }
         }
 

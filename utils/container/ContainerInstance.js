@@ -5,6 +5,7 @@ const ServiceNotFoundError_1 = require("./error/ServiceNotFoundError");
 const MissingProvidedServiceTypeError_1 = require("./error/MissingProvidedServiceTypeError");
 const Container_1 = require("./Container");
 const controller_hooks_1 = require("../services/controller-service/controller-hooks");
+const effect_hooks_1 = require("../services/effect-hook/effect-hooks");
 /**
  * TypeDI can have multiple containers.
  * One container is ContainerInstance.
@@ -187,6 +188,10 @@ class ContainerInstance {
             value = new (type.bind.apply(type, params))();
             if (type.prototype._controller) {
                 controller_hooks_1.controllerHooks.setHook(type.name, value);
+            }
+            if (type.prototype._effect) {
+                console.log(type.name);
+                effect_hooks_1.effectHooks.setHook(type.name, value);
             }
         }
         if (service && !service.transient && value)
