@@ -65,6 +65,9 @@ function GapiModule(module) {
                 if (module.types) {
                     importModules(module.types, original, 'types');
                 }
+                if (module.effects) {
+                    importModules(module.types, original, 'types');
+                }
                 if (module.services) {
                     importModules(module.services, original, 'services');
                 }

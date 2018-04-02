@@ -7,4 +7,5 @@ export interface GapiModuleArguments {
     services?: Array<Containers | any>;
     controllers?: Array<Containers | any>;
     types?: Array<Containers | any>;
+    effects?: Array<Containers | any>;
 }
