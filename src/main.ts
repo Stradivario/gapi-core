@@ -44,7 +44,7 @@ export class UserQueriesController {
   constructor(private userType: UserType) {}
 
   @Type(UserType)
-  @Effect('myevent')
+  @Effect(EffectTypes.myevent)
   @Query({
     id: {
       type: new GraphQLNonNull(GraphQLInt)

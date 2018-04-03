@@ -4,7 +4,7 @@ import { ControllerMappingSettings, ControllerContainerService } from '../../ser
 import { Token } from '../Token';
 import { Container } from '../Container';
 
-export function GapiEffect<T, K extends keyof T>(optionsOrServiceName?: ControllerMappingSettings): Function {
+export function GapiEffect<T, K extends keyof T>(optionsOrServiceName?: ServiceOptions<T, K> | Token<any> | string): Function {
     return function (target) {
         const original = target;
         original.prototype._effect = true;

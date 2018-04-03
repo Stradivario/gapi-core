@@ -1,2 +1,3 @@
-import { ControllerMappingSettings } from '../../services/controller-service/controller.service';
-export declare function GapiEffect<T, K extends keyof T>(optionsOrServiceName?: ControllerMappingSettings): Function;
+import { ServiceOptions } from '../types/ServiceOptions';
+import { Token } from '../Token';
+export declare function GapiEffect<T, K extends keyof T>(optionsOrServiceName?: ServiceOptions<T, K> | Token<any> | string): Function;
