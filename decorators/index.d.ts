@@ -9,6 +9,7 @@ export * from './gapi-args/index';
 export * from './gapi-injector/index';
 export * from './gapi-object-type/index';
 export * from './gapi-of-type/index';
+export * from './gapi-effect/index';
 export * from './gapi-resolver/index';
 export * from './gapi-public/index';
 export * from './gapi-subscription/index';

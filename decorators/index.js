@@ -14,6 +14,7 @@ __export(require("./gapi-args/index"));
 __export(require("./gapi-injector/index"));
 __export(require("./gapi-object-type/index"));
 __export(require("./gapi-of-type/index"));
+__export(require("./gapi-effect/index"));
 __export(require("./gapi-resolver/index"));
 __export(require("./gapi-public/index"));
 __export(require("./gapi-subscription/index"));

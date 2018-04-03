@@ -11,6 +11,7 @@ export class ControllerMappingSettings {
 export interface GenericGapiResolversType {
     scope?: string[];
     target?: any;
+    effect?: string;
     method_name?: string;
     method_type?: 'query' | 'subscription' | 'mutation' | 'event';
     type: GraphQLObjectType;

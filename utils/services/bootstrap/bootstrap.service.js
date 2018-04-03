@@ -35,21 +35,22 @@ function getAllFields() {
                 const currentCtrl = controllerContainerService.getController(controller);
                 currentCtrl.getAllDescriptors().forEach(descriptor => {
                     const desc = currentCtrl.getDescriptor(descriptor).value();
-                    if (desc.method_type !== 'event') {
-                        Fields[desc.method_type][desc.method_name] = desc;
-                        methodBasedEffects.push(desc.method_name);
-                    }
+                    Fields[desc.method_type][desc.method_name] = desc;
+                    const effectName = desc.effect ? desc.effect : desc.method_name;
+                    methodBasedEffects.push(effectName);
                     const c = controller_hooks_1.controllerHooks.getHook(controller);
                     const originalResolve = desc.resolve.bind(c);
                     desc.resolve = function resolve(...args) {
                         return __awaiter(this, void 0, void 0, function* () {
+                            const methodEffect = events.map.has(desc.method_name);
+                            const customEffect = events.map.has(desc.effect);
                             const result = yield originalResolve.apply(c, args);
-                            if (events.map.has(desc.method_name)) {
+                            if (methodEffect || customEffect) {
                                 let tempArgs = [result, ...args];
                                 tempArgs = tempArgs.filter(i => i && i !== 'undefined');
                                 events
-                                    .getLayer(desc.method_name)
-                                    .putItem({ key: desc.method_name, data: tempArgs });
+                                    .getLayer(effectName)
+                                    .putItem({ key: effectName, data: tempArgs });
                             }
                             return result;
                         });

@@ -5,7 +5,7 @@ function strEnum<T extends string>(o: Array<T>): {[K in T]: K} {
         return res;
     }, Object.create(null));
 }
-export const EffectTypes = strEnum(['findUser',
+export const EffectTypes = strEnum(['myevent',
 'findUser2',
 'findUser3',
 'findUser5']);

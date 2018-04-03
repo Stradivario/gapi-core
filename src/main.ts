@@ -1,7 +1,7 @@
 import { Inject, Service, GapiController, Bootstrap, Resolve } from "../index";
 import { InjectionToken } from "../";
 import { GraphQLScalarType, GraphQLInt, GraphQLNonNull } from "graphql";
-import { GapiObjectType, Type, Query, GapiModule } from "../index";
+import { GapiObjectType, Type, Query, GapiModule , Effect} from "../index";
 import { TimerObservable } from "rxjs/observable/TimerObservable";
 import { InjectType } from "../decorators";
 import { OfType } from "../";
@@ -20,11 +20,12 @@ export class TestServ {
 
 @GapiEffect()
 class UserEffectsService {
-  constructor(private test: TestServ) {
-    console.log(this.test.test());
-  }
 
-  @OfType<EffectTypes>(EffectTypes.findUser)
+  constructor(
+    private test: TestServ
+  ) {}
+
+  @OfType<EffectTypes>(EffectTypes.myevent)
   findUser(result, payload, context, info) {
     console.log(this, result, payload, context, info);
   }
@@ -43,6 +44,7 @@ export class UserQueriesController {
   constructor(private userType: UserType) {}
 
   @Type(UserType)
+  @Effect('myevent')
   @Query({
     id: {
       type: new GraphQLNonNull(GraphQLInt)
