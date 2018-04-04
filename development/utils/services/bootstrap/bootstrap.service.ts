@@ -117,10 +117,10 @@ export const Bootstrap = App => {
     const configService = Container.get(ConfigService);
     if (configService.APP_CONFIG.schema) {
       configService.APP_CONFIG.schema = await configService.APP_CONFIG.schema;
-  } else {
+    } else {
       configService.APP_CONFIG.schema = schema;
-  }
-    configService.APP_CONFIG.schema = schema;
+    }
+
     const server = Container.get(
       GapiServerModule.forRoot(configService.APP_CONFIG)
     );

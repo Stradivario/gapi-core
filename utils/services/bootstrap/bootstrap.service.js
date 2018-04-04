@@ -111,7 +111,6 @@ exports.Bootstrap = App => {
         else {
             configService.APP_CONFIG.schema = schema;
         }
-        configService.APP_CONFIG.schema = schema;
         const server = index_1.default.get(server_module_1.GapiServerModule.forRoot(configService.APP_CONFIG));
         server
             .start()
