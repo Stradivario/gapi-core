@@ -113,8 +113,13 @@ export const Bootstrap = App => {
   Object.defineProperty(App, 'name', { value: 'AppModule', writable: true });
   Container.get(App);
   console.log('Finished!\nStarting application...');
-  getAllFields().then((schema: GraphQLSchema) => {
+  getAllFields().then(async (schema: GraphQLSchema) => {
     const configService = Container.get(ConfigService);
+    if (configService.APP_CONFIG.schema) {
+      configService.APP_CONFIG.schema = await configService.APP_CONFIG.schema;
+  } else {
+      configService.APP_CONFIG.schema = schema;
+  }
     configService.APP_CONFIG.schema = schema;
     const server = Container.get(
       GapiServerModule.forRoot(configService.APP_CONFIG)

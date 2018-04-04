@@ -11,9 +11,9 @@ export interface AppConfigInterface {
     cert?: Buffer;
     uploadFolder?: string;
     graphiqlToken?: string;
-    port: string | number;
+    port?: string | number;
     force?: boolean;
-    schema?: GraphQLSchema;
+    schema?: GraphQLSchema | Promise<GraphQLSchema>;
     cyper?: any;
     connectionHooks?: ConnectionHookService;
     ethereumApi?: string;

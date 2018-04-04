@@ -103,8 +103,14 @@ exports.Bootstrap = App => {
     Object.defineProperty(App, 'name', { value: 'AppModule', writable: true });
     index_1.default.get(App);
     console.log('Finished!\nStarting application...');
-    getAllFields().then((schema) => {
+    getAllFields().then((schema) => __awaiter(this, void 0, void 0, function* () {
         const configService = index_1.default.get(config_service_1.ConfigService);
+        if (configService.APP_CONFIG.schema) {
+            configService.APP_CONFIG.schema = yield configService.APP_CONFIG.schema;
+        }
+        else {
+            configService.APP_CONFIG.schema = schema;
+        }
         configService.APP_CONFIG.schema = schema;
         const server = index_1.default.get(server_module_1.GapiServerModule.forRoot(configService.APP_CONFIG));
         server
@@ -114,6 +120,6 @@ exports.Bootstrap = App => {
             console.log('Application started!');
         })
             .catch(e => console.log(e));
-    });
+    }));
     return App;
 };
