@@ -8,10 +8,10 @@ export function OfType<T>(type: T) {
     Container.get(CacheService)
       .getLayer<Array<any>>(<any>type)
       .getItemObservable(<any>type)
-      .subscribe(item => {
+      .subscribe(async item => {
         const c = effectHooks.getHook(t.constructor.name);
         const originalDesc = descriptor.value.bind(c);
-        originalDesc(...item.data);
+        await originalDesc(...item.data);
       });
   };
 }
