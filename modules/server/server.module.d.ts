@@ -8,5 +8,5 @@ export interface Config {
 export declare class GapiServerModule {
     start(): Promise<{}>;
     static forRoot(config: AppConfigInterface): typeof GapiServerModule;
-    stop(): Promise<Error>;
+    stop(): Promise<void>;
 }

@@ -23,50 +23,36 @@ const error_service_1 = require("../error/error.service");
 const index_1 = require("../../../utils/container/index");
 const __1 = require("../..");
 let ServerUtilService = class ServerUtilService {
-    constructor() {
-        this.server = new hapi_1.Server();
-    }
     registerEndpoints(endpoints) {
-        for (const endpoint of endpoints) {
-            this.server.register(endpoint);
-        }
+        return __awaiter(this, void 0, void 0, function* () {
+            for (const endpoint of endpoints) {
+                yield this.server.register(endpoint);
+            }
+        });
     }
     initGraphQl() {
         return __awaiter(this, void 0, void 0, function* () {
             const config = index_1.default.get(__1.ConfigService);
-            const graphqlOptions = {
-                register: apollo_service_1.graphqlHapi,
-                options: {
-                    path: '/graphql',
-                    graphqlOptions: {
-                        schema: config.APP_CONFIG.schema,
-                        graphiql: true,
-                        formatError: error_service_1.attachErrorHandlers
-                    }
-                }
-            };
             if (process.env.NODE_ENV !== 'production') {
-                this.registerEndpoints([
-                    {
-                        register: apollo_service_1.graphiqlHapi,
-                        options: {
-                            path: '/graphiql',
-                            graphiqlOptions: {
-                                endpointURL: '/graphql',
-                                passHeader: `'Authorization':'${config.APP_CONFIG.graphiqlToken ||
-                                    process.env.GRAPHIQL_TOKEN}'`,
-                                subscriptionsEndpoint: `${process.env.GRAPHIQL_WS_SSH ? 'wss' : 'ws'}://${process.env.GRAPHIQL_WS_PATH || 'localhost'}${process.env.DEPLOY_PLATFORM === 'heroku'
-                                    ? ''
-                                    : `:${config.APP_CONFIG.port ||
-                                        process.env.API_PORT ||
-                                        process.env.PORT}`}/subscriptions`,
-                                websocketConnectionParams: {
-                                    token: config.APP_CONFIG.graphiqlToken || process.env.GRAPHIQL_TOKEN
-                                }
+                yield this.server.register({
+                    plugin: apollo_service_1.graphiqlHapi,
+                    options: {
+                        path: '/graphiql',
+                        graphiqlOptions: {
+                            endpointURL: '/graphql',
+                            passHeader: `'Authorization':'${config.APP_CONFIG.graphiqlToken ||
+                                process.env.GRAPHIQL_TOKEN}'`,
+                            subscriptionsEndpoint: `${process.env.GRAPHIQL_WS_SSH ? 'wss' : 'ws'}://${process.env.GRAPHIQL_WS_PATH || 'localhost'}${process.env.DEPLOY_PLATFORM === 'heroku'
+                                ? ''
+                                : `:${config.APP_CONFIG.port ||
+                                    process.env.API_PORT ||
+                                    process.env.PORT}`}/subscriptions`,
+                            websocketConnectionParams: {
+                                token: config.APP_CONFIG.graphiqlToken || process.env.GRAPHIQL_TOKEN
                             }
-                        }
-                    }
-                ]);
+                        },
+                    },
+                });
             }
             // this.registerEndpoints([{
             //   method: 'POST',
@@ -90,39 +76,66 @@ let ServerUtilService = class ServerUtilService {
             //     handler: uploadFile,
             //   }
             // }]);
-            this.registerEndpoints([graphqlOptions]);
+            // const graphqlOptions = {
+            //   plugin: graphqlHapi,
+            //   options: {
+            //     path: '/graphql',
+            //     graphqlOptions: {
+            //       schema: config.APP_CONFIG.schema,
+            //       graphiql: true,
+            //       formatError: attachErrorHandlers
+            //     }
+            //   }
+            // };
+            // this.registerEndpoints([graphqlOptions]);
         });
     }
     connect(options) {
-        const serverConnectionOptions = {
-            port: options.port,
-            routes: {
-                cors: {
-                    origin: ['*'],
-                    additionalHeaders: [
-                        'Host',
-                        'User-Agent',
-                        'Accept',
-                        'Accept-Language',
-                        'Accept-Encoding',
-                        'Access-Control-Request-Method',
-                        'Access-Control-Request-Headers',
-                        'Origin',
-                        'Connection',
-                        'Pragma',
-                        'Cache-Control'
-                    ]
+        return __awaiter(this, void 0, void 0, function* () {
+            this.serverConnectionOptions = {
+                port: options.APP_CONFIG.port,
+                routes: {
+                    cors: {
+                        origin: ['*'],
+                        additionalHeaders: [
+                            'Host',
+                            'User-Agent',
+                            'Accept',
+                            'Accept-Language',
+                            'Accept-Encoding',
+                            'Access-Control-Request-Method',
+                            'Access-Control-Request-Headers',
+                            'Origin',
+                            'Connection',
+                            'Pragma',
+                            'Cache-Control'
+                        ]
+                    }
                 }
-            }
-        };
-        // if(process.env.NODE_ENV === 'production') {
-        //   serverConnectionOptions.tls = {
-        //     key: key,
-        //     cert:cert
-        //   };
-        // }
-        this.server.connection(serverConnectionOptions);
-        this.onRequest();
+            };
+            // if(process.env.NODE_ENV === 'production') {
+            //   serverConnectionOptions.tls = {
+            //     key: key,
+            //     cert:cert
+            //   };
+            // }
+            this.server = new hapi_1.Server(this.serverConnectionOptions);
+            yield this.server.register({
+                plugin: apollo_service_1.graphqlHapi,
+                options: {
+                    path: '/graphql',
+                    graphqlOptions: {
+                        schema: options.APP_CONFIG.schema,
+                        graphiql: true,
+                        formatError: error_service_1.attachErrorHandlers
+                    },
+                    route: {
+                        cors: true,
+                    },
+                },
+            });
+            this.onRequest();
+        });
     }
     onRequest() {
         // this.server.ext('onRequest', function (request, reply) {
@@ -139,17 +152,14 @@ let ServerUtilService = class ServerUtilService {
         // });
     }
     startServer() {
-        const configContainer = index_1.default.get(__1.ConfigService);
-        this.connect(configContainer.APP_CONFIG);
-        this.initGraphQl();
-        const self = this;
-        const connectionHookService = index_1.default.get(__1.ConnectionHookService);
-        return new Promise((resolve, reject) => {
-            this.server.start(err => {
-                if (err) {
-                    reject(err);
-                    throw err;
-                }
+        return __awaiter(this, void 0, void 0, function* () {
+            const configContainer = index_1.default.get(__1.ConfigService);
+            yield this.connect(configContainer);
+            yield this.initGraphQl();
+            const self = this;
+            const connectionHookService = index_1.default.get(__1.ConnectionHookService);
+            return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+                const started = yield this.server.start();
                 const subscriptionServer = new subscriptions_transport_ws_1.SubscriptionServer({
                     execute: execution_1.execute,
                     subscribe: subscription_1.subscribe,
@@ -169,7 +179,7 @@ let ServerUtilService = class ServerUtilService {
                     console.log(`Graphiql dev tool is running at: http://${this.server.info.address}:${this.server.info.port}/graphiql`);
                 }
                 resolve(true);
-            });
+            }));
         });
     }
     stopServer() {

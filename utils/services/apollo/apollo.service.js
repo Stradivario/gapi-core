@@ -11,89 +11,84 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Boom = require("boom");
 const GraphiQL = require("apollo-server-module-graphiql");
 const apollo_server_core_1 = require("apollo-server-core");
-const index_1 = require("../../../utils/container/index");
-const auth_service_1 = require("../../services/auth/auth.service");
-function runHttpQueryWrapper(options, request, reply) {
-    return apollo_server_core_1.runHttpQuery([request], {
-        method: request.method.toUpperCase(),
-        options: options,
-        query: request.method === 'post' ? request.payload : request.query,
-    }).then((gqlResponse) => {
-        return reply(gqlResponse).type('application/json');
-    }, (error) => {
-        if ('HttpQueryError' !== error.name) {
-            throw error;
+const auth_service_1 = require("../auth/auth.service");
+const container_1 = require("../../container");
+const graphqlHapi = {
+    name: 'graphql',
+    register: (server, options) => {
+        if (!options || !options.graphqlOptions) {
+            throw new Error('Apollo Server requires options.');
         }
-        if (true === error.isGraphQLError) {
-            return reply(error.message).code(error.statusCode).type('application/json');
-        }
-        const err = Boom.create(error.statusCode);
-        err.output.payload.message = error.message;
-        if (error.headers) {
-            Object.keys(error.headers).forEach((header) => {
-                err.output.headers[header] = error.headers[header];
-            });
-        }
-        return reply(err);
-    });
-}
-const graphqlHapi = function (server, options, next) {
-    if (!options || !options.graphqlOptions) {
-        throw new Error('Apollo Server requires options.');
-    }
-    if (arguments.length !== 3) {
-        throw new Error(`Apollo Server expects exactly 3 argument, got ${arguments.length}`);
-    }
-    server.route({
-        method: ['GET', 'POST'],
-        path: options.path || '/graphql',
-        config: options.route || {},
-        handler: (request, reply) => __awaiter(this, void 0, void 0, function* () {
-            if (request.headers.authorization && request.headers.authorization !== 'undefined') {
+        server.route({
+            method: ['GET', 'POST'],
+            path: options.path || '/graphql',
+            vhost: options.vhost || undefined,
+            config: options.route || {},
+            handler: (request, h) => __awaiter(this, void 0, void 0, function* () {
                 try {
-                    const serviceUtilsService = index_1.Container.get(auth_service_1.AuthService);
-                    options.graphqlOptions.context = yield serviceUtilsService.modifyFunctions.validateToken(request.headers.authorization);
+                    if (request.headers.authorization && request.headers.authorization !== 'undefined') {
+                        try {
+                            const serviceUtilsService = container_1.Container.get(auth_service_1.AuthService);
+                            options.graphqlOptions.context = yield serviceUtilsService.modifyFunctions.validateToken(request.headers.authorization);
+                        }
+                        catch (e) {
+                            return Boom.unauthorized();
+                        }
+                    }
+                    else {
+                        options.graphqlOptions.context = null;
+                    }
+                    const gqlResponse = yield apollo_server_core_1.runHttpQuery([request], {
+                        method: request.method.toUpperCase(),
+                        options: options.graphqlOptions,
+                        query: request.method === 'post' ? request.payload : request.query,
+                    });
+                    const response = h.response(gqlResponse);
+                    response.type('application/json');
+                    return response;
                 }
-                catch (e) {
-                    return reply(Boom.unauthorized());
+                catch (error) {
+                    if ('HttpQueryError' !== error.name) {
+                        throw Boom.boomify(error);
+                    }
+                    if (true === error.isGraphQLError) {
+                        const response = h.response(error.message);
+                        response.code(error.statusCode);
+                        response.type('application/json');
+                        return response;
+                    }
+                    const err = new Boom(error.message, { statusCode: error.statusCode });
+                    if (error.headers) {
+                        Object.keys(error.headers).forEach(header => {
+                            err.output.headers[header] = error.headers[header];
+                        });
+                    }
+                    // Boom hides the error when status code is 500
+                    err.output.payload.message = error.message;
+                    throw err;
                 }
-            }
-            else {
-                options.graphqlOptions.context = null;
-            }
-            return runHttpQueryWrapper(options.graphqlOptions, request, reply);
-        }),
-    });
-    return next();
+            }),
+        });
+    },
 };
 exports.graphqlHapi = graphqlHapi;
-graphqlHapi.attributes = {
-    name: 'graphql',
-    version: '0.0.1',
-};
-const graphiqlHapi = function (server, options, next) {
-    if (!options || !options.graphiqlOptions) {
-        throw new Error('Apollo Server GraphiQL requires options.');
-    }
-    if (arguments.length !== 3) {
-        throw new Error(`Apollo Server GraphiQL expects exactly 3 arguments, got ${arguments.length}`);
-    }
-    server.route({
-        method: 'GET',
-        path: options.path || '/graphiql',
-        config: options.route || {},
-        handler: (request, reply) => {
-            const query = request.query;
-            GraphiQL.resolveGraphiQLString(query, options.graphiqlOptions, request)
-                .then(graphiqlString => {
-                reply(graphiqlString).header('Content-Type', 'text/html');
-            }, error => reply(error));
-        },
-    });
-    return next();
+const graphiqlHapi = {
+    name: 'graphiql',
+    register: (server, options) => {
+        if (!options || !options.graphiqlOptions) {
+            throw new Error('Apollo Server GraphiQL requires options.');
+        }
+        server.route({
+            method: 'GET',
+            path: options.path || '/graphiql',
+            config: options.route || {},
+            handler: (request, h) => __awaiter(this, void 0, void 0, function* () {
+                const graphiqlString = yield GraphiQL.resolveGraphiQLString(request.query, options.graphiqlOptions, request);
+                const response = h.response(graphiqlString);
+                response.type('text/html');
+                return response;
+            }),
+        });
+    },
 };
 exports.graphiqlHapi = graphiqlHapi;
-graphiqlHapi.attributes = {
-    name: 'graphiql',
-    version: '0.0.1',
-};

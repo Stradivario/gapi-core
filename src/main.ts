@@ -35,7 +35,7 @@ class UserEffectsService {
 export class UserType {
   readonly gosho: UserType2 = InjectType(UserType2);
   readonly gosho2: UserType2 = InjectType(UserType2);
-  readonly id4: number | GraphQLScalarType = GraphQLInt;
+  readonly id: number | GraphQLScalarType = GraphQLInt;
   readonly id5: number | GraphQLScalarType = GraphQLInt;
 }
 
@@ -51,6 +51,7 @@ export class UserQueriesController {
     }
   })
   findUser(root, { id }, context) {
+    console.log('AAADADAA', context);
     return {
       id: 1
     };
