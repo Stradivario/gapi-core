@@ -15,7 +15,7 @@ export class UserType2 {
 
 @Service()
 export class TestServ {
-  test() { }
+  test() {return 1;}
 }
 
 @GapiEffect()
@@ -98,23 +98,36 @@ class Pesho {
   id = 1;
 }
 
+@Service()
+export class TestService {
+  testMethod() {
+    return 1;
+  }
+}
+
+@Service()
 class MyPlugin {
   name = 'MyPlugin';
   version = '1.0.0';
+  constructor(
+    private test: TestService
+  ) {
+    console.log(this.test);
+  }
 
   async register(server, options) {
-
-    // Create a route for example
-
     server.route({
       method: 'GET',
       path: '/test',
-      handler: function (request, h) {
-        return 'hello, world';
-      }
+      handler: this.handler.bind(this)
     });
-
   }
+
+  async handler(request, h) {
+    console.log(this.test.testMethod());
+    return 'Hello world';
+  }
+
 }
 
 @GapiModule({
@@ -127,7 +140,7 @@ class MyPlugin {
       useClass: Pesho
     }
   ],
-  plugins: [ MyPlugin ]
+  plugins: [MyPlugin]
 })
 export class AppModule { }
 
