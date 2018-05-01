@@ -1,4 +1,4 @@
-import { Inject, Service, GapiController, Bootstrap, Resolve, GapiHapiPluginInterface } from "../index";
+import { Inject, Service, GapiController, Bootstrap, Resolve, GapiHapiPluginInterface, ServerUtilService } from "../index";
 import { InjectionToken } from "../";
 import { GraphQLScalarType, GraphQLInt, GraphQLNonNull } from "graphql";
 import { GapiObjectType, Type, Query, GapiModule, Effect } from "../index";
@@ -7,6 +7,7 @@ import { InjectType, GapiModuleWithServices } from "../decorators";
 import { OfType } from "../";
 import { EffectTypes } from "./app/core/api-introspection/EffectTypes";
 import { GapiEffect } from "../";
+import { Server } from "hapi";
 
 @GapiObjectType()
 export class UserType2 {
@@ -109,17 +110,28 @@ export class TestService {
 class MyPlugin implements GapiHapiPluginInterface {
   name = 'MyPlugin';
   version = '1.0.0';
+  server: Server;
   constructor(
     @Inject('dada') private dada: string,
     private test: TestService
   ) {
-    console.log(this.dada);
   }
+
 
   async register(server, options) {
     server.route({
       method: 'GET',
       path: '/test',
+      handler: this.handler.bind(this)
+    });
+    server.route({
+      method: 'GET',
+      path: '/test2',
+      handler: this.handler.bind(this)
+    });
+    server.route({
+      method: 'GET',
+      path: '/test3',
       handler: this.handler.bind(this)
     });
   }
