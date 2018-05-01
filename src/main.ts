@@ -3,7 +3,7 @@ import { InjectionToken } from "../";
 import { GraphQLScalarType, GraphQLInt, GraphQLNonNull } from "graphql";
 import { GapiObjectType, Type, Query, GapiModule, Effect } from "../index";
 import { TimerObservable } from "rxjs/observable/TimerObservable";
-import { InjectType } from "../decorators";
+import { InjectType, GapiModuleWithServices } from "../decorators";
 import { OfType } from "../";
 import { EffectTypes } from "./app/core/api-introspection/EffectTypes";
 import { GapiEffect } from "../";
@@ -110,9 +110,10 @@ class MyPlugin {
   name = 'MyPlugin';
   version = '1.0.0';
   constructor(
+    @Inject('dada') private dada: string,
     private test: TestService
   ) {
-    console.log(this.test);
+    console.log(this.dada);
   }
 
   async register(server, options) {
@@ -130,8 +131,26 @@ class MyPlugin {
 
 }
 
+
 @GapiModule({
-  imports: [UserQueriesController],
+  imports: []
+})
+export class ProbaModule {
+  public static forRoot(): GapiModuleWithServices {
+    return {
+      gapiModule: ProbaModule,
+      services: [{
+        provide: 'dada',
+        useValue: '5'
+      }]
+    }
+  }
+}
+
+@GapiModule({
+  imports: [
+    ProbaModule.forRoot(),
+    UserQueriesController],
   services: [
     UserEffectsService,
     TestServ,
@@ -142,6 +161,8 @@ class MyPlugin {
   ],
   plugins: [MyPlugin]
 })
-export class AppModule { }
+export class AppModule {
+
+}
 
 Bootstrap(AppModule);

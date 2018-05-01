@@ -1,4 +1,3 @@
-export * from './services/apply/apply.service';
 export * from './services/bootstrap/bootstrap.service';
 export * from './services/server/server.service';
 export * from './services/apollo/apollo.service';

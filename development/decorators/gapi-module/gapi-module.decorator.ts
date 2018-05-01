@@ -1,6 +1,5 @@
 import { GapiModuleArguments, GapiServiceArguments, GapiModuleWithServices } from './gapi-module.decorator.interface';
 import { GapiModuleSymbol } from './gapi-module.symbol';
-import { ApplyServicesHook } from '../../utils/services/apply/apply.service';
 import 'reflect-metadata';
 import Container from '../../utils/container/index';
 import { ServiceMetadata } from '../../utils/container';

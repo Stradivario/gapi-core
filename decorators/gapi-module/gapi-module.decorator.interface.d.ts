@@ -1,19 +1,19 @@
 import { PluginBase, PluginNameVersion, PluginPackage } from 'hapi';
 export interface GapiModuleWithServices {
     gapiModule: any;
-    services: GapiServiceArguments[];
+    services: Array<GapiServiceArguments | Function>;
 }
-export declare type GapiServiceArguments = Array<{
+export interface GapiServiceArguments {
     provide: string;
     useValue?: any;
     useFactory?: Function;
-    useClass: Function;
-} | any>;
+    useClass?: Function;
+}
 export interface GapiModuleArguments {
-    imports?: Array<Function | any>;
-    services?: Array<Function | any>;
-    controllers?: Array<Function | any>;
-    types?: Array<Function | any>;
-    effects?: Array<Function | any>;
-    plugins?: Array<PluginBase<any> & (PluginNameVersion | PluginPackage) | Function | any>;
+    imports?: Array<Function | GapiModuleWithServices>;
+    services?: Array<Function | GapiServiceArguments>;
+    controllers?: Array<Function>;
+    types?: Array<Function>;
+    effects?: Array<Function>;
+    plugins?: Array<PluginBase<any> & (PluginNameVersion | PluginPackage) | Function>;
 }
