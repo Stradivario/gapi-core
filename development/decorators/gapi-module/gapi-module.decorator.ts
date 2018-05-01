@@ -1,4 +1,4 @@
-import { GapiModuleArguments } from './gapi-module.decorator.interface';
+import { GapiModuleArguments, GapiServiceArguments, GapiModuleWithServices } from './gapi-module.decorator.interface';
 import { GapiModuleSymbol } from './gapi-module.symbol';
 import { ApplyServicesHook } from '../../utils/services/apply/apply.service';
 import 'reflect-metadata';
@@ -6,6 +6,7 @@ import Container from '../../utils/container/index';
 import { ServiceMetadata } from '../../utils/container';
 import { ModuleContainerService } from '../../utils/services/module/module.service';
 import { HapiPluginService } from '../../utils/services/plugin/plugin.service';
+import { PluginBase, PluginNameVersion, PluginPackage } from 'hapi';
 
 const moduleContainerService = Container.get(ModuleContainerService);
 const hapiPluginService = Container.get(HapiPluginService);
@@ -22,7 +23,7 @@ function getInjectables(module) {
     return injectables;
 }
 
-function importPlugins(plugins, original, status) {
+function importPlugins(plugins: Array<PluginBase<any> & (PluginNameVersion | PluginPackage) | Function>, original, status) {
     plugins.forEach(plugin => {
         if (plugin.constructor === Function) {
             hapiPluginService.register(Container.get(plugin));
@@ -110,6 +111,21 @@ export function GapiModule<T, K extends keyof T>(module: GapiModuleArguments) {
         f.prototype = original.prototype;
         if (original.forRoot) {
             f.forRoot = original.forRoot;
+            const originalForRoot = f.forRoot;
+            f.forRoot = function (args) {
+                const result: GapiModuleWithServices = originalForRoot(args);
+                if (!result.gapiModule) {
+                    throw new Error('Missing gapi module please return the same Class or provide {gapiModule: YourModule, services: []}');
+                }
+                if (!result.services) {
+                    console.info('Consider return YourModule; if you dont want to use GapiModuleWithServices interface to return Pre initialized configuration services');
+                    console.info('Your Gapi module loaded as regular import please remove YourModule.forRoot() and instead import just YourModule');
+                } else {
+                    importModules(result.services, original, 'services');
+                }
+
+                return result.gapiModule;
+            };
         }
         return f;
     };
