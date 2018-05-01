@@ -1,11 +1,11 @@
 import { Server, ServerOptions } from 'hapi';
+import { ConfigService } from '../..';
 export declare class ServerUtilService {
     serverConnectionOptions: ServerOptions;
     server: Server;
     registerEndpoints(endpoints: Array<any>): Promise<void>;
-    initGraphQl(): Promise<void>;
-    connect(options: any): Promise<void>;
-    onRequest(): void;
-    startServer(): Promise<{}>;
+    initGraphQl(configContainer: ConfigService): Promise<void>;
+    connect(options: ConfigService): Promise<void>;
+    startServer(): Promise<boolean>;
     stopServer(): Promise<void>;
 }

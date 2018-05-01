@@ -24,10 +24,8 @@ export class ServerUtilService {
     }
   }
 
-  async initGraphQl() {
+  async initGraphQl(configContainer: ConfigService) {
     const config = Container.get(ConfigService);
-
-
     if (process.env.NODE_ENV !== 'production') {
       await this.server.register({
         plugin: graphiqlHapi,
@@ -54,43 +52,23 @@ export class ServerUtilService {
         },
       });
     }
-
-    // this.registerEndpoints([{
-    //   method: 'POST',
-    //   path: '/upload',
-    //   config: {
-    //     payload: {
-    //       maxBytes: 2048576000000,
-    //       output: 'stream',
-    //       parse: true,
-    //       allow: 'multipart/form-data'
-    //     },
-    //     app: {
-    //       tags: ['api', 'shop'],
-    //       description: 'uploadFile',
-    //       endpoint: 'uploadFile',
-    //       scope: [
-    //         ENUMS.USER_TYPE.ADMIN.key
-    //       ]
-    //     },
-    //     auth: false,
-    //     handler: uploadFile,
-    //   }
-    // }]);
-    // const graphqlOptions = {
-    //   plugin: graphqlHapi,
-    //   options: {
-    //     path: '/graphql',
-    //     graphqlOptions: {
-    //       schema: config.APP_CONFIG.schema,
-    //       graphiql: true,
-    //       formatError: attachErrorHandlers
-    //     }
-    //   }
-    // };
-    // this.registerEndpoints([graphqlOptions]);
+    await this.server.register({
+      plugin: graphqlHapi,
+      options: {
+        path: '/graphql',
+        graphqlOptions: {
+          schema: configContainer.APP_CONFIG.schema,
+          graphiql: true,
+          formatError: attachErrorHandlers
+        },
+        route: {
+          cors: true,
+        },
+      },
+    });
   }
-  async connect(options) {
+
+  async connect(options: ConfigService) {
     this.serverConnectionOptions = {
       port: options.APP_CONFIG.port,
       routes: {
@@ -112,94 +90,52 @@ export class ServerUtilService {
         }
       }
     };
-
-    // if(process.env.NODE_ENV === 'production') {
-    //   serverConnectionOptions.tls = {
-    //     key: key,
-    //     cert:cert
-    //   };
-    // }
-
     this.server = new Server(this.serverConnectionOptions);
-    await this.server.register({
-      plugin: graphqlHapi,
-      options: {
-        path: '/graphql',
-        graphqlOptions: {
-          schema: options.APP_CONFIG.schema,
-          graphiql: true,
-          formatError: attachErrorHandlers
-        },
-        route: {
-          cors: true,
-        },
-      },
-    });
-    this.onRequest();
-  }
 
-  onRequest() {
-    // this.server.ext('onRequest', function (request, reply) {
-    //   // if(request.method === 'options') {
-    //       console.log('1441')
-    //     return reply.continue();
-    //   // }
-    //   // if(!request.headers.authorization) {
-    //   //   return reply(Boom.unauthorized());
-    //   // } else {
-    //   //   ServerModule.validateToken(request.headers.authorization);
-    //   //   return reply.continue();
-    //   // }
-    // });
   }
 
   async startServer() {
     const configContainer = Container.get(ConfigService);
-    await this.connect(configContainer);
-    await this.initGraphQl();
-    const self = this;
     const connectionHookService = Container.get(ConnectionHookService);
-
-    return new Promise(async (resolve, reject) => {
-
-      const started = await this.server.start();
-      const subscriptionServer = new SubscriptionServer(
-        <any>{
-          execute,
-          subscribe,
-          schema: configContainer.APP_CONFIG.schema,
-          onConnect(connectionParams) {
-            return connectionHookService.modifyHooks.onSubConnection(
-              connectionParams
-            );
-          },
-          onOperation: (message, params, webSocket) => {
-            return connectionHookService.modifyHooks.onSubOperation(
-              message,
+    await this.connect(configContainer);
+    await this.initGraphQl(configContainer);
+    await this.server.start();
+    const subscriptionServer = new SubscriptionServer(
+      {
+        execute,
+        subscribe,
+        schema: <any>configContainer.APP_CONFIG.schema,
+        onConnect(connectionParams) {
+          return connectionHookService.modifyHooks
+            .onSubConnection(connectionParams);
+        },
+        onOperation: (connectionParams, params, webSocket) => {
+          return connectionHookService.modifyHooks
+            .onSubOperation(
+              connectionParams,
               params,
               webSocket
             );
-          }
-        },
-        {
-          server: this.server.listener,
-          path: '/subscriptions'
         }
-      );
-      console.log(
-        `Server running at: http://${this.server.info.address}:${
-        this.server.info.port
-        }, environment: ${process.env.NODE_ENV || 'development'}`
-      );
-      if (process.env.NODE_ENV !== 'production') {
-        console.log(
-          `Graphiql dev tool is running at: http://${
-          this.server.info.address
-          }:${this.server.info.port}/graphiql`
-        );
+      },
+      {
+        server: this.server.listener,
+        path: '/subscriptions'
       }
-      resolve(true);
-    });
+    );
+    console.log(
+      `Server running at: http://${this.server.info.address}:${
+      this.server.info.port
+      }, environment: ${process.env.NODE_ENV || 'development'}`
+    );
+    if (process.env.NODE_ENV !== 'production') {
+      console.log(
+        `Graphiql dev tool is running at: http://${
+        this.server.info.address
+        }:${this.server.info.port}/graphiql`
+      );
+    }
+    return await Promise.resolve(true);
   }
 
   stopServer() {

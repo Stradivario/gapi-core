@@ -24,62 +24,60 @@ function getAllFields() {
         const events = index_1.default.get(ngx_events_layer_service_1.CacheService);
         const controllerContainerService = index_1.default.get(controller_service_1.ControllerContainerService);
         const moduleContainerService = index_1.default.get(module_service_1.ModuleContainerService);
-        return new Promise((resolve, reject) => {
-            // Array.from(moduleContainerService.modules.keys()).forEach(module => {
-            //     const currentModule = moduleContainerService.getModule(module);
-            //     currentModule.resolveDependencyHandlers();
-            // });
-            const methodBasedEffects = [];
-            const Fields = { query: {}, mutation: {}, subscription: {} };
-            Array.from(controllerContainerService.controllers.keys()).forEach(controller => {
-                const currentCtrl = controllerContainerService.getController(controller);
-                currentCtrl.getAllDescriptors().forEach(descriptor => {
-                    const desc = currentCtrl.getDescriptor(descriptor).value();
-                    Fields[desc.method_type][desc.method_name] = desc;
-                    const effectName = desc.effect ? desc.effect : desc.method_name;
-                    methodBasedEffects.push(effectName);
-                    const c = controller_hooks_1.controllerHooks.getHook(controller);
-                    const originalResolve = desc.resolve.bind(c);
-                    desc.resolve = function resolve(...args) {
-                        return __awaiter(this, void 0, void 0, function* () {
-                            const methodEffect = events.map.has(desc.method_name);
-                            const customEffect = events.map.has(desc.effect);
-                            const result = yield originalResolve.apply(c, args);
-                            if (methodEffect || customEffect) {
-                                let tempArgs = [result, ...args];
-                                tempArgs = tempArgs.filter(i => i && i !== 'undefined');
-                                events
-                                    .getLayer(effectName)
-                                    .putItem({ key: effectName, data: tempArgs });
-                            }
-                            return result;
-                        });
-                    };
-                });
+        // Array.from(moduleContainerService.modules.keys()).forEach(module => {
+        //     const currentModule = moduleContainerService.getModule(module);
+        //     currentModule.resolveDependencyHandlers();
+        // });
+        const methodBasedEffects = [];
+        const Fields = { query: {}, mutation: {}, subscription: {} };
+        Array.from(controllerContainerService.controllers.keys()).forEach(controller => {
+            const currentCtrl = controllerContainerService.getController(controller);
+            currentCtrl.getAllDescriptors().forEach(descriptor => {
+                const desc = currentCtrl.getDescriptor(descriptor).value();
+                Fields[desc.method_type][desc.method_name] = desc;
+                const effectName = desc.effect ? desc.effect : desc.method_name;
+                methodBasedEffects.push(effectName);
+                const c = controller_hooks_1.controllerHooks.getHook(controller);
+                const originalResolve = desc.resolve.bind(c);
+                desc.resolve = function resolve(...args) {
+                    return __awaiter(this, void 0, void 0, function* () {
+                        const methodEffect = events.map.has(desc.method_name);
+                        const customEffect = events.map.has(desc.effect);
+                        const result = yield originalResolve.apply(c, args);
+                        if (methodEffect || customEffect) {
+                            let tempArgs = [result, ...args];
+                            tempArgs = tempArgs.filter(i => i && i !== 'undefined');
+                            events
+                                .getLayer(effectName)
+                                .putItem({ key: effectName, data: tempArgs });
+                        }
+                        return result;
+                    });
+                };
             });
-            function generateType(query, name, description) {
-                if (!Object.keys(query).length) {
-                    return;
-                }
-                return new graphql_1.GraphQLObjectType({
-                    name: name,
-                    description: description,
-                    fields: query
-                });
-            }
-            const query = generateType(Fields.query, 'Query', 'Query type for all get requests which will not change persistent data');
-            const mutation = generateType(Fields.mutation, 'Mutation', 'Mutation type for all requests which will change persistent data');
-            const subscription = generateType(Fields.subscription, 'Subscription', 'Subscription type for all rabbitmq subscriptions via pub sub');
-            hook_service_1.HookService.AttachHooks([query, mutation, subscription]);
-            const schema = index_1.default.get(schema_service_1.SchemaService).generateSchema(query, mutation, subscription);
-            try {
-                index_1.default.get(file_1.FileService).writeEffectTypes(methodBasedEffects);
-            }
-            catch (e) {
-                console.error('Effects are not saved to directory');
-            }
-            resolve(schema);
         });
+        function generateType(query, name, description) {
+            if (!Object.keys(query).length) {
+                return;
+            }
+            return new graphql_1.GraphQLObjectType({
+                name: name,
+                description: description,
+                fields: query
+            });
+        }
+        const query = generateType(Fields.query, 'Query', 'Query type for all get requests which will not change persistent data');
+        const mutation = generateType(Fields.mutation, 'Mutation', 'Mutation type for all requests which will change persistent data');
+        const subscription = generateType(Fields.subscription, 'Subscription', 'Subscription type for all rabbitmq subscriptions via pub sub');
+        hook_service_1.HookService.AttachHooks([query, mutation, subscription]);
+        const schema = index_1.default.get(schema_service_1.SchemaService).generateSchema(query, mutation, subscription);
+        try {
+            index_1.default.get(file_1.FileService).writeEffectTypes(methodBasedEffects);
+        }
+        catch (e) {
+            console.error('Effects are not saved to directory');
+        }
+        return yield Promise.resolve(schema);
     });
 }
 function onExitProcess(server) {
@@ -98,27 +96,26 @@ function onExitProcess(server) {
         process.exit(99);
     });
 }
-exports.Bootstrap = App => {
+exports.Bootstrap = (App) => __awaiter(this, void 0, void 0, function* () {
     console.log(`Bootstrapping application...`);
     Object.defineProperty(App, 'name', { value: 'AppModule', writable: true });
     index_1.default.get(App);
     console.log('Finished!\nStarting application...');
-    getAllFields().then((schema) => __awaiter(this, void 0, void 0, function* () {
-        const configService = index_1.default.get(config_service_1.ConfigService);
-        if (configService.APP_CONFIG.schema) {
-            configService.APP_CONFIG.schema = yield configService.APP_CONFIG.schema;
-        }
-        else {
-            configService.APP_CONFIG.schema = schema;
-        }
-        const server = index_1.default.get(server_module_1.GapiServerModule.forRoot(configService.APP_CONFIG));
-        server
-            .start()
-            .then(data => {
-            onExitProcess(server);
-            console.log('Application started!');
-        })
-            .catch(e => console.log(e));
-    }));
-    return App;
-};
+    const schema = yield getAllFields();
+    const configService = index_1.default.get(config_service_1.ConfigService);
+    if (configService.APP_CONFIG.schema) {
+        configService.APP_CONFIG.schema = yield configService.APP_CONFIG.schema;
+    }
+    else {
+        configService.APP_CONFIG.schema = schema;
+    }
+    const server = index_1.default.get(server_module_1.GapiServerModule.forRoot(configService.APP_CONFIG));
+    try {
+        yield server.start();
+    }
+    catch (e) {
+        console.log(e);
+    }
+    onExitProcess(server);
+    return server;
+});

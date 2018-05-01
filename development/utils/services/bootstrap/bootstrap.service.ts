@@ -16,79 +16,77 @@ async function getAllFields() {
   const events = Container.get(CacheService);
   const controllerContainerService = Container.get(ControllerContainerService);
   const moduleContainerService = Container.get(ModuleContainerService);
-  return new Promise((resolve, reject) => {
-    // Array.from(moduleContainerService.modules.keys()).forEach(module => {
-    //     const currentModule = moduleContainerService.getModule(module);
-    //     currentModule.resolveDependencyHandlers();
-    // });
-    const methodBasedEffects = [];
-    const Fields = { query: {}, mutation: {}, subscription: {} };
-    Array.from(controllerContainerService.controllers.keys()).forEach(
-      controller => {
-        const currentCtrl = controllerContainerService.getController(
-          controller
-        );
-        currentCtrl.getAllDescriptors().forEach(descriptor => {
-          const desc = currentCtrl.getDescriptor(descriptor).value();
-          Fields[desc.method_type][desc.method_name] = desc;
-          const effectName = desc.effect ? desc.effect : desc.method_name;
-          methodBasedEffects.push(effectName);
-          const c = controllerHooks.getHook(controller);
-          const originalResolve = desc.resolve.bind(c);
-          desc.resolve = async function resolve(...args: any[]) {
-            const methodEffect = events.map.has(desc.method_name);
-            const customEffect = events.map.has(desc.effect);
-            const result = await originalResolve.apply(c, args);
-            if (methodEffect || customEffect) {
-              let tempArgs = [result, ...args];
-              tempArgs = tempArgs.filter(i => i && i !== 'undefined');
-              events
-                .getLayer<Array<any>>(effectName)
-                .putItem({ key: effectName, data: tempArgs });
-            }
-            return result;
-          };
-        });
-      }
-    );
-    function generateType(query, name, description) {
-      if (!Object.keys(query).length) {
-        return;
-      }
-      return new GraphQLObjectType({
-        name: name,
-        description: description,
-        fields: query
+  // Array.from(moduleContainerService.modules.keys()).forEach(module => {
+  //     const currentModule = moduleContainerService.getModule(module);
+  //     currentModule.resolveDependencyHandlers();
+  // });
+  const methodBasedEffects = [];
+  const Fields = { query: {}, mutation: {}, subscription: {} };
+  Array.from(controllerContainerService.controllers.keys()).forEach(
+    controller => {
+      const currentCtrl = controllerContainerService.getController(
+        controller
+      );
+      currentCtrl.getAllDescriptors().forEach(descriptor => {
+        const desc = currentCtrl.getDescriptor(descriptor).value();
+        Fields[desc.method_type][desc.method_name] = desc;
+        const effectName = desc.effect ? desc.effect : desc.method_name;
+        methodBasedEffects.push(effectName);
+        const c = controllerHooks.getHook(controller);
+        const originalResolve = desc.resolve.bind(c);
+        desc.resolve = async function resolve(...args: any[]) {
+          const methodEffect = events.map.has(desc.method_name);
+          const customEffect = events.map.has(desc.effect);
+          const result = await originalResolve.apply(c, args);
+          if (methodEffect || customEffect) {
+            let tempArgs = [result, ...args];
+            tempArgs = tempArgs.filter(i => i && i !== 'undefined');
+            events
+              .getLayer<Array<any>>(effectName)
+              .putItem({ key: effectName, data: tempArgs });
+          }
+          return result;
+        };
       });
     }
-    const query = generateType(
-      Fields.query,
-      'Query',
-      'Query type for all get requests which will not change persistent data'
-    );
-    const mutation = generateType(
-      Fields.mutation,
-      'Mutation',
-      'Mutation type for all requests which will change persistent data'
-    );
-    const subscription = generateType(
-      Fields.subscription,
-      'Subscription',
-      'Subscription type for all rabbitmq subscriptions via pub sub'
-    );
-    HookService.AttachHooks([query, mutation, subscription]);
-    const schema = Container.get(SchemaService).generateSchema(
-      query,
-      mutation,
-      subscription
-    );
-    try {
-      Container.get(FileService).writeEffectTypes(methodBasedEffects);
-    } catch (e) {
-      console.error('Effects are not saved to directory');
+  );
+  function generateType(query, name, description) {
+    if (!Object.keys(query).length) {
+      return;
     }
-    resolve(schema);
-  });
+    return new GraphQLObjectType({
+      name: name,
+      description: description,
+      fields: query
+    });
+  }
+  const query = generateType(
+    Fields.query,
+    'Query',
+    'Query type for all get requests which will not change persistent data'
+  );
+  const mutation = generateType(
+    Fields.mutation,
+    'Mutation',
+    'Mutation type for all requests which will change persistent data'
+  );
+  const subscription = generateType(
+    Fields.subscription,
+    'Subscription',
+    'Subscription type for all rabbitmq subscriptions via pub sub'
+  );
+  HookService.AttachHooks([query, mutation, subscription]);
+  const schema = Container.get(SchemaService).generateSchema(
+    query,
+    mutation,
+    subscription
+  );
+  try {
+    Container.get(FileService).writeEffectTypes(methodBasedEffects);
+  } catch (e) {
+    console.error('Effects are not saved to directory');
+  }
+  return await Promise.resolve(schema);
 }
 
 function onExitProcess(server: GapiServerModule) {
@@ -96,42 +94,36 @@ function onExitProcess(server: GapiServerModule) {
     console.log('App stopped');
     server.stop();
   });
-  process.on('exit', function() {
+  process.on('exit', function () {
     process.emit(<any>'cleanup');
   });
-  process.on('SIGINT', function() {
+  process.on('SIGINT', function () {
     process.exit(2);
   });
-  process.on('uncaughtException', function(e) {
+  process.on('uncaughtException', function (e) {
     console.log(e.stack);
     process.exit(99);
   });
 }
 
-export const Bootstrap = App => {
+export const Bootstrap = async App => {
   console.log(`Bootstrapping application...`);
   Object.defineProperty(App, 'name', { value: 'AppModule', writable: true });
   Container.get(App);
   console.log('Finished!\nStarting application...');
-  getAllFields().then(async (schema: GraphQLSchema) => {
-    const configService = Container.get(ConfigService);
-    if (configService.APP_CONFIG.schema) {
-      configService.APP_CONFIG.schema = await configService.APP_CONFIG.schema;
-    } else {
-      configService.APP_CONFIG.schema = schema;
-    }
-
-    const server = Container.get(
-      GapiServerModule.forRoot(configService.APP_CONFIG)
-    );
-    server
-      .start()
-      .then(data => {
-        onExitProcess(server);
-        console.log('Application started!');
-      })
-      .catch(e => console.log(e));
-  });
-
-  return App;
+  const schema: GraphQLSchema = await getAllFields();
+  const configService = Container.get(ConfigService);
+  if (configService.APP_CONFIG.schema) {
+    configService.APP_CONFIG.schema = await configService.APP_CONFIG.schema;
+  } else {
+    configService.APP_CONFIG.schema = schema;
+  }
+  const server = Container.get(GapiServerModule.forRoot(configService.APP_CONFIG));
+  try {
+    await server.start();
+  } catch (e) {
+    console.log(e);
+  }
+  onExitProcess(server);
+  return server;
 };
