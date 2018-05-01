@@ -1,4 +1,4 @@
-import { Server, ServerOptions } from 'hapi';
+import { Server, ServerOptions, PluginBase, PluginNameVersion, PluginPackage } from 'hapi';
 import { graphqlHapi, graphiqlHapi } from '../apollo/apollo.service';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import { subscribe } from 'graphql/subscription';
@@ -12,6 +12,7 @@ import {
   ConnectionHookService
 } from '../..';
 import { GraphQLSchema } from 'graphql';
+import { HapiPluginService } from '../plugin/plugin.service';
 
 @Service()
 export class ServerUtilService {
@@ -97,7 +98,9 @@ export class ServerUtilService {
   async startServer() {
     const configContainer = Container.get(ConfigService);
     const connectionHookService = Container.get(ConnectionHookService);
+    const userPlugins = Container.get(HapiPluginService);
     await this.connect(configContainer);
+    await Promise.all(userPlugins.getPlugins().map(async plugin => await this.server.register(plugin)));
     await this.initGraphQl(configContainer);
     await this.server.start();
     const subscriptionServer = new SubscriptionServer(
@@ -135,7 +138,7 @@ export class ServerUtilService {
         }:${this.server.info.port}/graphiql`
       );
     }
-    return await Promise.resolve(true);
+    return await Promise.resolve(this.server);
   }
 
   stopServer() {

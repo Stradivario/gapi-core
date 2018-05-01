@@ -1,7 +1,7 @@
 import { Inject, Service, GapiController, Bootstrap, Resolve } from "../index";
 import { InjectionToken } from "../";
 import { GraphQLScalarType, GraphQLInt, GraphQLNonNull } from "graphql";
-import { GapiObjectType, Type, Query, GapiModule , Effect} from "../index";
+import { GapiObjectType, Type, Query, GapiModule, Effect } from "../index";
 import { TimerObservable } from "rxjs/observable/TimerObservable";
 import { InjectType } from "../decorators";
 import { OfType } from "../";
@@ -15,7 +15,7 @@ export class UserType2 {
 
 @Service()
 export class TestServ {
-  test() {}
+  test() { }
 }
 
 @GapiEffect()
@@ -23,7 +23,7 @@ class UserEffectsService {
 
   constructor(
     private test: TestServ
-  ) {}
+  ) { }
 
   @OfType<EffectTypes>(EffectTypes.myevent)
   findUser(result, payload, context, info) {
@@ -41,7 +41,7 @@ export class UserType {
 
 @GapiController()
 export class UserQueriesController {
-  constructor(private userType: UserType) {}
+  constructor(private userType: UserType) { }
 
   @Type(UserType)
   @Effect(EffectTypes.myevent)
@@ -98,6 +98,25 @@ class Pesho {
   id = 1;
 }
 
+class MyPlugin {
+  name = 'MyPlugin';
+  version = '1.0.0';
+
+  async register(server, options) {
+
+    // Create a route for example
+
+    server.route({
+      method: 'GET',
+      path: '/test',
+      handler: function (request, h) {
+        return 'hello, world';
+      }
+    });
+
+  }
+}
+
 @GapiModule({
   imports: [UserQueriesController],
   services: [
@@ -107,8 +126,9 @@ class Pesho {
       provide: "Pesho",
       useClass: Pesho
     }
-  ]
+  ],
+  plugins: [ MyPlugin ]
 })
-export class AppModule {}
+export class AppModule { }
 
 Bootstrap(AppModule);

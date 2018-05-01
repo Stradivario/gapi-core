@@ -7,8 +7,7 @@ export interface Config {
     schema: GraphQLSchema;
 }
 export declare class GapiServerModule {
-    hapiServer: Server;
-    start(): Promise<boolean>;
+    start(): Promise<Server>;
     static forRoot(config: AppConfigInterface): typeof GapiServerModule;
     stop(): Promise<void>;
 }

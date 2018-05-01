@@ -11,6 +11,8 @@ import { ModuleContainerService } from '../module/module.service';
 import { CacheService } from '../events/ngx-events-layer.service';
 import { Subscription } from 'rxjs';
 import { FileService } from '../../services/file';
+import { HapiPluginService } from '../plugin/plugin.service';
+import { Server } from 'hapi';
 
 async function getAllFields() {
   const events = Container.get(CacheService);
@@ -118,12 +120,13 @@ export const Bootstrap = async App => {
   } else {
     configService.APP_CONFIG.schema = schema;
   }
-  const server = Container.get(GapiServerModule.forRoot(configService.APP_CONFIG));
+  const gapiServer = Container.get(GapiServerModule.forRoot(configService.APP_CONFIG));
+  let server: Server;
   try {
-    await server.start();
+    server = await gapiServer.start();
   } catch (e) {
     console.log(e);
   }
-  onExitProcess(server);
-  return server;
+  onExitProcess(gapiServer);
+  return Promise.resolve({server: server, schema: schema});
 };

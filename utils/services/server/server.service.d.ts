@@ -6,6 +6,6 @@ export declare class ServerUtilService {
     registerEndpoints(endpoints: Array<any>): Promise<void>;
     initGraphQl(configContainer: ConfigService): Promise<void>;
     connect(options: ConfigService): Promise<void>;
-    startServer(): Promise<boolean>;
+    startServer(): Promise<Server>;
     stopServer(): Promise<void>;
 }

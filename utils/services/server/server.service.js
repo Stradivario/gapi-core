@@ -22,6 +22,7 @@ const execution_1 = require("graphql/execution");
 const error_service_1 = require("../error/error.service");
 const index_1 = require("../../../utils/container/index");
 const __1 = require("../..");
+const plugin_service_1 = require("../plugin/plugin.service");
 let ServerUtilService = class ServerUtilService {
     registerEndpoints(endpoints) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -100,7 +101,9 @@ let ServerUtilService = class ServerUtilService {
         return __awaiter(this, void 0, void 0, function* () {
             const configContainer = index_1.default.get(__1.ConfigService);
             const connectionHookService = index_1.default.get(__1.ConnectionHookService);
+            const userPlugins = index_1.default.get(plugin_service_1.HapiPluginService);
             yield this.connect(configContainer);
+            yield Promise.all(userPlugins.getPlugins().map((plugin) => __awaiter(this, void 0, void 0, function* () { return yield this.server.register(plugin); })));
             yield this.initGraphQl(configContainer);
             yield this.server.start();
             const subscriptionServer = new subscriptions_transport_ws_1.SubscriptionServer({
@@ -123,7 +126,7 @@ let ServerUtilService = class ServerUtilService {
             if (process.env.NODE_ENV !== 'production') {
                 console.log(`Graphiql dev tool is running at: http://${this.server.info.address}:${this.server.info.port}/graphiql`);
             }
-            return yield Promise.resolve(true);
+            return yield Promise.resolve(this.server);
         });
     }
     stopServer() {

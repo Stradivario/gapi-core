@@ -11,9 +11,6 @@ const config_service_1 = require("../../utils/services/config/config.service");
 const server_service_1 = require("../../utils/services/server/server.service");
 const utilService = index_1.Container.get(server_service_1.ServerUtilService);
 let GapiServerModule = GapiServerModule_1 = class GapiServerModule {
-    constructor() {
-        this.hapiServer = utilService.server;
-    }
     start() {
         return utilService.startServer();
     }

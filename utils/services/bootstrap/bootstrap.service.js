@@ -109,13 +109,14 @@ exports.Bootstrap = (App) => __awaiter(this, void 0, void 0, function* () {
     else {
         configService.APP_CONFIG.schema = schema;
     }
-    const server = index_1.default.get(server_module_1.GapiServerModule.forRoot(configService.APP_CONFIG));
+    const gapiServer = index_1.default.get(server_module_1.GapiServerModule.forRoot(configService.APP_CONFIG));
+    let server;
     try {
-        yield server.start();
+        server = yield gapiServer.start();
     }
     catch (e) {
         console.log(e);
     }
-    onExitProcess(server);
-    return server;
+    onExitProcess(gapiServer);
+    return Promise.resolve({ server: server, schema: schema });
 });

@@ -1,2 +1,6 @@
-import { GapiServerModule } from '../../../modules/server/server.module';
-export declare const Bootstrap: (App: any) => Promise<GapiServerModule>;
+import { GraphQLSchema } from 'graphql';
+import { Server } from 'hapi';
+export declare const Bootstrap: (App: any) => Promise<{
+    server: Server;
+    schema: GraphQLSchema;
+}>;

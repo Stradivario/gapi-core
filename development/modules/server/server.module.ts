@@ -4,7 +4,7 @@ import { AppConfigInterface } from '../../utils/services/config/config.interface
 import { GraphQLSchema } from 'graphql';
 import { ConfigService } from '../../utils/services/config/config.service';
 import { ServerUtilService } from '../../utils/services/server/server.service';
-import { Server } from 'hapi';
+import { Server, PluginBase, PluginNameVersion, PluginPackage } from 'hapi';
 
 export interface Config {
     port: string;
@@ -16,9 +16,7 @@ const utilService: ServerUtilService = Container.get(ServerUtilService);
 @Service()
 export class GapiServerModule {
 
-    hapiServer: Server = utilService.server;
-
-    start(): Promise<boolean> {
+    start(): Promise<Server> {
         return utilService.startServer();
     }
 

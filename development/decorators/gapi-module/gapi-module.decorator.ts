@@ -5,8 +5,10 @@ import 'reflect-metadata';
 import Container from '../../utils/container/index';
 import { ServiceMetadata } from '../../utils/container';
 import { ModuleContainerService } from '../../utils/services/module/module.service';
+import { HapiPluginService } from '../../utils/services/plugin/plugin.service';
 
 const moduleContainerService = Container.get(ModuleContainerService);
+const hapiPluginService = Container.get(HapiPluginService);
 
 function getInjectables(module) {
     const injectables = [];
@@ -18,6 +20,16 @@ function getInjectables(module) {
         }
     });
     return injectables;
+}
+
+function importPlugins(plugins, original, status) {
+    plugins.forEach(plugin => {
+        if (plugin.constructor === Function) {
+            hapiPluginService.register(Container.get(plugin));
+        } else {
+            hapiPluginService.register(plugin);
+        }
+    });
 }
 
 function importModules(modules, original, status) {
@@ -77,6 +89,9 @@ export function GapiModule<T, K extends keyof T>(module: GapiModuleArguments) {
                 }
                 if (module.controllers) {
                     importModules(module.controllers, original, 'controllers');
+                }
+                if (module.plugins) {
+                    importPlugins(module.plugins, original, 'plugins');
                 }
                 this.injectables = module;
                 moduleContainerService.createModule(original.name, this.injectables);
