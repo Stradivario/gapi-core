@@ -7,6 +7,7 @@ const Container_1 = require("./Container");
 __export(require("./decorators/Service"));
 __export(require("./decorators/GapiController"));
 __export(require("./decorators/GapiEffect"));
+__export(require("./decorators/GapiHapiPlugin"));
 __export(require("./decorators/Inject"));
 __export(require("./decorators/InjectMany"));
 var Container_2 = require("./Container");
