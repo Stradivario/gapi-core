@@ -70,7 +70,7 @@ function importModules(modules, original, status) {
     });
 }
 
-export function GapiModule<T, K extends keyof T>(module: GapiModuleArguments) {
+export function GapiModule<T, K extends keyof T>(module?: GapiModuleArguments) {
     return (target) => {
         const original = target;
         function construct(constructor, args) {
