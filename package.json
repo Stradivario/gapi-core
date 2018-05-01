@@ -7,7 +7,7 @@
   },
   "author": "Kristian Tachev <kristiqn.tachev@gmail.com> (Stradivario)",
   "scripts": {
-    "postpublish": "git push ssh://git@gitlab.youvolio.com:522/gapi/gapi.git -f && git push ssh://git@gitlab.youvolio.com:522/gapi/gapi.git --tags",
+    "postpublish": "git push ssh://git@gitlab.youvolio.com:522/gapi/gapi.git -f && git push ssh://git@gitlab.youvolio.com:522/gapi/gapi.git --tags && git push --tags",
     "lint": "tslint -c tslint.json 'development/**/*.{ts,tsx}'",
     "pretest": "npm run lint",
     "test": "jest",
