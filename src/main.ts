@@ -1,4 +1,4 @@
-import { Inject, Service, GapiController, Bootstrap, Resolve } from "../index";
+import { Inject, Service, GapiController, Bootstrap, Resolve, GapiHapiPluginInterface } from "../index";
 import { InjectionToken } from "../";
 import { GraphQLScalarType, GraphQLInt, GraphQLNonNull } from "graphql";
 import { GapiObjectType, Type, Query, GapiModule, Effect } from "../index";
@@ -100,13 +100,13 @@ class Pesho {
 
 @Service()
 export class TestService {
-  testMethod() {
-    return 1;
+  helloWorld() {
+    return 'Hello world';
   }
 }
 
 @Service()
-class MyPlugin {
+class MyPlugin implements GapiHapiPluginInterface {
   name = 'MyPlugin';
   version = '1.0.0';
   constructor(
@@ -125,8 +125,7 @@ class MyPlugin {
   }
 
   async handler(request, h) {
-    console.log(this.test.testMethod());
-    return 'Hello world';
+    return this.test.helloWorld();
   }
 
 }
