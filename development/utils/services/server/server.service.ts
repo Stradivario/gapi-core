@@ -16,7 +16,7 @@ import { GraphQLSchema } from 'graphql';
 @Service()
 export class ServerUtilService {
   serverConnectionOptions: ServerOptions;
-  server: Server
+  server: Server;
 
   async registerEndpoints(endpoints: Array<any>) {
     for (const endpoint of endpoints) {
@@ -39,13 +39,13 @@ export class ServerUtilService {
               process.env.GRAPHIQL_TOKEN}'`,
             subscriptionsEndpoint: `${
               process.env.GRAPHIQL_WS_SSH ? 'wss' : 'ws'
-            }://${process.env.GRAPHIQL_WS_PATH || 'localhost'}${
+              }://${process.env.GRAPHIQL_WS_PATH || 'localhost'}${
               process.env.DEPLOY_PLATFORM === 'heroku'
                 ? ''
                 : `:${config.APP_CONFIG.port ||
-                    process.env.API_PORT ||
-                    process.env.PORT}`
-            }/subscriptions`,
+                process.env.API_PORT ||
+                process.env.PORT}`
+              }/subscriptions`,
             websocketConnectionParams: {
               token:
                 config.APP_CONFIG.graphiqlToken || process.env.GRAPHIQL_TOKEN
@@ -113,7 +113,7 @@ export class ServerUtilService {
       }
     };
 
-        // if(process.env.NODE_ENV === 'production') {
+    // if(process.env.NODE_ENV === 'production') {
     //   serverConnectionOptions.tls = {
     //     key: key,
     //     cert:cert
@@ -125,7 +125,7 @@ export class ServerUtilService {
       plugin: graphqlHapi,
       options: {
         path: '/graphql',
-       graphqlOptions: {
+        graphqlOptions: {
           schema: options.APP_CONFIG.schema,
           graphiql: true,
           formatError: attachErrorHandlers
@@ -159,9 +159,9 @@ export class ServerUtilService {
     await this.initGraphQl();
     const self = this;
     const connectionHookService = Container.get(ConnectionHookService);
-    
+
     return new Promise(async (resolve, reject) => {
-     
+
       const started = await this.server.start();
       const subscriptionServer = new SubscriptionServer(
         <any>{
@@ -188,13 +188,13 @@ export class ServerUtilService {
       );
       console.log(
         `Server running at: http://${this.server.info.address}:${
-          this.server.info.port
+        this.server.info.port
         }, environment: ${process.env.NODE_ENV || 'development'}`
       );
       if (process.env.NODE_ENV !== 'production') {
         console.log(
           `Graphiql dev tool is running at: http://${
-            this.server.info.address
+          this.server.info.address
           }:${this.server.info.port}/graphiql`
         );
       }

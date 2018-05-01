@@ -46,11 +46,8 @@ const graphqlHapi: IPlugin = {
         try {
           if (request.headers.authorization && request.headers.authorization !== 'undefined') {
             try {
-
               const serviceUtilsService: AuthService = Container.get(AuthService);
-
               options.graphqlOptions.context = await serviceUtilsService.modifyFunctions.validateToken(request.headers.authorization);
-    
             } catch (e) {
               return Boom.unauthorized();
             }
