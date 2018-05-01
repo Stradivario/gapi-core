@@ -4,7 +4,7 @@ export interface GapiModuleWithServices {
     services: Array<GapiServiceArguments | Function>;
 }
 export interface GapiServiceArguments {
-    provide: string;
+    provide: any;
     useValue?: any;
     useFactory?: Function;
     useClass?: Function;
