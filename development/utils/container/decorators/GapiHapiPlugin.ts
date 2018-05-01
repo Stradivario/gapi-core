@@ -3,7 +3,12 @@ import { ServiceOptions } from '../types/ServiceOptions';
 import { ControllerMappingSettings, ControllerContainerService } from '../../services/controller-service/controller.service';
 import { Token } from '../Token';
 import { Container } from '../Container';
-
+export interface GapiHapiPluginInterface {
+    name: string;
+    version: string;
+    register(server, options): void;
+    handler();
+}
 export function GapiHapiPlugin<T, K extends keyof T>(optionsOrServiceName?: ServiceOptions<T, K> | Token<any> | string): Function {
     return function (target) {
         const original = target;
