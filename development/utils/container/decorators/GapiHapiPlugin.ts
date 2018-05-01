@@ -7,7 +7,7 @@ export interface GapiHapiPluginInterface {
     name: string;
     version: string;
     register(server, options): void;
-    handler();
+    handler(request, h);
 }
 export function GapiHapiPlugin<T, K extends keyof T>(optionsOrServiceName?: ServiceOptions<T, K> | Token<any> | string): Function {
     return function (target) {
