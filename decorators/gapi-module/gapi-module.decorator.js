@@ -111,8 +111,8 @@ function GapiModule(module) {
             f.forRoot = function (args) {
                 const result = originalForRoot(args);
                 if (!result.services) {
-                    console.info('Consider return YourModule; if you dont want to use GapiModuleWithServices interface to return Pre initialized configuration services');
-                    console.info('Your Gapi module loaded as regular import please remove YourModule.forRoot() and instead import just YourModule');
+                    console.info(`Consider return ${original.name}; if you dont want to use GapiModuleWithServices interface to return Pre initialized configuration services`);
+                    console.info(`Your Gapi module loaded as regular import please remove ${original.name}.forRoot() and instead import just ${original.name}`);
                 }
                 else {
                     importModules(result.services, original, 'services');
