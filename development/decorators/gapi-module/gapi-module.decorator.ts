@@ -75,6 +75,9 @@ export function GapiModule<T, K extends keyof T>(module?: GapiModuleArguments) {
         const original = target;
         function construct(constructor, args) {
             const c: any = function () {
+                if (!module) {
+                    return new constructor();
+                }
                 if (module.types) {
                     importModules(module.types, original, 'types');
                 }

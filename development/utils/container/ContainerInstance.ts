@@ -317,7 +317,6 @@ export class ContainerInstance {
             }
 
             if (type.prototype._effect) {
-                console.log(type.name);
                 effectHooks.setHook(type.name, value);
             }
         }

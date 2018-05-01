@@ -190,7 +190,6 @@ class ContainerInstance {
                 controller_hooks_1.controllerHooks.setHook(type.name, value);
             }
             if (type.prototype._effect) {
-                console.log(type.name);
                 effect_hooks_1.effectHooks.setHook(type.name, value);
             }
         }

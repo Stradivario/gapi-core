@@ -74,6 +74,9 @@ function GapiModule(module) {
         const original = target;
         function construct(constructor, args) {
             const c = function () {
+                if (!module) {
+                    return new constructor();
+                }
                 if (module.types) {
                     importModules(module.types, original, 'types');
                 }
