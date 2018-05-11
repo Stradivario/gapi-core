@@ -46,6 +46,7 @@
     "boom": "^7.2.0",
     "fs-extra": "^5.0.0",
     "graphql": "^0.13.2",
+    "graphql-geojson": "^1.0.0",
     "graphql-tools": "^2.14.1",
     "hapi": "^17.4.0",
     "jsonwebtoken": "^8.1.0",

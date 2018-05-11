@@ -16,7 +16,7 @@ function Service(optionsOrServiceName) {
             service.global = optionsOrServiceName.global || false;
             service.transient = optionsOrServiceName.transient;
         }
-        else if (optionsOrServiceName) { // ServiceOptions
+        else if (optionsOrServiceName) {
             service.id = optionsOrServiceName.id;
             service.factory = optionsOrServiceName.factory;
             service.multiple = optionsOrServiceName.multiple;
