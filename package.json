@@ -3,7 +3,7 @@
   "version": "0.7.205",
   "repository": {
     "type": "git",
-    "url": "http://gitlab.youvolio.com/open-source/gapi.git"
+    "url": "https://github.com/Stradivario/gapi.git"
   },
   "author": "Kristian Tachev <kristiqn.tachev@gmail.com> (Stradivario)",
   "scripts": {
