@@ -25,8 +25,6 @@
 
 ***
 
-***
-
 **Amazon ServerLess Ready!**
 
 [Check Example](#amazon-serverless)
