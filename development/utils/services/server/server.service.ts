@@ -129,7 +129,7 @@ export class ServerUtilService {
     console.log(
       `Server running at: http://${this.server.info.address}:${
       this.server.info.port
-      }, environment: ${process.env.NODE_ENV || 'development'}`
+      }/graphql, environment: ${process.env.NODE_ENV || 'development'}`
     );
     if (process.env.NODE_ENV !== 'production') {
       console.log(
