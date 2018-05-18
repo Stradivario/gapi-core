@@ -122,7 +122,7 @@ let ServerUtilService = class ServerUtilService {
                 server: this.server.listener,
                 path: '/subscriptions'
             });
-            console.log(`Server running at: http://${this.server.info.address}:${this.server.info.port}, environment: ${process.env.NODE_ENV || 'development'}`);
+            console.log(`Server running at: http://${this.server.info.address}:${this.server.info.port}/graphql, environment: ${process.env.NODE_ENV || 'development'}`);
             if (process.env.NODE_ENV !== 'production') {
                 console.log(`Graphiql dev tool is running at: http://${this.server.info.address}:${this.server.info.port}/graphiql`);
             }
