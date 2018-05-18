@@ -46,7 +46,9 @@ class ContainerInstance {
         if (service && this !== globalContainer) {
             const clonedService = Object.assign({}, service);
             clonedService.value = undefined;
-            return this.getServiceValue(identifier, clonedService);
+            const value = this.getServiceValue(identifier, clonedService);
+            this.set(identifier, value);
+            return value;
         }
         return this.getServiceValue(identifier, service);
     }

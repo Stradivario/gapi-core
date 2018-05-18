@@ -75,6 +75,10 @@ export declare class ContainerInstance {
     /**
      * Sets a value for the given type or service name in the container.
      */
+    set(token: ServiceIdentifier, value: any): this;
+    /**
+     * Sets a value for the given type or service name in the container.
+     */
     set<T, K extends keyof T>(values: ServiceMetadata<T, K>[]): this;
     /**
      * Removes services with a given service identifiers (tokens or types).
