@@ -142,7 +142,9 @@ export class ServerUtilService {
   }
 
   stopServer() {
-    return this.server.stop();
+    if (this.server) {
+      return this.server.stop();
+    }
   }
 }
 
