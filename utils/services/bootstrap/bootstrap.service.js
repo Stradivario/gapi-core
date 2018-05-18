@@ -19,6 +19,7 @@ const controller_hooks_1 = require("../controller-service/controller-hooks");
 const module_service_1 = require("../module/module.service");
 const ngx_events_layer_service_1 = require("../events/ngx-events-layer.service");
 const file_1 = require("../../services/file");
+const graphql_tools_1 = require("graphql-tools");
 function getAllFields() {
     return __awaiter(this, void 0, void 0, function* () {
         const events = index_1.default.get(ngx_events_layer_service_1.CacheService);
@@ -109,6 +110,11 @@ exports.Bootstrap = (App) => __awaiter(this, void 0, void 0, function* () {
     else {
         configService.APP_CONFIG.schema = schema;
     }
+    const schemas = [configService.APP_CONFIG.schema];
+    if (schema.getQueryType() || schema.getMutationType() || schema.getSubscriptionType()) {
+        schemas.push(schema);
+    }
+    configService.APP_CONFIG.schema = yield graphql_tools_1.mergeSchemas({ schemas });
     const gapiServer = index_1.default.get(server_module_1.GapiServerModule.forRoot(configService.APP_CONFIG));
     let server;
     try {

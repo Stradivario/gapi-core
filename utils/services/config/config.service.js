@@ -28,9 +28,9 @@ let ConfigService = ConfigService_1 = class ConfigService {
             // tslint:disable-next-line:max-line-length
             port: process.env.API_PORT || process.env.PORT || 9000,
             cyper: {
-                iv: 'Jkyt1H3FA8JK9L3A',
-                privateKey: '8zTVzr3p53VC12jHV54rIYu2545x47lY',
-                algorithm: 'aes256',
+                iv: process.env.CYPER_IV || 'Jkyt1H3FA8JK9L3A',
+                privateKey: process.env.CYPER_PRIVATE_KEY || '8zTVzr3p53VC12jHV54rIYu2545x47lY',
+                algorithm: process.env.CYPER_ALGORITHM || 'aes256',
                 key: ''
             },
             connectionHooks: this.connectionHookService,

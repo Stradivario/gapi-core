@@ -18,7 +18,11 @@ export class ModuleMapping {
     async registerDependencyHandler(module): Promise<boolean> {
         const originalFactory = module.useFactory;
         module.useFactory = function () {
-            return originalFactory(...module.deps);
+            if (module.deps.length) {
+                return originalFactory(...module.deps);
+            } else {
+                return originalFactory();
+            }
         };
         Container.set(module.provide, module.useFactory());
         this._handlers.next([...this._handlers.getValue(), module]);

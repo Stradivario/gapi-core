@@ -13,6 +13,7 @@ import { Subscription } from 'rxjs';
 import { FileService } from '../../services/file';
 import { HapiPluginService } from '../plugin/plugin.service';
 import { Server } from 'hapi';
+import { mergeSchemas } from 'graphql-tools';
 
 async function getAllFields() {
   const events = Container.get(CacheService);
@@ -120,6 +121,11 @@ export const Bootstrap = async App => {
   } else {
     configService.APP_CONFIG.schema = schema;
   }
+  const schemas = [configService.APP_CONFIG.schema];
+  if (schema.getQueryType() || schema.getMutationType() || schema.getSubscriptionType()) {
+    schemas.push(schema);
+  }
+  configService.APP_CONFIG.schema = await mergeSchemas({ schemas });
   const gapiServer = Container.get(GapiServerModule.forRoot(configService.APP_CONFIG));
   let server: Server;
   try {

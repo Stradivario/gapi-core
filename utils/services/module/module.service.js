@@ -27,7 +27,12 @@ class ModuleMapping {
         return __awaiter(this, void 0, void 0, function* () {
             const originalFactory = module.useFactory;
             module.useFactory = function () {
-                return originalFactory(...module.deps);
+                if (module.deps.length) {
+                    return originalFactory(...module.deps);
+                }
+                else {
+                    return originalFactory();
+                }
             };
             container_1.Container.set(module.provide, module.useFactory());
             this._handlers.next([...this._handlers.getValue(), module]);
