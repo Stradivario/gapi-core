@@ -144,6 +144,8 @@ export class ServerUtilService {
   stopServer() {
     if (this.server) {
       return this.server.stop();
+    } else {
+      return Promise.resolve();
     }
   }
 }

@@ -133,6 +133,9 @@ let ServerUtilService = class ServerUtilService {
         if (this.server) {
             return this.server.stop();
         }
+        else {
+            return Promise.resolve();
+        }
     }
 };
 ServerUtilService = __decorate([
