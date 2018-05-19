@@ -18,7 +18,7 @@ export class ModuleMapping {
     async registerDependencyHandler(module): Promise<boolean> {
         const originalFactory = module.useFactory;
         module.useFactory = function () {
-            if (module.deps.length) {
+            if (module.deps && module.deps.length) {
                 return originalFactory(...module.deps);
             } else {
                 return originalFactory();

@@ -27,7 +27,7 @@ class ModuleMapping {
         return __awaiter(this, void 0, void 0, function* () {
             const originalFactory = module.useFactory;
             module.useFactory = function () {
-                if (module.deps.length) {
+                if (module.deps && module.deps.length) {
                     return originalFactory(...module.deps);
                 }
                 else {
