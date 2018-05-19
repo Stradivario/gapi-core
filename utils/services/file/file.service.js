@@ -11,6 +11,9 @@ const fs_1 = require("fs");
 const fs_extra_1 = require("fs-extra");
 let FileService = class FileService {
     writeEffectTypes(effects) {
+        if (process.env.DISABLE_EFFECTS || effects && !effects.length) {
+            return;
+        }
         const types = `
 function strEnum<T extends string>(o: Array<T>): {[K in T]: K} {
     return o.reduce((res, key) => {

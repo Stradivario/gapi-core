@@ -5,6 +5,9 @@ import { ensureDirSync } from 'fs-extra';
 @Service()
 export class FileService {
     writeEffectTypes(effects: Array<any>) {
+        if (process.env.DISABLE_EFFECTS || effects && !effects.length) {
+            return;
+        }
         const types = `
 function strEnum<T extends string>(o: Array<T>): {[K in T]: K} {
     return o.reduce((res, key) => {
