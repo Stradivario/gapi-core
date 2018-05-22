@@ -114,6 +114,7 @@ exports.Bootstrap = (App) => __awaiter(this, void 0, void 0, function* () {
     if (schema.getQueryType() || schema.getMutationType() || schema.getSubscriptionType()) {
         schemas.push(schema);
     }
+    configService.APP_CONFIG.schema['_subscriptionType'] = schema['_subscriptionType'];
     configService.APP_CONFIG.schema = yield graphql_tools_1.mergeSchemas({ schemas });
     const gapiServer = index_1.default.get(server_module_1.GapiServerModule.forRoot(configService.APP_CONFIG));
     let server;

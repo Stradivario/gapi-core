@@ -109,7 +109,7 @@ function onExitProcess(server: GapiServerModule) {
   });
 }
 
-export const Bootstrap = async App => {
+export const Bootstrap = async (App) => {
   console.log(`Bootstrapping application...`);
   Object.defineProperty(App, 'name', { value: 'AppModule', writable: true });
   Container.get(App);
@@ -125,6 +125,7 @@ export const Bootstrap = async App => {
   if (schema.getQueryType() || schema.getMutationType() || schema.getSubscriptionType()) {
     schemas.push(schema);
   }
+  configService.APP_CONFIG.schema['_subscriptionType'] = schema['_subscriptionType'];
   configService.APP_CONFIG.schema = await mergeSchemas({ schemas });
   const gapiServer = Container.get(GapiServerModule.forRoot(configService.APP_CONFIG));
   let server: Server;
