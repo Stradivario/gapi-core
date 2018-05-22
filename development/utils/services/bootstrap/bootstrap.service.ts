@@ -121,6 +121,8 @@ export const Bootstrap = async (App) => {
   } else {
     configService.APP_CONFIG.schema = schema;
   }
+
+  // TODO: not working at the moment "Schema is not configured for subscriptions" error when merging schemas
   // const schemas = [configService.APP_CONFIG.schema];
   // if (schema.getQueryType() || schema.getMutationType() || schema.getSubscriptionType()) {
   //   schemas.push(schema);
