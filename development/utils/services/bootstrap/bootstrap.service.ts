@@ -121,12 +121,12 @@ export const Bootstrap = async (App) => {
   } else {
     configService.APP_CONFIG.schema = schema;
   }
-  const schemas = [configService.APP_CONFIG.schema];
-  if (schema.getQueryType() || schema.getMutationType() || schema.getSubscriptionType()) {
-    schemas.push(schema);
-  }
-  configService.APP_CONFIG.schema['_subscriptionType'] = schema['_subscriptionType'];
-  configService.APP_CONFIG.schema = await mergeSchemas({ schemas });
+  // const schemas = [configService.APP_CONFIG.schema];
+  // if (schema.getQueryType() || schema.getMutationType() || schema.getSubscriptionType()) {
+  //   schemas.push(schema);
+  // }
+  // configService.APP_CONFIG.schema['_subscriptionType'] = schema['_subscriptionType'];
+  // configService.APP_CONFIG.schema = await mergeSchemas({ schemas });
   const gapiServer = Container.get(GapiServerModule.forRoot(configService.APP_CONFIG));
   let server: Server;
   try {
