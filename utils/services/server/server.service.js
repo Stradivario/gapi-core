@@ -34,7 +34,8 @@ let ServerUtilService = class ServerUtilService {
     initGraphQl(configContainer) {
         return __awaiter(this, void 0, void 0, function* () {
             const config = index_1.default.get(__1.ConfigService);
-            if (process.env.NODE_ENV !== 'production') {
+            const isDevToolActive = process.env.GRAPHIQL === 'true' ? true : false;
+            if (isDevToolActive) {
                 yield this.server.register({
                     plugin: apollo_service_1.graphiqlHapi,
                     options: {

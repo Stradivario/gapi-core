@@ -123,12 +123,12 @@ export const Bootstrap = async (App) => {
   }
 
   // TODO: not working at the moment "Schema is not configured for subscriptions" error when merging schemas
-  // const schemas = [configService.APP_CONFIG.schema];
-  // if (schema.getQueryType() || schema.getMutationType() || schema.getSubscriptionType()) {
-  //   schemas.push(schema);
-  // }
+  const schemas = [configService.APP_CONFIG.schema];
+  if (schema.getQueryType() || schema.getMutationType() || schema.getSubscriptionType()) {
+    schemas.push(schema);
+  }
   // configService.APP_CONFIG.schema['_subscriptionType'] = schema['_subscriptionType'];
-  // configService.APP_CONFIG.schema = await mergeSchemas({ schemas });
+  configService.APP_CONFIG.schema = await mergeSchemas({ schemas });
   const gapiServer = Container.get(GapiServerModule.forRoot(configService.APP_CONFIG));
   let server: Server;
   try {

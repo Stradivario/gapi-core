@@ -27,7 +27,8 @@ export class ServerUtilService {
 
   async initGraphQl(configContainer: ConfigService) {
     const config = Container.get(ConfigService);
-    if (process.env.NODE_ENV !== 'production') {
+    const isDevToolActive = process.env.GRAPHIQL === 'true' ? true : false;
+    if (isDevToolActive) {
       await this.server.register({
         plugin: graphiqlHapi,
         options: {
