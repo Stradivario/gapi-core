@@ -47,7 +47,7 @@
     "fs-extra": "^5.0.0",
     "graphql": "^0.13.2",
     "graphql-geojson": "^1.0.0",
-    "graphql-tools": "^2.24.0",
+    "graphql-tools": "^3.0.2",
     "hapi": "^17.4.0",
     "jsonwebtoken": "^8.1.0",
     "pg": "^6.4.2",
