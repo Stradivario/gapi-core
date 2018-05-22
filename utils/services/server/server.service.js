@@ -45,9 +45,9 @@ let ServerUtilService = class ServerUtilService {
                                 process.env.GRAPHIQL_TOKEN}'`,
                             subscriptionsEndpoint: `${process.env.GRAPHIQL_WS_SSH ? 'wss' : 'ws'}://${process.env.GRAPHIQL_WS_PATH || 'localhost'}${process.env.DEPLOY_PLATFORM === 'heroku'
                                 ? ''
-                                : `${process.env.WS_NO_PORT ? '' : `:${config.APP_CONFIG.port ||
+                                : `:${config.APP_CONFIG.port ||
                                     process.env.API_PORT ||
-                                    process.env.PORT}`}`}/subscriptions`,
+                                    process.env.PORT}`}/subscriptions`,
                             websocketConnectionParams: {
                                 token: config.APP_CONFIG.graphiqlToken || process.env.GRAPHIQL_TOKEN
                             }

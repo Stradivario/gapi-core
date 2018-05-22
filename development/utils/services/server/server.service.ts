@@ -41,9 +41,9 @@ export class ServerUtilService {
               }://${process.env.GRAPHIQL_WS_PATH || 'localhost'}${
               process.env.DEPLOY_PLATFORM === 'heroku'
                 ? ''
-                : `${process.env.WS_NO_PORT ? '' : `:${config.APP_CONFIG.port ||
-                  process.env.API_PORT ||
-                  process.env.PORT}`}`
+                : `:${config.APP_CONFIG.port ||
+                process.env.API_PORT ||
+                process.env.PORT}`
               }/subscriptions`,
             websocketConnectionParams: {
               token:
