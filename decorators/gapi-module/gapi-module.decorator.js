@@ -1,4 +1,12 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
 const index_1 = require("../../utils/container/index");
@@ -32,7 +40,7 @@ function importPlugins(plugins, original, status) {
     });
 }
 function importModules(modules, original, status) {
-    modules.forEach((module) => {
+    modules.forEach((module) => __awaiter(this, void 0, void 0, function* () {
         if (!module) {
             throw new Error(`Incorrect importing '${status}' inside ${original.name}`);
         }
@@ -46,10 +54,10 @@ function importModules(modules, original, status) {
                 if (module.useFactory.constructor === Function) {
                     if (module.deps && module.deps.length) {
                         const originalFactory = module.useFactory;
-                        module.useFactory = () => originalFactory(...getInjectables(module));
+                        module.useFactory = () => __awaiter(this, void 0, void 0, function* () { return yield originalFactory(...getInjectables(module)); });
                     }
                     moduleContainerService.createModule(original.name, null).registerDependencyHandler(module);
-                    index_1.default.set(module.provide, module.useFactory());
+                    index_1.default.set(module.provide, yield module.useFactory());
                 }
                 else {
                     throw new Error(`Wrong Factory function ${module.provide ? JSON.stringify(module.provide) : ''} inside module: ${original.name}`);
@@ -70,7 +78,7 @@ function importModules(modules, original, status) {
             Object.defineProperty(module, 'name', { value: name, writable: true });
             index_1.default.get(module);
         }
-    });
+    }));
 }
 function GapiModule(module) {
     return (target) => {
