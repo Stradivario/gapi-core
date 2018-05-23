@@ -13,10 +13,12 @@ const hapiPluginService = Container.get(HapiPluginService);
 function getInjectables(module) {
     const injectables = [];
     module.deps.forEach(i => {
-        if (i.constructor === Function) {
-            injectables.push(Container.get(i));
+        if (i.name) {
+            return injectables.push(Container.get(i));
+        } else if (i.constructor === Function) {
+            return injectables.push(Container.get(i));
         } else {
-            injectables.push(i);
+            return injectables.push(i);
         }
     });
     return injectables;

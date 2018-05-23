@@ -8,6 +8,7 @@ export interface GapiServiceArguments {
     useValue?: any;
     useFactory?: Function;
     useClass?: Function;
+    deps: Array<any>;
 }
 export interface GapiModuleArguments {
     imports?: Array<Function | GapiModuleWithServices>;
