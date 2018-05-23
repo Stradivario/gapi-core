@@ -48,10 +48,10 @@ function importModules(modules, original, status) {
                 if (module.useFactory.constructor === Function) {
                     if (module.deps && module.deps.length) {
                         const originalFactory = module.useFactory;
-                        module.useFactory = async () => await originalFactory(...getInjectables(module));
+                        module.useFactory = () => originalFactory(...getInjectables(module));
                     }
                     moduleContainerService.createModule(original.name, null).registerDependencyHandler(module);
-                    Container.set(module.provide, await module.useFactory());
+                    Container.set(module.provide, module.useFactory());
                 } else {
                     throw new Error(`Wrong Factory function ${module.provide ? JSON.stringify(module.provide) : ''} inside module: ${original.name}`);
                 }
