@@ -5,7 +5,7 @@ export interface GapiModuleWithServices {
     gapiModule;
     services: Array<GapiServiceArguments | Function>;
 }
-export interface GapiServiceArguments {provide: any; useValue?: any; useFactory?: Function; useClass?: Function; deps?: Array<any> }
+export interface GapiServiceArguments {provide: any; useValue?: any; useFactory?: Function; useClass?: Function; deps?: Array<any>; }
 export interface GapiModuleArguments {
     imports?: Array<Function | GapiModuleWithServices>;
     services?: Array<Function | GapiServiceArguments>;
