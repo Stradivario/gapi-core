@@ -38,31 +38,17 @@ async function getAllFields() {
         const c = controllerHooks.getHook(controller);
         const originalResolve = desc.resolve.bind(c);
         desc.resolve = async function resolve(...args: any[]) {
-          return await new Promise(async (resolve, reject) => {
-            const methodEffect = events.map.has(desc.method_name);
-            const customEffect = events.map.has(desc.effect);
-            let result = await originalResolve.apply(c, args);
-            const emitEffect = (res) => {
-              if (methodEffect || customEffect) {
-                let tempArgs = [res, ...args];
-                tempArgs = tempArgs.filter(i => i && i !== 'undefined');
-                events
-                  .getLayer<Array<any>>(effectName)
-                  .putItem({ key: effectName, data: tempArgs });
-              }
-            };
-            if (result instanceof Observable) {
-                result.subscribe(res => {
-                  emitEffect(res);
-                  resolve(res);
-                });
-                return;
-            } else {
-              emitEffect(result);
-              resolve(result);
-              return;
-            }
-          })
+          const methodEffect = events.map.has(desc.method_name);
+          const customEffect = events.map.has(desc.effect);
+          let result = await originalResolve.apply(c, args);
+          if (methodEffect || customEffect) {
+            let tempArgs = [result, ...args];
+            tempArgs = tempArgs.filter(i => i && i !== 'undefined');
+            events
+              .getLayer<Array<any>>(effectName)
+              .putItem({ key: effectName, data: tempArgs });
+          }
+          return result;
         };
       });
     }

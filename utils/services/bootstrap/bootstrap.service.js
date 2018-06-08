@@ -18,7 +18,6 @@ const hook_service_1 = require("../../services/hook/hook.service");
 const controller_hooks_1 = require("../controller-service/controller-hooks");
 const module_service_1 = require("../module/module.service");
 const ngx_events_layer_service_1 = require("../events/ngx-events-layer.service");
-const rxjs_1 = require("rxjs");
 const file_1 = require("../../services/file");
 const graphql_tools_1 = require("graphql-tools");
 function getAllFields() {
@@ -43,32 +42,17 @@ function getAllFields() {
                 const originalResolve = desc.resolve.bind(c);
                 desc.resolve = function resolve(...args) {
                     return __awaiter(this, void 0, void 0, function* () {
-                        return yield new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
-                            const methodEffect = events.map.has(desc.method_name);
-                            const customEffect = events.map.has(desc.effect);
-                            let result = yield originalResolve.apply(c, args);
-                            const emitEffect = (res) => {
-                                if (methodEffect || customEffect) {
-                                    let tempArgs = [res, ...args];
-                                    tempArgs = tempArgs.filter(i => i && i !== 'undefined');
-                                    events
-                                        .getLayer(effectName)
-                                        .putItem({ key: effectName, data: tempArgs });
-                                }
-                            };
-                            if (result instanceof rxjs_1.Observable) {
-                                result.subscribe(res => {
-                                    emitEffect(res);
-                                    resolve(res);
-                                });
-                                return;
-                            }
-                            else {
-                                emitEffect(result);
-                                resolve(result);
-                                return;
-                            }
-                        }));
+                        const methodEffect = events.map.has(desc.method_name);
+                        const customEffect = events.map.has(desc.effect);
+                        let result = yield originalResolve.apply(c, args);
+                        if (methodEffect || customEffect) {
+                            let tempArgs = [result, ...args];
+                            tempArgs = tempArgs.filter(i => i && i !== 'undefined');
+                            events
+                                .getLayer(effectName)
+                                .putItem({ key: effectName, data: tempArgs });
+                        }
+                        return result;
                     });
                 };
             });
