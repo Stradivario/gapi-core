@@ -46,6 +46,8 @@
     "boom": "^7.2.0",
     "fs-extra": "^5.0.0",
     "graphql": "^0.13.2",
+    "graphql-cost-analysis": "^1.0.1",
+    "graphql-depth-limit": "^1.1.0",
     "graphql-geojson": "^1.0.0",
     "graphql-tools": "^3.0.2",
     "hapi": "^17.4.0",

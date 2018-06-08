@@ -23,6 +23,8 @@ const error_service_1 = require("../error/error.service");
 const index_1 = require("../../../utils/container/index");
 const __1 = require("../..");
 const plugin_service_1 = require("../plugin/plugin.service");
+const graphql_cost_analysis_1 = require("graphql-cost-analysis");
+const depthLimit = require("graphql-depth-limit");
 let ServerUtilService = class ServerUtilService {
     registerEndpoints(endpoints) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -63,6 +65,12 @@ let ServerUtilService = class ServerUtilService {
                     graphqlOptions: {
                         schema: configContainer.APP_CONFIG.schema,
                         graphiql: true,
+                        validationRules: [
+                            depthLimit(configContainer.APP_CONFIG.depthLimit),
+                            graphql_cost_analysis_1.default({
+                                maximumCost: configContainer.APP_CONFIG.maximumCost,
+                            }),
+                        ],
                         formatError: error_service_1.attachErrorHandlers
                     },
                     route: {

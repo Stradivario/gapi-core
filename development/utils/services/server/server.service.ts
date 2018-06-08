@@ -13,6 +13,8 @@ import {
 } from '../..';
 import { GraphQLSchema } from 'graphql';
 import { HapiPluginService } from '../plugin/plugin.service';
+import costAnalysis from 'graphql-cost-analysis'
+import * as depthLimit from 'graphql-depth-limit'
 
 @Service()
 export class ServerUtilService {
@@ -61,6 +63,12 @@ export class ServerUtilService {
         graphqlOptions: {
           schema: configContainer.APP_CONFIG.schema,
           graphiql: true,
+          validationRules: [
+            depthLimit(configContainer.APP_CONFIG.depthLimit),
+            costAnalysis({
+              maximumCost: configContainer.APP_CONFIG.maximumCost,
+            }),
+          ],
           formatError: attachErrorHandlers
         },
         route: {

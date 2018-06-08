@@ -25,6 +25,8 @@ let ConfigService = ConfigService_1 = class ConfigService {
             cert: this.cert,
             schema: null,
             uploadFolder: '',
+            maximumCost: 1000,
+            depthLimit: 10,
             // tslint:disable-next-line:max-line-length
             port: process.env.API_PORT || process.env.PORT || 9000,
             cyper: {

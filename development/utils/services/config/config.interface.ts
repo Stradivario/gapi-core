@@ -12,6 +12,8 @@ export interface AppConfigInterface {
     uploadFolder?: string;
     graphiqlToken?: string;
     port?: string | number;
+    maximumCost?: number;
+    depthLimit?: number;
     force?: boolean;
     schema?: GraphQLSchema | Promise<GraphQLSchema>;
     cyper?: any;
