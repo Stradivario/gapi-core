@@ -1,6 +1,6 @@
 {
   "name": "@gapi/core",
-  "version": "0.7.265",
+  "version": "0.7.266",
   "repository": {
     "type": "git",
     "url": "https://github.com/Stradivario/gapi.git"
@@ -37,7 +37,7 @@
     "tslint-language-service": "^0.9.8"
   },
   "dependencies": {
-    "@gapi/amqp": "^0.7.264",
+    "@gapi/amqp": "^0.7.266",
     "apollo-codegen": "^0.18.3",
     "apollo-errors": "^1.5.1",
     "apollo-server-hapi": "^1.3.6",
