@@ -50,8 +50,8 @@ function importModules(modules, original, status) {
                         const originalFactory = module.useFactory;
                         module.useFactory = () => originalFactory(...getInjectables(module));
                     }
-                    moduleContainerService.createModule(original.name, null).registerDependencyHandler(module);
-                    Container.set(module.provide, module.useFactory);
+                    // moduleContainerService.createModule(original.name, null).registerDependencyHandler(module);
+                    Container.set(module.provide, module.useFactory());
                 } else {
                     throw new Error(`Wrong Factory function ${module.provide ? JSON.stringify(module.provide) : ''} inside module: ${original.name}`);
                 }
