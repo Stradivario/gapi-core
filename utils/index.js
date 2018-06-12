@@ -15,4 +15,5 @@ __export(require("./services/hook/hook.service"));
 __export(require("./services/events/index"));
 __export(require("./services/pub-sub/pub-sub.service"));
 __export(require("./services/file/file.service"));
-__export(require("./container/"));
+__export(require("./helpers"));
+__export(require("./container"));

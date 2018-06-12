@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const index_1 = require("../../utils/container/index");
+const index_1 = require("../../utils//container/index");
 function InjectTypePrivate(Type) {
     const currentType = new Type();
-    if (!index_1.default.has(currentType.name)) {
-        index_1.default.set(currentType.name, currentType);
+    if (!index_1.Container.has(currentType.name)) {
+        index_1.Container.set(currentType.name, currentType);
     }
-    return index_1.default.get(currentType.name);
+    return index_1.Container.get(currentType.name);
 }
 // Beta type injector not working in this moment
 function TypeInjector(Type) {

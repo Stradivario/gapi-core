@@ -1,4 +1,4 @@
-import Container from '../../utils/container/index';
+import { Container } from '../../utils//container/index';
 
 function InjectTypePrivate<T>(Type) {
     const currentType = new Type();

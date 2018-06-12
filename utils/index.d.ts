@@ -11,4 +11,5 @@ export * from './services/hook/hook.service';
 export * from './services/events/index';
 export * from './services/pub-sub/pub-sub.service';
 export * from './services/file/file.service';
-export * from './container/';
+export * from './helpers';
+export * from './container';

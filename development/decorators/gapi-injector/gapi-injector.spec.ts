@@ -1,5 +1,5 @@
 import { Injector } from './gapi-injector';
-import { Container } from '../../utils';
+import { Container, GapiController } from '../../utils//container/index';
 
 describe('Decorators: @GapiInjector', () => {
     it('Should inject value to property "valueExecutor" inside target ClassTestExecutor', (done) => {

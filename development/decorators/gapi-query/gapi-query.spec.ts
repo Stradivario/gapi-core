@@ -1,4 +1,4 @@
-import { Container } from '../../utils';
+import { Container, GapiController } from '../../utils//container/index';
 import { Scope, Type, GapiObjectType, Query } from '../index';
 import { GraphQLInt, GraphQLScalarType, GraphQLNonNull, GraphQLObjectType } from 'graphql';
 
