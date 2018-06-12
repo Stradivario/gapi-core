@@ -1,3 +1,3 @@
-export * from './ngx-events-layer.service';
-export * from './ngx-events-layer.layer';
-export * from './ngx-events-layer.interfaces';
+export * from './events-layer.service';
+export * from './events-layer';
+export * from './events-layer.interfaces';

@@ -2,7 +2,7 @@ import { ServiceMetadata } from '../types/ServiceMetadata';
 import { Container } from '../Container';
 import { ServiceOptions } from '../types/ServiceOptions';
 import { Token } from '../Token';
-import { ControllerMappingSettings, ControllerContainerService } from '../../services/controller-service/controller.service';
+import { ControllerContainerService } from '../../services/controller-service/controller.service';
 
 /**
  * Marks class as a service that can be injected using Container.

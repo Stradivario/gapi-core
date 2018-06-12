@@ -1,7 +1,7 @@
 import { ControllerContainerService } from '../../utils/services/controller-service/controller.service';
 import Container from '../../utils/container/index';
-import { GenericGapiResolversType } from '../../utils/services/controller-service/controller.service';
-import { CacheService } from '../../utils/services/events/ngx-events-layer.service';
+import { CacheService } from '../../utils/services/events/events-layer.service';
+
 export function Effect(name: string): Function {
     const type = { effect:  name };
     Container.get(CacheService).getLayer<Array<any>>(name);

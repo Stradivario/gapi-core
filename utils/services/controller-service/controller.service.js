@@ -7,35 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const index_1 = require("../../../utils/container/index");
-const Subject_1 = require("rxjs/Subject");
-class ControllerMappingSettings {
-    constructor() {
-        this.scope = ['ADMIN'];
-    }
-}
-exports.ControllerMappingSettings = ControllerMappingSettings;
-class ControllerMapping {
-    constructor(name, type) {
-        this._settings = new ControllerMappingSettings();
-        this._descriptors = new Map();
-        this._ready = new Subject_1.Subject();
-        this._controller_name = name;
-        this._type = type;
-    }
-    setSettings(settings) {
-        this._settings = settings;
-    }
-    setDescriptor(name, descriptor) {
-        this._descriptors.set(name, descriptor);
-    }
-    getDescriptor(name) {
-        return this._descriptors.get(name);
-    }
-    getAllDescriptors() {
-        return Array.from(this._descriptors.keys());
-    }
-}
-exports.ControllerMapping = ControllerMapping;
+const controller_mapping_1 = require("./controller-mapping");
 let ControllerContainerService = class ControllerContainerService {
     constructor() {
         this.controllers = new Map();
@@ -53,7 +25,7 @@ let ControllerContainerService = class ControllerContainerService {
             return this.controllers.get(name);
         }
         else {
-            this.controllers.set(name, new ControllerMapping(name));
+            this.controllers.set(name, new controller_mapping_1.ControllerMapping(name));
             return this.controllers.get(name);
         }
     }

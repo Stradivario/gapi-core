@@ -1,6 +1,5 @@
 import { ControllerContainerService } from '../../utils/services/controller-service/controller.service';
 import Container from '../../utils/container/index';
-import { GenericGapiResolversType } from '../../utils/services/controller-service/controller.service';
 
 export function Public<T>(): Function {
     const pub = {public: true};

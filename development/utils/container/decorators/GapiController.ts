@@ -1,8 +1,9 @@
 import { ServiceMetadata } from '../types/ServiceMetadata';
 import { ServiceOptions } from '../types/ServiceOptions';
-import { ControllerMappingSettings, ControllerContainerService } from '../../services/controller-service/controller.service';
+import { ControllerContainerService } from '../../services/controller-service/controller.service';
 import { Token } from '../Token';
 import { Container } from '../Container';
+import { ControllerMappingSettings } from '../../services/controller-service/controller-config';
 
 export function GapiController<T, K extends keyof T>(optionsOrServiceName?: ControllerMappingSettings): Function {
     return function (target) {

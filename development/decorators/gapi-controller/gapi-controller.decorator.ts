@@ -1,7 +1,6 @@
 import 'reflect-metadata';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { ControllerContainerService } from '../../utils/services/controller-service/controller.service';
-import { ControllerMappingSettings, GenericGapiResolversType } from '../../utils/services/controller-service/controller.service';
 import Container from '../../utils/container/index';
 
 // export interface GapiController {

@@ -10,6 +10,9 @@ export declare class ModuleMapping {
 }
 export declare class ModuleContainerService {
     modules: Map<string, ModuleMapping>;
+    lazyFactories: Map<string, ModuleMapping>;
     getModule(name: string): ModuleMapping;
     createModule(name: string, injectables: GapiModuleArguments): ModuleMapping;
+    testCreateModuleAsync(module: any, original: any): Promise<void>;
+    setLazyFactory(module: any, original: any): void;
 }

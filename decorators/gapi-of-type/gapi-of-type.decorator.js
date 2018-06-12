@@ -9,12 +9,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const index_1 = require("../../utils/container/index");
-const ngx_events_layer_service_1 = require("../../utils/services/events/ngx-events-layer.service");
+const events_layer_service_1 = require("../../utils/services/events/events-layer.service");
 const effect_hooks_1 = require("../../utils/services/effect-hook/effect-hooks");
 function OfType(type) {
     return (target, propertyKey, descriptor) => {
         const t = target;
-        index_1.Container.get(ngx_events_layer_service_1.CacheService)
+        index_1.Container.get(events_layer_service_1.CacheService)
             .getLayer(type)
             .getItemObservable(type)
             .subscribe((item) => __awaiter(this, void 0, void 0, function* () {

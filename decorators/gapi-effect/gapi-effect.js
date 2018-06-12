@@ -2,10 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const controller_service_1 = require("../../utils/services/controller-service/controller.service");
 const index_1 = require("../../utils/container/index");
-const ngx_events_layer_service_1 = require("../../utils/services/events/ngx-events-layer.service");
+const events_layer_service_1 = require("../../utils/services/events/events-layer.service");
 function Effect(name) {
     const type = { effect: name };
-    index_1.default.get(ngx_events_layer_service_1.CacheService).getLayer(name);
+    index_1.default.get(events_layer_service_1.CacheService).getLayer(name);
     return (t, propKey, descriptor) => {
         const self = t;
         const originalMethod = descriptor.value;

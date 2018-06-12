@@ -1,5 +1,5 @@
 import { Container } from '../../utils/container/index';
-import { CacheService } from '../../utils/services/events/ngx-events-layer.service';
+import { CacheService } from '../../utils/services/events/events-layer.service';
 import { effectHooks } from '../../utils/services/effect-hook/effect-hooks';
 
 export function OfType<T>(type: T) {

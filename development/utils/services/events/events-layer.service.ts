@@ -1,15 +1,12 @@
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
-import { CacheLayer } from './ngx-events-layer.layer';
-import { CacheLayerInterface, CacheServiceConfigInterface, CacheLayerItem } from './ngx-events-layer.interfaces';
+import { CacheLayer } from './events-layer';
+import { CacheLayerInterface, CacheServiceConfigInterface, CacheLayerItem } from './events-layer.interfaces';
 import { Service } from '../../container/index';
 import { Container } from '../..';
 
-const INTERNAL_PROCEDURE_CACHE_NAME = 'cache_layers';
-
 const FRIENDLY_ERROR_MESSAGES = {
-  TRY_TO_UNSUBSCRIBE: 'Someone try to unsubscribe from collection directly... agghhh.. read docs! Blame: ',
-  LOCAL_STORAGE_DISABLED: 'LocalStorage is disabled switching to regular in-memory storage.Please relate issue if you think it is enabled and there is a problem with the library itself.'
+  TRY_TO_UNSUBSCRIBE: 'Someone try to unsubscribe from collection directly... agghhh.. read docs! Blame: '
 };
 
 @Service()
@@ -21,18 +18,6 @@ export class CacheService {
 
   public static createCacheInstance<T>(cacheLayer): CacheLayer<CacheLayerItem<T>> {
     return new CacheLayer<CacheLayerItem<T>>(cacheLayer);
-  }
-
-  public static isLocalStorageUsable(): boolean {
-    const error = [];
-    try {
-      localStorage.setItem('test-key', JSON.stringify({ key: 'test-object' }));
-      localStorage.removeItem('test-key');
-    } catch (e) {
-      error.push(e);
-      console.log(FRIENDLY_ERROR_MESSAGES.LOCAL_STORAGE_DISABLED);
-    }
-    return error.length ? false : true;
   }
 
   public getLayer<T>(name: string): CacheLayer<CacheLayerItem<T>> {
@@ -51,10 +36,6 @@ export class CacheService {
     layer.items = layer.items || [];
     layer.config = layer.config || this.config;
     const cacheLayer = CacheService.createCacheInstance<T>(layer);
-    if (layer.config.localStorage && CacheService.isLocalStorageUsable()) {
-      localStorage.setItem(INTERNAL_PROCEDURE_CACHE_NAME, JSON.stringify([...CacheService.getLayersFromLS().filter(l => l !== cacheLayer.name), cacheLayer.name]));
-      localStorage.setItem(cacheLayer.name, JSON.stringify(layer));
-    }
     this.map.set(cacheLayer.name, cacheLayer);
     this._cachedLayers.next([...this._cachedLayers.getValue(), cacheLayer]);
     this.LayerHook<T>(cacheLayer);
@@ -85,10 +66,6 @@ export class CacheService {
 
   public removeLayer<T>(layerInstance: CacheLayer<CacheLayerItem<T>>): void {
     this.map.delete(layerInstance.name);
-    if (this.config.localStorage) {
-      localStorage.removeItem(layerInstance.name);
-      localStorage.setItem(INTERNAL_PROCEDURE_CACHE_NAME, JSON.stringify(CacheService.getLayersFromLS().filter(layer => layer !== layerInstance.name)));
-    }
     this._cachedLayers.next([...this._cachedLayers.getValue().filter(layer => layer.name !== layerInstance.name)]);
   }
 
@@ -103,21 +80,13 @@ export class CacheService {
     return newLayers;
   }
 
-  public static getLayersFromLS(): Array<string> {
-    return JSON.parse(localStorage.getItem(INTERNAL_PROCEDURE_CACHE_NAME));
-  }
-
-  public flushCache(force?: boolean): Observable<boolean> {
+  public flushCache(): Observable<boolean> {
     let oldLayersNames: string[];
     return this._cachedLayers.take(1)
       .map(layers => {
         oldLayersNames = layers.map(l => l.name);
         layers.forEach(layer => this.removeLayer(layer));
-        if (force) {
-          localStorage.removeItem(INTERNAL_PROCEDURE_CACHE_NAME);
-        } else {
-          oldLayersNames.forEach((l) => this.createLayer({ name: l }));
-        }
+        oldLayersNames.forEach((l) => this.createLayer({ name: l }));
         return true;
       });
   }

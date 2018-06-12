@@ -8,7 +8,7 @@ import { GapiServerModule } from '../../../modules/server/server.module';
 import { HookService } from '../../services/hook/hook.service';
 import { controllerHooks } from '../controller-service/controller-hooks';
 import { ModuleContainerService } from '../module/module.service';
-import { CacheService } from '../events/ngx-events-layer.service';
+import { CacheService } from '../events/events-layer.service';
 import { Subscription } from 'rxjs';
 import { FileService } from '../../services/file';
 import { HapiPluginService } from '../plugin/plugin.service';

@@ -17,6 +17,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const index_1 = require("../../../utils/container/index");
 const BehaviorSubject_1 = require("rxjs/BehaviorSubject");
 const container_1 = require("../../container");
+const helpers_1 = require("../../helpers");
 class ModuleMapping {
     constructor(name, injectables) {
         this._handlers = new BehaviorSubject_1.BehaviorSubject([]);
@@ -68,6 +69,7 @@ exports.ModuleMapping = ModuleMapping;
 let ModuleContainerService = class ModuleContainerService {
     constructor() {
         this.modules = new Map();
+        this.lazyFactories = new Map();
     }
     getModule(name) {
         if (this.modules.has(name)) {
@@ -84,6 +86,43 @@ let ModuleContainerService = class ModuleContainerService {
         else {
             this.modules.set(name, new ModuleMapping(name, injectables));
             return this.modules.get(name);
+        }
+    }
+    testCreateModuleAsync(module, original) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (module.types) {
+                helpers_1.importModules(module.types, original, 'types');
+            }
+            if (module.effects) {
+                helpers_1.importModules(module.effects, original, 'effects');
+            }
+            if (module.services) {
+                helpers_1.importModules(module.services, original, 'services');
+            }
+            if (module.imports) {
+                helpers_1.importModules(module.imports, original, 'imports');
+            }
+            if (module.controllers) {
+                helpers_1.importModules(module.controllers, original, 'controllers');
+            }
+            if (module.plugins) {
+                helpers_1.importPlugins(module.plugins, original, 'plugins');
+            }
+            console.log('Loaded Module: ' + original.name);
+            // return Promise.all();
+        });
+    }
+    setLazyFactory(module, original) {
+        if (module.useFactory.constructor === Function) {
+            if (module.deps && module.deps.length) {
+                const originalFactory = module.useFactory;
+                module.useFactory = () => originalFactory(...helpers_1.getInjectables(module));
+            }
+            // moduleContainerService.createModule(original.name, null).registerDependencyHandler(module);
+            container_1.Container.set(module.provide, module.useFactory());
+        }
+        else {
+            throw new Error(`Wrong Factory function ${module.provide ? JSON.stringify(module.provide) : ''} inside module: ${original.name}`);
         }
     }
 };

@@ -1,6 +1,6 @@
 import { ServiceMetadata } from '../types/ServiceMetadata';
 import { ServiceOptions } from '../types/ServiceOptions';
-import { ControllerMappingSettings, ControllerContainerService } from '../../services/controller-service/controller.service';
+import { ControllerContainerService } from '../../services/controller-service/controller.service';
 import { Token } from '../Token';
 import { Container } from '../Container';
 export interface GapiHapiPluginInterface {

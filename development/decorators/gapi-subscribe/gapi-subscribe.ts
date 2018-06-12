@@ -1,6 +1,5 @@
 import { ControllerContainerService } from '../../utils/services/controller-service/controller.service';
 import Container from '../../utils/container/index';
-import { GenericGapiResolversType } from '../../utils/services/controller-service/controller.service';
 import { ResolverFn, FilterFn } from 'graphql-subscriptions';
 
 export function Subscribe<T>(asyncIteratorFunction: ResolverFn | AsyncIterator<T>, filterFn?: FilterFn): Function {

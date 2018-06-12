@@ -4,6 +4,7 @@ import { Subject } from 'rxjs/Subject';
 import { GapiModuleArguments } from '../../../decorators/gapi-module/gapi-module.decorator.interface';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Container } from '../../container';
+import { getInjectables, importModules, importPlugins } from '../../helpers';
 
 export class ModuleMapping {
     _module_name: string;
@@ -56,6 +57,7 @@ export class ModuleMapping {
 @Service()
 export class ModuleContainerService {
     modules: Map<string, ModuleMapping> = new Map();
+    lazyFactories: Map<string, ModuleMapping> = new Map();
     getModule(name: string): ModuleMapping {
         if (this.modules.has(name)) {
             return this.modules.get(name);
@@ -71,7 +73,43 @@ export class ModuleContainerService {
             this.modules.set(name, new ModuleMapping(name, injectables));
             return this.modules.get(name);
         }
+    }
 
+    async testCreateModuleAsync(module, original) {
+        if (module.types) {
+            importModules(module.types, original, 'types');
+        }
+        if (module.effects) {
+            importModules(module.effects, original, 'effects');
+        }
+        if (module.services) {
+            importModules(module.services, original, 'services');
+        }
+        if (module.imports) {
+            importModules(module.imports, original, 'imports');
+        }
+        if (module.controllers) {
+            importModules(module.controllers, original, 'controllers');
+        }
+        if (module.plugins) {
+            importPlugins(module.plugins, original, 'plugins');
+        }
+        console.log('Loaded Module: ' + original.name);
+        // return Promise.all();
+    }
+
+    setLazyFactory(module, original) {
+        if (module.useFactory.constructor === Function) {
+            if (module.deps && module.deps.length) {
+                const originalFactory = module.useFactory;
+                module.useFactory = () => originalFactory(...getInjectables(module));
+            }
+            // moduleContainerService.createModule(original.name, null).registerDependencyHandler(module);
+            
+            Container.set(module.provide, module.useFactory());
+        } else {
+            throw new Error(`Wrong Factory function ${module.provide ? JSON.stringify(module.provide) : ''} inside module: ${original.name}`);
+        }
     }
 
 

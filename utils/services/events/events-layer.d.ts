@@ -1,4 +1,4 @@
-import { CacheLayerInterface, CacheServiceConfigInterface } from './ngx-events-layer.interfaces';
+import { CacheLayerInterface, CacheServiceConfigInterface } from './events-layer.interfaces';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Rx';
 export declare class CacheLayer<T> {
@@ -6,7 +6,6 @@ export declare class CacheLayer<T> {
     name: string;
     config: CacheServiceConfigInterface;
     private map;
-    static createCacheParams(config: any): void;
     get(name: any): T;
     constructor(layer: CacheLayerInterface);
     private initHook(layer);

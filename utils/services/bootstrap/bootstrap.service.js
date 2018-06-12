@@ -17,12 +17,12 @@ const server_module_1 = require("../../../modules/server/server.module");
 const hook_service_1 = require("../../services/hook/hook.service");
 const controller_hooks_1 = require("../controller-service/controller-hooks");
 const module_service_1 = require("../module/module.service");
-const ngx_events_layer_service_1 = require("../events/ngx-events-layer.service");
+const events_layer_service_1 = require("../events/events-layer.service");
 const file_1 = require("../../services/file");
 const graphql_tools_1 = require("graphql-tools");
 function getAllFields() {
     return __awaiter(this, void 0, void 0, function* () {
-        const events = index_1.default.get(ngx_events_layer_service_1.CacheService);
+        const events = index_1.default.get(events_layer_service_1.CacheService);
         const controllerContainerService = index_1.default.get(controller_service_1.ControllerContainerService);
         const moduleContainerService = index_1.default.get(module_service_1.ModuleContainerService);
         // Array.from(moduleContainerService.modules.keys()).forEach(module => {
