@@ -1,6 +1,6 @@
-import { getInjectables } from "./get-injectables";
+import { getInjectables } from './get-injectables';
 import Container from '../../utils/container/index';
-import { ModuleContainerService } from "../services/module/module.service";
+import { ModuleContainerService } from '../services/module/module.service';
 
 const moduleContainerService = Container.get(ModuleContainerService);
 
@@ -15,7 +15,7 @@ export function importModules(injectables, original, status) {
                 const f: any = () => new original(...getInjectables(injectable));
                 Container.set(injectable.provide, new f.constructor());
             } else if (injectable.provide && injectable.useFactory) {
-                moduleContainerService.setLazyFactory(injectable, original)
+                moduleContainerService.setLazyFactory(injectable, original);
             } else if (injectable.provide && injectable.useValue) {
                 Container.set(injectable.provide, injectable.useValue);
             } else {
@@ -30,5 +30,5 @@ export function importModules(injectables, original, status) {
             Container.get(injectable);
         }
 
-    })
+    });
 }

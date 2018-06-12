@@ -1,4 +1,4 @@
-import { GraphQLObjectType } from "graphql";
+import { GraphQLObjectType } from 'graphql';
 
 export class ControllerMappingSettings {
     scope?: string[] = ['ADMIN'];
