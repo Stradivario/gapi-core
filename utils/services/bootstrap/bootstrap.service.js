@@ -29,6 +29,13 @@ function getAllFields() {
         //     const currentModule = moduleContainerService.getModule(module);
         //     currentModule.resolveDependencyHandlers();
         // });
+        yield Promise.all(Array.from(moduleContainerService.lazyFactories.keys())
+            .map((f) => __awaiter(this, void 0, void 0, function* () {
+            const factory = moduleContainerService.lazyFactories.get(f);
+            if (factory instanceof Promise) {
+                yield index_1.default.get(f);
+            }
+        })));
         const methodBasedEffects = [];
         const Fields = { query: {}, mutation: {}, subscription: {} };
         Array.from(controllerContainerService.controllers.keys()).forEach(controller => {
@@ -101,8 +108,8 @@ exports.Bootstrap = (App) => __awaiter(this, void 0, void 0, function* () {
     console.log(`Bootstrapping application...`);
     Object.defineProperty(App, 'name', { value: 'AppModule', writable: true });
     index_1.default.get(App);
-    console.log('Finished!\nStarting application...');
     const schema = yield getAllFields();
+    console.log('Bootstrapping finished!\nStarting application...');
     const configService = index_1.default.get(config_service_1.ConfigService);
     if (configService.APP_CONFIG.schema) {
         configService.APP_CONFIG.schema = yield configService.APP_CONFIG.schema;

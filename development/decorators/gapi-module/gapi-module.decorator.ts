@@ -1,9 +1,9 @@
-import { GapiModuleArguments, GapiServiceArguments, GapiModuleWithServices } from './gapi-module.decorator.interface';
-import { GapiModuleSymbol } from './gapi-module.symbol';
 import 'reflect-metadata';
+import { GapiModuleArguments, GapiModuleWithServices } from './gapi-module.decorator.interface';
 import Container from '../../utils/container/index';
-import { ServiceMetadata } from '../../utils/container';
-import { getInjectables, importPlugins, importModules } from '../../utils/helpers';
+import { importPlugins, importModules } from '../../utils/helpers';
+import { Observable } from 'apollo-link';
+import { Subject } from 'rxjs';
 
 export function GapiModule<T, K extends keyof T>(module?: GapiModuleArguments) {
     return (target) => {

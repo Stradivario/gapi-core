@@ -1,6 +1,5 @@
-import Container, { Service } from '../../../utils/container/index';
+import Container from '../../../utils/container/index';
 import { ControllerContainerService } from '../../services/controller-service/controller.service';
-import { ServerUtilService } from '../../services/server/server.service';
 import { GraphQLSchema, GraphQLObjectType } from 'graphql';
 import { ConfigService } from '../../services/config/config.service';
 import { SchemaService } from '../../services/schema/schema.service';
@@ -9,9 +8,7 @@ import { HookService } from '../../services/hook/hook.service';
 import { controllerHooks } from '../controller-service/controller-hooks';
 import { ModuleContainerService } from '../module/module.service';
 import { CacheService } from '../events/events-layer.service';
-import { Subscription } from 'rxjs';
 import { FileService } from '../../services/file';
-import { HapiPluginService } from '../plugin/plugin.service';
 import { Server } from 'hapi';
 import { mergeSchemas } from 'graphql-tools';
 
@@ -23,6 +20,14 @@ async function getAllFields() {
   //     const currentModule = moduleContainerService.getModule(module);
   //     currentModule.resolveDependencyHandlers();
   // });
+  await Promise.all(Array.from(moduleContainerService.lazyFactories.keys())
+    .map(async f => {
+      const factory = moduleContainerService.lazyFactories.get(f);
+      if (factory instanceof Promise) {
+        await Container.get(f);
+      }
+    }));
+
   const methodBasedEffects = [];
   const Fields = { query: {}, mutation: {}, subscription: {} };
   Array.from(controllerContainerService.controllers.keys()).forEach(
@@ -113,8 +118,8 @@ export const Bootstrap = async (App) => {
   console.log(`Bootstrapping application...`);
   Object.defineProperty(App, 'name', { value: 'AppModule', writable: true });
   Container.get(App);
-  console.log('Finished!\nStarting application...');
   const schema: GraphQLSchema = await getAllFields();
+  console.log('Bootstrapping finished!\nStarting application...');
   const configService = Container.get(ConfigService);
   if (configService.APP_CONFIG.schema) {
     configService.APP_CONFIG.schema = await configService.APP_CONFIG.schema;
@@ -137,5 +142,5 @@ export const Bootstrap = async (App) => {
     console.log(e);
   }
   onExitProcess(gapiServer);
-  return Promise.resolve({server: server, schema: schema});
+  return Promise.resolve({ server: server, schema: schema });
 };

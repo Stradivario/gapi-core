@@ -1,10 +1,9 @@
-import { GraphQLObjectType, GraphQLNonNull } from 'graphql';
 import { Service } from '../../../utils/container/index';
-import { Subject } from 'rxjs/Subject';
 import { GapiModuleArguments } from '../../../decorators/gapi-module/gapi-module.decorator.interface';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Container } from '../../container';
 import { getInjectables, importModules, importPlugins } from '../../helpers';
+import { Observable } from 'rxjs/Observable';
 
 export class ModuleMapping {
     _module_name: string;
@@ -57,7 +56,7 @@ export class ModuleMapping {
 @Service()
 export class ModuleContainerService {
     modules: Map<string, ModuleMapping> = new Map();
-    lazyFactories: Map<string, ModuleMapping> = new Map();
+    lazyFactories: Map<string, Promise<Container>> = new Map();
     getModule(name: string): ModuleMapping {
         if (this.modules.has(name)) {
             return this.modules.get(name);
@@ -98,17 +97,26 @@ export class ModuleContainerService {
         // return Promise.all();
     }
 
-    setLazyFactory(module, original) {
-        if (module.useFactory.constructor === Function) {
-            if (module.deps && module.deps.length) {
-                const originalFactory = module.useFactory;
-                module.useFactory = () => originalFactory(...getInjectables(module));
+    setLazyFactory(injectable, original) {
+        if (injectable.useFactory.constructor === Function) {
+            if (injectable.deps && injectable.deps.length) {
+                const originalFactory = injectable.useFactory;
+                injectable.useFactory = () => originalFactory(...getInjectables(injectable.deps));
             }
-            // moduleContainerService.createModule(original.name, null).registerDependencyHandler(module);
+            // moduleContainerService.createModule(original.name, null).registerDependencyHandler(injectable);
+            if (injectable.useFactory instanceof Promise) {
+                console.log(injectable.provide)
+            }
+            const factory = injectable.useFactory();
+            if (factory instanceof Observable) {
+                factory.subscribe(v => Container.set(injectable.provide, v));
+            } else {
+                Container.set(injectable.provide, factory);
+            }
+            this.lazyFactories.set(injectable.provide, factory);
 
-            Container.set(module.provide, module.useFactory());
         } else {
-            throw new Error(`Wrong Factory function ${module.provide ? JSON.stringify(module.provide) : ''} inside module: ${original.name}`);
+            throw new Error(`Wrong Factory function ${injectable.provide ? JSON.stringify(injectable.provide) : ''} inside module: ${original.name}`);
         }
     }
 

@@ -11,8 +11,8 @@ export function importModules(injectables, original, status) {
         }
         if (injectable.constructor === Object) {
             if (injectable.provide && injectable.useClass) {
-                const original = injectable.useClass;
-                const f: any = () => new original(...getInjectables(injectable));
+                const c = injectable.useClass;
+                const f: any = () => new c(...getInjectables(injectable));
                 Container.set(injectable.provide, new f.constructor());
             } else if (injectable.provide && injectable.useFactory) {
                 moduleContainerService.setLazyFactory(injectable, original);

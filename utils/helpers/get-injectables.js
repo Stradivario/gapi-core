@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const index_1 = require("../../utils/container/index");
-function getInjectables(module) {
+function getInjectables(dependencies) {
     const injectables = [];
-    module.deps.forEach(i => {
+    dependencies.forEach(i => {
         if (i.name) {
             return injectables.push(index_1.default.get(i));
         }

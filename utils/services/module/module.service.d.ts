@@ -1,5 +1,6 @@
 import { GapiModuleArguments } from '../../../decorators/gapi-module/gapi-module.decorator.interface';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Container } from '../../container';
 export declare class ModuleMapping {
     _module_name: string;
     _injectables: GapiModuleArguments;
@@ -10,9 +11,9 @@ export declare class ModuleMapping {
 }
 export declare class ModuleContainerService {
     modules: Map<string, ModuleMapping>;
-    lazyFactories: Map<string, ModuleMapping>;
+    lazyFactories: Map<string, Promise<Container>>;
     getModule(name: string): ModuleMapping;
     createModule(name: string, injectables: GapiModuleArguments): ModuleMapping;
     testCreateModuleAsync(module: any, original: any): Promise<void>;
-    setLazyFactory(module: any, original: any): void;
+    setLazyFactory(injectable: any, original: any): void;
 }

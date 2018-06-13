@@ -18,6 +18,7 @@ const index_1 = require("../../../utils/container/index");
 const BehaviorSubject_1 = require("rxjs/BehaviorSubject");
 const container_1 = require("../../container");
 const helpers_1 = require("../../helpers");
+const Observable_1 = require("rxjs/Observable");
 class ModuleMapping {
     constructor(name, injectables) {
         this._handlers = new BehaviorSubject_1.BehaviorSubject([]);
@@ -112,17 +113,27 @@ let ModuleContainerService = class ModuleContainerService {
             // return Promise.all();
         });
     }
-    setLazyFactory(module, original) {
-        if (module.useFactory.constructor === Function) {
-            if (module.deps && module.deps.length) {
-                const originalFactory = module.useFactory;
-                module.useFactory = () => originalFactory(...helpers_1.getInjectables(module));
+    setLazyFactory(injectable, original) {
+        if (injectable.useFactory.constructor === Function) {
+            if (injectable.deps && injectable.deps.length) {
+                const originalFactory = injectable.useFactory;
+                injectable.useFactory = () => originalFactory(...helpers_1.getInjectables(injectable.deps));
             }
-            // moduleContainerService.createModule(original.name, null).registerDependencyHandler(module);
-            container_1.Container.set(module.provide, module.useFactory());
+            // moduleContainerService.createModule(original.name, null).registerDependencyHandler(injectable);
+            if (injectable.useFactory instanceof Promise) {
+                console.log(injectable.provide);
+            }
+            const factory = injectable.useFactory();
+            if (factory instanceof Observable_1.Observable) {
+                factory.subscribe(v => container_1.Container.set(injectable.provide, v));
+            }
+            else {
+                container_1.Container.set(injectable.provide, factory);
+            }
+            this.lazyFactories.set(injectable.provide, factory);
         }
         else {
-            throw new Error(`Wrong Factory function ${module.provide ? JSON.stringify(module.provide) : ''} inside module: ${original.name}`);
+            throw new Error(`Wrong Factory function ${injectable.provide ? JSON.stringify(injectable.provide) : ''} inside module: ${original.name}`);
         }
     }
 };

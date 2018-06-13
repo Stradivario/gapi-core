@@ -1,8 +1,8 @@
 import Container from '../../utils/container/index';
 
-export function getInjectables(module) {
+export function getInjectables(dependencies) {
     const injectables = [];
-    module.deps.forEach(i => {
+    dependencies.forEach(i => {
         if (i.name) {
             return injectables.push(Container.get(i));
         } else if (i.constructor === Function) {

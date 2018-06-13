@@ -11,8 +11,8 @@ function importModules(injectables, original, status) {
         }
         if (injectable.constructor === Object) {
             if (injectable.provide && injectable.useClass) {
-                const original = injectable.useClass;
-                const f = () => new original(...get_injectables_1.getInjectables(injectable));
+                const c = injectable.useClass;
+                const f = () => new c(...get_injectables_1.getInjectables(injectable));
                 index_1.default.set(injectable.provide, new f.constructor());
             }
             else if (injectable.provide && injectable.useFactory) {

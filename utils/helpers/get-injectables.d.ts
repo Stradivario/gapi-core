@@ -1,1 +1,1 @@
-export declare function getInjectables(module: any): any[];
+export declare function getInjectables(dependencies: any): any[];
