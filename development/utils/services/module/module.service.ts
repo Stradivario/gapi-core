@@ -104,16 +104,15 @@ export class ModuleContainerService {
                 injectable.useFactory = () => originalFactory(...getInjectables(injectable.deps));
             }
             // moduleContainerService.createModule(original.name, null).registerDependencyHandler(injectable);
-            if (injectable.useFactory instanceof Promise) {
-                console.log(injectable.provide)
-            }
             const factory = injectable.useFactory();
             if (factory instanceof Observable) {
                 factory.subscribe(v => Container.set(injectable.provide, v));
+            } else if (factory instanceof Promise) {
+                Container.set(injectable.provide, factory);
+                this.lazyFactories.set(injectable.provide, factory);
             } else {
                 Container.set(injectable.provide, factory);
             }
-            this.lazyFactories.set(injectable.provide, factory);
 
         } else {
             throw new Error(`Wrong Factory function ${injectable.provide ? JSON.stringify(injectable.provide) : ''} inside module: ${original.name}`);
