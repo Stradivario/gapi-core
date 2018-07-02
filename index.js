@@ -14,7 +14,7 @@ const graphql_1 = require("@rxdi/graphql");
 const graphql_pubsub_1 = require("@rxdi/graphql-pubsub");
 const core_1 = require("@rxdi/core");
 const DEFAULT_CONFIG = {
-    hapi: {
+    server: {
         hapi: {
             port: 9000
         }
@@ -45,7 +45,7 @@ let CoreModule = CoreModule_1 = class CoreModule {
         return {
             module: CoreModule_1,
             frameworkImports: [
-                hapi_1.HapiModule.forRoot(config.hapi),
+                hapi_1.HapiModule.forRoot(config.server),
                 graphql_1.GraphQLModule.forRoot(config.graphql),
                 graphql_pubsub_1.GraphQLPubSubModule.forRoot(config.pubsub)
             ]
@@ -55,7 +55,7 @@ let CoreModule = CoreModule_1 = class CoreModule {
 CoreModule = CoreModule_1 = __decorate([
     core_1.Module({
         imports: [
-            hapi_1.HapiModule.forRoot(DEFAULT_CONFIG.hapi),
+            hapi_1.HapiModule.forRoot(DEFAULT_CONFIG.server),
             graphql_1.GraphQLModule.forRoot(DEFAULT_CONFIG.graphql),
             graphql_pubsub_1.GraphQLPubSubModule.forRoot()
         ]
@@ -63,9 +63,11 @@ CoreModule = CoreModule_1 = __decorate([
 ], CoreModule);
 exports.CoreModule = CoreModule;
 __export(require("graphql"));
+__export(require("graphql-tools"));
 __export(require("graphql-geojson"));
 __export(require("graphql-subscriptions"));
 __export(require("@rxdi/graphql-pubsub"));
 __export(require("@rxdi/graphql"));
 __export(require("@rxdi/hapi"));
+__export(require("@rxdi/core"));
 var CoreModule_1;

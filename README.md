@@ -82,10 +82,10 @@ npm install @gapi/core
 ```typescript
 import { CoreModule } from '@gapi/core';
 import { Controller, Module, BootstrapFramework } from '@rxdi/core';
-import { ObjectType, Query, Public, Type } from '@rxdi/graphql';
+import { GapiObjectType, Query, Public, Type } from '@rxdi/graphql';
 import { GraphQLScalarType, GraphQLInt, GraphQLNonNull } from 'graphql';
 
-@ObjectType()
+@GapiObjectType()
 export class UserType {
     readonly id: number | GraphQLScalarType = GraphQLInt;
 }
@@ -615,7 +615,7 @@ import { BootstrapFramework } from '@rxdi/core';
 import { CoreModule } from '@gapi/core';
 
 const GapiCoreModule = CoreModule.forRoot({
-    hapi: {
+    server: {
         randomPort: true,
         hapi: {
             port: 9000
@@ -807,7 +807,7 @@ export class UserModule {}
 
 #### Define UserType schema
 ### Folder root/src/user/type/user.type.ts
-##### You can customize every resolver from schema and you can create nested schemas with @ObjectType decorator
+##### You can customize every resolver from schema and you can create nested schemas with @GapiObjectType decorator
 
 
 ## User Schema
@@ -817,11 +817,11 @@ export class UserModule {}
 ##### If you remove @Resolve decorator it will be passed value returned from the first root resolver
 
 ```typescript
-import { ObjectType, Resolve, InjectType } from '@rxdi/graphql';
+import { GapiObjectType, Resolve, InjectType } from '@rxdi/graphql';
 import { GraphQLScalarType, GraphQLInt, GraphQLString } from 'graphql';
 import { UserSettings } from './user.settings';
 
-@ObjectType()
+@GapiObjectType()
 export class UserType {
     readonly id: number | GraphQLScalarType = GraphQLInt;
     readonly email: string | GraphQLScalarType = GraphQLString;
@@ -841,11 +841,11 @@ export class UserType {
 
 ```typescript
 import { Injector } from '@rxdi/core';
-import { ObjectType, Resolve } from '@rxdi/graphql';
+import { GapiObjectType, Resolve } from '@rxdi/graphql';
 import { AnotherService } from '../services/another.service';
 import { GraphQLScalarType, GraphQLBoolean } from 'graphql';
 
-@ObjectType()
+@GapiObjectType()
 export class UserSettings {
 
     @Injector(AnotherService) private anotherService?: AnotherService;
@@ -864,10 +864,10 @@ export class UserSettings {
 ## UserMessage Schema for Subscriptions
 
 ```typescript
-import { ObjectType } from '@rxdi/graphql';
+import { GapiObjectType } from '@rxdi/graphql';
 import { GraphQLScalarType, GraphQLString } from 'graphql';
 
-@ObjectType()
+@GapiObjectType()
 export class UserMessage {
     readonly message: string | GraphQLScalarType = GraphQLString;
 }
@@ -876,11 +876,11 @@ export class UserMessage {
 ## UserToken
 
 ```typescript
-import { ObjectType, InjectType } from '@rxdi/graphql';
+import { GapiObjectType, InjectType } from '@rxdi/graphql';
 import { UserType } from './user.type';
 import { GraphQLScalarType, GraphQLString } from 'graphql';
 
-@ObjectType()
+@GapiObjectType()
 export class UserTokenType {
     readonly token: string | GraphQLScalarType = GraphQLString;
     readonly user: UserType = InjectType(UserType);
@@ -1484,10 +1484,10 @@ subscription {
 ##### Complex schema object with nested schemas of same type
 
 ```typescript
-import { ObjectType, InjectType, Resolve, Type } from '@rxdi/graphql';
-import { GraphQLObjectType, GraphQLString, GraphQLInt, GraphQLList, GraphQLBoolean, GraphQLScalarType } from "graphql";
+import { GapiObjectType, InjectType, Resolve, Type } from '@rxdi/graphql';
+import { GraphQLGapiObjectType, GraphQLString, GraphQLInt, GraphQLList, GraphQLBoolean, GraphQLScalarType } from "graphql";
 
-@ObjectType()
+@GapiObjectType()
 export class UserSettingsType {
     readonly id: number | GraphQLScalarType = GraphQLInt;
     readonly color: string | GraphQLScalarType = GraphQLString;
@@ -1495,7 +1495,7 @@ export class UserSettingsType {
     readonly sidebar: boolean | GraphQLScalarType = GraphQLBoolean;
 }
 
-@ObjectType()
+@GapiObjectType()
 export class UserWalletSettingsType {
     readonly type: string | GraphQLScalarType = GraphQLString;
     readonly private: string | GraphQLScalarType = GraphQLString;
@@ -1529,7 +1529,7 @@ export class UserWalletSettingsType {
 }
 
 
-@ObjectType()
+@GapiObjectType()
 export class UserWalletType {
     readonly id: number | GraphQLScalarType = GraphQLInt;
     readonly address: string | GraphQLScalarType = GraphQLString;
@@ -1537,7 +1537,7 @@ export class UserWalletType {
 }
 
 
-@ObjectType()
+@GapiObjectType()
 export class UserType {
     readonly id: number | GraphQLScalarType = GraphQLInt;
     readonly email: string | GraphQLScalarType = GraphQLString;
@@ -1736,11 +1736,11 @@ All Gapi Decorators
 
 **@Type** - Works with (@Query, @Mutation, Subscription) passing ObjectType class here for example UserType this is internally new GraphQLObjectType
 
-**@ObjectType** - Internally is using new GraphQLObjectType() adding name of the class as a {name: constructor.name} can take {name: 'YourCustomName'} as argument also the same Object type can be used for generating new GraphQLInputObjectType when passing {input: true} used for Arguments
+**@GapiObjectType** - Internally is using new GraphQLObjectType() adding name of the class as a {name: constructor.name} can take {name: 'YourCustomName'} as argument also the same Object type can be used for generating new GraphQLInputObjectType when passing {input: true} used for Arguments
 
-**@Resolve** - This is used internally inside ObjectType and it is related with modifying return result from GraphQL like in the following example
+**@Resolve** - This is used internally inside GapiObjectType and it is related with modifying return result from GraphQL like in the following example
 ```typescript
-@ObjectType()
+@GapiObjectType()
 export class UserType {
     id: number | GraphQLScalarType = GraphQLInt;
     
@@ -1768,12 +1768,12 @@ constructor(
 ) {}
 ```
 
-**@Injector** - Use this very carefully! It will Inject Services before application is fully loaded used to load Instance of a class before the real load of application it is used only inside ObjectType because Types are the first thing that will be loaded inside Gapi Application so we need our Services on Processing Decorators which is when the application loads.If you can use Dependency Injection internally provided.
+**@Injector** - Use this very carefully! It will Inject Services before application is fully loaded used to load Instance of a class before the real load of application it is used only inside GapiObjectType because Types are the first thing that will be loaded inside Gapi Application so we need our Services on Processing Decorators which is when the application loads.If you can use Dependency Injection internally provided.
 
 **@InjectType** - This is BETA decorator for now is used without Decorator sign @ example:
 
 ```typescript
-@ObjectType()
+@GapiObjectType()
 export class UserType {
     readonly id: number | GraphQLScalarType = GraphQLInt;
     readonly settings: string | UserSettings = InjectType(UserSettingsType);
@@ -1782,7 +1782,7 @@ export class UserType {
 In future releases it will be used as follows: 
 
 ```typescript
-@ObjectType()
+@GapiObjectType()
 export class UserType {
     readonly id: number | GraphQLScalarType = GraphQLInt;
     @InjectType(UserSettingsType) readonly settings: string;

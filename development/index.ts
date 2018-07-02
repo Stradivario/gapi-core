@@ -4,13 +4,13 @@ import { GraphQLPubSubModule, GRAPHQL_PUB_SUB_DI_CONFIG } from '@rxdi/graphql-pu
 import { ModuleWithServices, Module } from '@rxdi/core';
 
 export interface CoreModuleConfig {
-    hapi?: HapiConfigInterface;
+    server?: HapiConfigInterface;
     graphql?: GRAPHQL_PLUGIN_CONFIG;
     pubsub?: GRAPHQL_PUB_SUB_DI_CONFIG;
 }
 
 const DEFAULT_CONFIG = {
-    hapi: {
+    server: {
         hapi: {
             port: 9000
         }
@@ -42,7 +42,7 @@ const DEFAULT_CONFIG = {
 
 @Module({
     imports: [
-        HapiModule.forRoot(DEFAULT_CONFIG.hapi),
+        HapiModule.forRoot(DEFAULT_CONFIG.server),
         GraphQLModule.forRoot(DEFAULT_CONFIG.graphql),
         GraphQLPubSubModule.forRoot()
     ]
@@ -53,7 +53,7 @@ export class CoreModule {
         return {
             module: CoreModule,
             frameworkImports: [
-                HapiModule.forRoot(config.hapi),
+                HapiModule.forRoot(config.server),
                 GraphQLModule.forRoot(config.graphql),
                 GraphQLPubSubModule.forRoot(config.pubsub)
             ]
@@ -62,8 +62,10 @@ export class CoreModule {
 }
 
 export * from 'graphql';
+export * from 'graphql-tools';
 export * from 'graphql-geojson';
 export * from 'graphql-subscriptions';
 export * from '@rxdi/graphql-pubsub';
 export * from '@rxdi/graphql';
 export * from '@rxdi/hapi';
+export * from '@rxdi/core';
