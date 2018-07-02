@@ -1,6 +1,6 @@
 before_script:
   - npm install
-script: npm test
+# script: npm test
 env:
   - DEPLOY_PLATFORM=heroku
 language: node_js
