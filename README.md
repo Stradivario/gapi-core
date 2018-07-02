@@ -81,7 +81,7 @@ npm install @gapi/core
 
 ```typescript
 import { CoreModule } from '@gapi/core';
-import { Controller, Module, Bootstrap } from '@rxdi/core';
+import { Controller, Module, BootstrapFramework } from '@rxdi/core';
 import { ObjectType, Query, Public, Type } from '@rxdi/graphql';
 import { GraphQLScalarType, GraphQLInt, GraphQLNonNull } from 'graphql';
 
@@ -111,26 +111,7 @@ export class UserQueriesController {
 export class AppModule { }
 
 
-BootstrapFramework(AppModule, [CoreModule], {
-    init: false,
-    initOptions: {
-        effects: true,
-        plugins: true,
-        services: true,
-        controllers: true
-    },
-    logger: {
-        logging: true,
-        date: true,
-        exitHandler: true,
-        fileService: true,
-        hashes: true
-    }
-})
-.subscribe(
-    () => console.log('Started!'),
-    (e) => console.error(e)
-);
+BootstrapFramework(AppModule, [CoreModule]).subscribe()
 ```
 
 Execute
@@ -138,7 +119,6 @@ Execute
 ```bash
 ts-node index.ts
 ```
-
 
 
 ## With CLI
@@ -385,7 +365,7 @@ export type EffectTypes = keyof typeof EffectTypes;
 
 ```
 
-Import GapiEffect inside GapiModule
+Import GapiEffect inside Module
 
 ```typescript
 
@@ -462,9 +442,9 @@ Working only for version bellow < 1.0.0  will be developed in next weeks
 
 ```typescript
 
-import { GapiModule } from '@gapi/core';
+import { Module } from '@gapi/core';
 
-@GapiModule({
+@Module({
     plugins: [{
         name: 'myPlugin',
         version: '1.0.0',
@@ -837,8 +817,7 @@ export class UserModule {}
 ##### If you remove @Resolve decorator it will be passed value returned from the first root resolver
 
 ```typescript
-import { InjectType } from '@gapi/core';
-import { ObjectType, Resolve } from '@rxdi/graphql';
+import { ObjectType, Resolve, InjectType } from '@rxdi/graphql';
 import { GraphQLScalarType, GraphQLInt, GraphQLString } from 'graphql';
 import { UserSettings } from './user.settings';
 
@@ -1726,11 +1705,11 @@ query {
 
 All Gapi Decorators
 
-**@Query** - Define Query object added above method inside @GapiController
+**@Query** - Define Query object added above method inside @Controller
 
-**@Mutation** - Define Mutation object added above method inside @GapiController
+**@Mutation** - Define Mutation object added above method inside @Controller
 
-**@Subscription** - Define Subscription object added above method inside @GapiController
+**@Subscription** - Define Subscription object added above method inside @Controller
 
 **@Subscribe** - It will be used with @Subscription Decorator and it takes PubSubIterator function @Subscribe(() => UserSubscriptionsController.pubsub.asyncIterator('CREATE_SIGNAL_BASIC')) can be used also withFilter 
 
@@ -1774,10 +1753,10 @@ export class UserType {
 ```
 Important part is that getId? method needs to be OPTIONAL because it will be part of the Interface defined by the class UserType so everywhere if you use UserType it will ask you to add getId as a function but we just want to modify the return result from Schema with Resolve method decorator.
 
-**@GapiController** - It will define Controllers inside Gapi Application you can have as many as you wish controllers just when you are ready import them inside @GapiModule({controllers: ...CONTROLLERS})
+**@Controller** - It will define Controllers inside Gapi Application you can have as many as you wish controllers just when you are ready import them inside @Module({controllers: ...CONTROLLERS})
 
 
-**@GapiModule** - This is the starting point of the application when we bootstrap our module inside root/src/main.ts.Also can be used to create another GapiModules which can be imported inside AppModule {imports: ...IMPORTS}
+**@Module** - This is the starting point of the application when we bootstrap our module inside root/src/main.ts.Also can be used to create another Modules which can be imported inside AppModule {imports: ...IMPORTS}
 
 **@Service** - Passed above class, this Decorator will insert metadata related with this class and all Dependencies Injected inside constructor() so when application starts you will get a Singleton of many Services if they are not Factory Services(Will explain how to create Factory in next release).So you can use single instance of a Service injected everywhere inside your application.
 
