@@ -17,13 +17,14 @@ const DEFAULT_CONFIG = {
     server: {
         hapi: {
             port: 9000
-        }
+        },
     },
     graphql: {
         path: '/graphql',
         openBrowser: false,
         writeEffects: false,
         graphiQlPath: '/graphiql',
+        watcherPort: '',
         graphiqlOptions: {
             endpointURL: '/graphql',
             subscriptionsEndpoint: `${process.env.GRAPHIQL_WS_SSH ? 'wss' : 'ws'}://${process.env.GRAPHIQL_WS_PATH || 'localhost'}${process.env.DEPLOY_PLATFORM === 'heroku'

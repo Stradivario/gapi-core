@@ -1,10 +1,10 @@
-import { HapiModule, HapiConfigInterface } from '@rxdi/hapi';
+import { HapiModule, HapiConfigModel } from '@rxdi/hapi';
 import { GraphQLModule, GRAPHQL_PLUGIN_CONFIG } from '@rxdi/graphql';
 import { GraphQLPubSubModule, GRAPHQL_PUB_SUB_DI_CONFIG } from '@rxdi/graphql-pubsub';
 import { ModuleWithServices, Module } from '@rxdi/core';
 
 export interface CoreModuleConfig {
-    server?: HapiConfigInterface;
+    server?: HapiConfigModel;
     graphql?: GRAPHQL_PLUGIN_CONFIG;
     pubsub?: GRAPHQL_PUB_SUB_DI_CONFIG;
 }
@@ -13,13 +13,14 @@ const DEFAULT_CONFIG = {
     server: {
         hapi: {
             port: 9000
-        }
+        },
     },
     graphql: {
         path: '/graphql',
         openBrowser: false,
         writeEffects: false,
         graphiQlPath: '/graphiql',
+        watcherPort: '',
         graphiqlOptions: {
             endpointURL: '/graphql',
             subscriptionsEndpoint: `${
