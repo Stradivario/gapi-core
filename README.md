@@ -702,7 +702,6 @@ export class AppModule {}
 
 (#gapi-configuration)
 ## Configuration
-
 > Since 1.0.0 version @gapi micrated to @rxdi there is a little changes which are with Configuration
 > @gapi now uses @rxdi/core infrastructure so it is a Framework created on top of it
 > This @gapi/core module is wrapper for 3 modules from @rxdi infrastructure: @rxdi/graphql, @rxdi/graphql-pubsub, @rxdi/hapi
