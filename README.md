@@ -4,6 +4,8 @@
 
 **Really easy [GraphQL](https://graphql.org/) API framework build on top of NodeJS inspired by [@Angular](https://angular.io/)**
 
+**Build with [@rxdi](https://github.com/rxdi/core)** - reactive Extension Dependency Injection Container working inside Browser and Node
+
 **Created to provide complex backend scalable applications with minimum effort.**
 
 **For questions/issues you can write ticket [here](http://gitlab.youvolio.com/gapi/gapi/issues)**
@@ -82,7 +84,7 @@ npm install @gapi/core
 ```typescript
 import { CoreModule } from '@gapi/core';
 import { Controller, Module, BootstrapFramework } from '@rxdi/core';
-import { GapiObjectType, Query, Public, Type } from '@rxdi/graphql';
+import { GapiObjectType, Query, Type } from '@rxdi/graphql';
 import { GraphQLScalarType, GraphQLInt, GraphQLNonNull } from 'graphql';
 
 @GapiObjectType()
@@ -394,12 +396,12 @@ import { UserEffects } from './user.effects';
 export class UserModule {}
 ```
 
-If you want to create custom Effect for particular resolver you need to use @Effect('myevent') Decorator takes String
+If you want to create custom Effect for particular resolver you need to use @EffectName('myevent') Decorator takes String
 This decorator will override default event which is Name of the Method in this example will be findUser
 
 ```typescript
   @Type(UserType)
-  @Effect('myevent')
+  @EffectName('myevent')
   @Query({
     id: {
       type: new GraphQLNonNull(GraphQLInt)
@@ -416,7 +418,7 @@ If you click Save app will automatically reload and you will have such a typing 
 Then you can lock it with new Typo generated "myevent"
 ```typescript
   @Type(UserType)
-  @Effect(EffectTypes.myevent)
+  @EffectName(EffectTypes.myevent)
   @Query({
     id: {
       type: new GraphQLNonNull(GraphQLInt)
@@ -550,29 +552,13 @@ export class YourModule {
 Inside main.ts
 ```typescript
 import { AppModule } from './app/app.module';
-import { Bootstrap } from '@rxdi/core';
+import { BootstrapFramework, Container } from '@rxdi/core';
 import { format } from 'url';
 
-const App = BootstrapFramework(AppModule, [CoreModule], {
-    init: false,
-    initOptions: {
-        effects: true,
-        plugins: true,
-        services: true,
-        controllers: true
-    },
-    logger: {
-        logging: true,
-        date: true,
-        exitHandler: true,
-        fileService: true,
-        hashes: true
-    }
-})
-.toPromise();
+const App = BootstrapFramework(AuthMicroserviceModule, [FrameworkImports], { init: true }).toPromise();
 
 export const handler = async (event, context, callback) => {
-    const app = await App(AppModule);
+    const app = await App;
     const url = format({
         pathname: event.path,
         query: event.queryStringParameters
@@ -589,7 +575,7 @@ export const handler = async (event, context, callback) => {
         result: null
     };
     try {
-        res = await app.server.inject(options);
+        res = await Container.get<Server>(HAPI_SERVER).inject(options);
     } catch (e) {
         console.error(JSON.stringify(e));
     }
