@@ -121,7 +121,7 @@ Execute
 ```bash
 ts-node index.ts
 ```
-
+To add configuration click [here](#gapi-configuration)
 
 ## With CLI
 ##### Next create project using CLI or read above how to bootstrap your custom application
@@ -175,7 +175,6 @@ gapi new my-project --serverless-sequelize
 ```
 
 
-
 Enter inside my-project and type: 
 
 ```bash
@@ -186,7 +185,6 @@ npm start
 ```bash
 http://localhost:9000/graphiql
 ```
-
 
 ### Testing
 
@@ -388,7 +386,7 @@ import { UserEffects } from './user.effects';
     services: [
         UserService,
         AnotherService
-    ],`
+    ],
     effects: [
         UserEffects
     ]
@@ -547,12 +545,14 @@ export class YourModule {
   }
 }
 ```
+
 (#amazon-serverless)
 ### Amazon Serverless 
 Inside main.ts
 ```typescript
 import { AppModule } from './app/app.module';
 import { BootstrapFramework, Container } from '@rxdi/core';
+import { FrameworkImports } from './framework-imports';
 import { format } from 'url';
 
 const App = BootstrapFramework(AuthMicroserviceModule, [FrameworkImports], { init: true }).toPromise();
@@ -698,6 +698,127 @@ import { CoreModule } from './core/core.module';
 export class AppModule {}
 
 ```
+
+
+(#gapi-configuration)
+## Configuration
+
+> Since 1.0.0 version @gapi micrated to @rxdi there is a little changes which are with Configuration
+> @gapi now uses @rxdi/core infrastructure so it is a Framework created on top of it
+> This @gapi/core module is wrapper for 3 modules from @rxdi infrastructure: @rxdi/graphql, @rxdi/graphql-pubsub, @rxdi/hapi
+> When you install @gapi/core automatically will be installed these 3 modules and inside of @gapi/core module there is a Default configuration for CoreModule which this module exports { CoreModule } example:
+
+```typescript
+const DEFAULT_CONFIG = {
+    server: {
+        hapi: {
+            port: 9000
+        },
+    },
+    graphql: {
+        path: '/graphql',
+        openBrowser: true,
+        writeEffects: true,
+        graphiql: true,
+        graphiQlPlayground: false,
+        graphiQlPath: '/graphiql',
+        watcherPort: '',
+        graphiqlOptions: {
+            endpointURL: '/graphql',
+            subscriptionsEndpoint: `${
+                process.env.GRAPHIQL_WS_SSH ? 'wss' : 'ws'
+                }://${process.env.GRAPHIQL_WS_PATH || 'localhost'}${
+                process.env.DEPLOY_PLATFORM === 'heroku'
+                    ? ''
+                    : `:${process.env.API_PORT ||
+                    process.env.PORT}`
+                }/subscriptions`,
+            websocketConnectionParams: {
+                token: process.env.GRAPHIQL_TOKEN
+            }
+        },
+        graphqlOptions: {
+            schema: null
+        }
+    },
+};
+...
+```
+Full example can be checked [here](https://github.com/Stradivario/gapi-core/blob/master/development/index.ts) 
+
+
+Based on that change if we want to not use default configuration instead of this
+```typescript
+BootstrapFramework(AppModule, [CoreModule]).subscribe()
+```
+We need to add more complex configuration and call it framework-imports where our configuration will live
+This module will be imported before AppModule will bootstrap.
+```typescript
+import { CoreModule, Module } from '@gapi/core';
+import { AuthService } from './app/core/services/auth/auth.service';
+import { AuthModule } from '@gapi/auth';
+import { readFileSync } from 'fs';
+
+@Module({
+    imports: [
+        AuthModule.forRoot({
+            algorithm: 'HS256',
+            cert: readFileSync('./cert.key'),
+            cyper: {
+                algorithm: 'aes256',
+                iv: 'Jkyt1H3FA8JK9L3B',
+                privateKey: '8zTVzr3p53VC12jHV54rIYu2545x47lA'
+            }
+        }),
+        CoreModule.forRoot({
+            server: {
+                hapi: {
+                    port: process.env.API_PORT || process.env.PORT || 9000
+                }
+            },
+            pubsub: {
+                authentication: AuthService
+            },
+            graphql: {
+                path: process.env.GRAPHQL_PATH,
+                openBrowser: process.env.OPEN_BROWSER === 'true' ? true : false,
+                watcherPort: 8967,
+                writeEffects: process.env.WRITE_EFFECTS === 'true' ? true : false,
+                graphiql: process.env.GRAPHIQL === 'true' ? true : false,
+                graphiQlPlayground: process.env.ENABLE_GRAPHIQL_PLAYGROUND === 'true' ? true : false,
+                graphiQlPath: process.env.GRAPHIQL_PATH,
+                authentication: AuthService,
+                graphiqlOptions: {
+                    endpointURL: process.env.GRAPHQL_PATH,
+                    passHeader: `'Authorization':'${process.env.GRAPHIQL_TOKEN}'`,
+                    subscriptionsEndpoint: `${process.env.GRAPHIQL_WS_SSH ? 'wss' : 'ws'}://${process.env.GRAPHIQL_WS_PATH || 'localhost'}${process.env.DEPLOY_PLATFORM === 'heroku'
+                        ? ''
+                        : `:${process.env.API_PORT ||
+                            process.env.PORT}`}/subscriptions`,
+                    websocketConnectionParams: {
+                        token: process.env.GRAPHIQL_TOKEN
+                    }
+                },
+                graphqlOptions: {
+                    schema: null
+                }
+            },
+        }),
+
+    ]
+})
+export class FrameworkImports {}
+
+```
+Now you can import `FrameworkImports`
+```typescript
+import { BootstrapFramework } from '@rxdi/core';
+import { FrameworkImports } from './framework-imports';
+import { AppModule } from './app/app.module';
+
+BootstrapFramework(AppModule, [FrameworkImports]).subscribe()
+```
+
 
 ### Docker
 
