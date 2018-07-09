@@ -92,7 +92,16 @@ commands:
     stop: docker rm -f gapi-api-rabbitmq
     restart: docker restart gapi-api-rabbitmq
     enable-dashboard: docker exec gapi-api-rabbitmq rabbitmq-plugins enable rabbitmq_management
-
+  build:
+    core:
+      - tsc
+      - find . -not -path "./node_modules/*" -type f -iname \*.js -delete
+      - parcel build --target node development/index.ts
+      - cp -r dist/index.js index.js
+      - gapi build clean
+    clean:
+      - rm -rf dist
+      - rm -rf .cache
 # You can define your custom commands for example 
 # commands:
 #   your-cli:

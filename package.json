@@ -1,6 +1,6 @@
 {
   "name": "@gapi/core",
-  "version": "1.0.27",
+  "version": "1.0.28",
   "repository": {
     "type": "git",
     "url": "https://github.com/Stradivario/gapi.git"
@@ -25,10 +25,10 @@
   "module": "gapi-module.js",
   "typings": "gapi-module.d.ts",
   "dependencies": {
-    "@rxdi/core": "^0.0.169",
-    "@rxdi/graphql": "^0.0.169",
-    "@rxdi/graphql-pubsub": "^0.0.169",
-    "@rxdi/hapi": "^0.0.169",
+    "@rxdi/core": "^0.0.171",
+    "@rxdi/graphql": "^0.0.171",
+    "@rxdi/graphql-pubsub": "^0.0.171",
+    "@rxdi/hapi": "^0.0.171",
     "graphql-geojson": "^1.0.0",
     "graphql-tools": "^3.0.2"
   },
@@ -57,5 +57,8 @@
     "collectCoverage": true
   },
   "description": "![Build Status](http://gitlab.youvolio.com/gapi/gapi-starter/badges/master/build.svg)",
-  "main": "index.js"
+  "main": "index.js",
+  "devDependencies": {
+    "typescript": "^2.9.2"
+  }
 }
