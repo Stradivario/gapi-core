@@ -25,10 +25,10 @@
   "module": "gapi-module.js",
   "typings": "gapi-module.d.ts",
   "dependencies": {
-    "@rxdi/core": "^0.0.177",
-    "@rxdi/graphql": "^0.0.177",
-    "@rxdi/graphql-pubsub": "^0.0.177",
-    "@rxdi/hapi": "^0.0.177",
+    "@rxdi/core": "^0.0.179",
+    "@rxdi/graphql": "^0.0.179",
+    "@rxdi/graphql-pubsub": "^0.0.179",
+    "@rxdi/hapi": "^0.0.179",
     "graphql-geojson": "^1.0.0",
     "graphql-tools": "^3.0.2"
   },
