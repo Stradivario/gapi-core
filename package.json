@@ -59,6 +59,6 @@
   "description": "![Build Status](http://gitlab.youvolio.com/gapi/gapi-starter/badges/master/build.svg)",
   "main": "index.js",
   "devDependencies": {
-    "typescript": "^2.9.2"
+    "typescript": "^3.0.1"
   }
 }
