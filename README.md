@@ -494,6 +494,7 @@ export class AppModule {}
 
 ```typescript
 import { Module, ModuleWithServices, InjectionToken } from '@rxdi/core';
+import { of } from 'rxjs';
 
 @Service()
 export class MODULE_DI_CONFIG {
@@ -514,8 +515,29 @@ export class YourModule {
           { provide: MY_MODULE_CONFIG, useClass: MODULE_DI_CONFIG },
           { 
             provide: MY_MODULE_CONFIG,
-            useFactory: () => {
-                return {text: 'Hello world'};
+            useFactory: () => ({text: 'Hello world'})
+          },
+          { 
+            provide: MY_MODULE_CONFIG,
+            lazy: true, // Will be evaluated and resolved if false will remain Promise
+            useFactory: async () => await Promise.resolve({text: 'Hello world'})
+          },
+          { 
+            provide: MY_MODULE_CONFIG,
+            lazy: true, // Will be evaluated and resolved if false will remain Observable
+            useFactory: () => of({text: 'Hello world'})
+          },
+          { 
+            // this example will download external module from link and save it inside node modules
+            // then will load it inside createUniqueHash token or MY_MODULE_CONFIG.
+            provide: MY_MODULE_CONFIG,
+            useDynamic: {
+                fileName: 'createUniqueHash',
+                namespace: '@helpers',
+                extension: 'js',
+                typings: '',
+                outputFolder: '/node_modules/',
+                link: 'https://ipfs.infura.io/ipfs/QmdQtC3drfQ6M6GFpDdrhYRKoky8BycKzWbTkc4NEzGLug'
             }
           }
       ]
