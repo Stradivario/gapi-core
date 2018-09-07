@@ -1,4 +1,76 @@
-parcelRequire=function(e,r,n,t){var i="function"==typeof parcelRequire&&parcelRequire,o="function"==typeof require&&require;function u(n,t){if(!r[n]){if(!e[n]){var f="function"==typeof parcelRequire&&parcelRequire;if(!t&&f)return f(n,!0);if(i)return i(n,!0);if(o&&"string"==typeof n)return o(n);var c=new Error("Cannot find module '"+n+"'");throw c.code="MODULE_NOT_FOUND",c}p.resolve=function(r){return e[n][1][r]||r};var l=r[n]=new u.Module(n);e[n][0].call(l.exports,p,l,l.exports,this)}return r[n].exports;function p(e){return u(p.resolve(e))}}u.isParcelRequire=!0,u.Module=function(e){this.id=e,this.bundle=u,this.exports={}},u.modules=e,u.cache=r,u.parent=i,u.register=function(r,n){e[r]=[function(e,r){r.exports=n},{}]};for(var f=0;f<n.length;f++)u(n[f]);if(n.length){var c=u(n[n.length-1]);"object"==typeof exports&&"undefined"!=typeof module?module.exports=c:"function"==typeof define&&define.amd?define(function(){return c}):t&&(this[t]=c)}return u}({"7QCb":[function(require,module,exports) {
-"use strict";var r,e=this&&this.__decorate||function(r,e,o,t){var p,s=arguments.length,i=s<3?e:null===t?t=Object.getOwnPropertyDescriptor(e,o):t;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)i=Reflect.decorate(r,e,o,t);else for(var a=r.length-1;a>=0;a--)(p=r[a])&&(i=(s<3?p(i):s>3?p(e,o,i):p(e,o))||i);return s>3&&i&&Object.defineProperty(e,o,i),i};function o(r){for(var e in r)exports.hasOwnProperty(e)||(exports[e]=r[e])}Object.defineProperty(exports,"__esModule",{value:!0});const t=require("@rxdi/hapi"),p=require("@rxdi/graphql"),s=require("@rxdi/graphql-pubsub"),i=require("@rxdi/core"),a={server:{hapi:{port:9e3}},graphql:{path:"/graphql",openBrowser:!1,writeEffects:!1,graphiql:!0,graphiQlPlayground:!1,graphiQlPath:"/graphiql",watcherPort:"",graphiqlOptions:{endpointURL:"/graphql",subscriptionsEndpoint:`${process.env.GRAPHIQL_WS_SSH?"wss":"ws"}://${process.env.GRAPHIQL_WS_PATH||"localhost"}${"heroku"===process.env.DEPLOY_PLATFORM?"":`:${process.env.API_PORT||process.env.PORT}`}/subscriptions`,websocketConnectionParams:{token:process.env.GRAPHIQL_TOKEN}},graphqlOptions:{schema:null}}};let l=r=class{static forRoot(e){return e=e||a,{module:r,frameworkImports:[t.HapiModule.forRoot(e.server),p.GraphQLModule.forRoot(e.graphql),s.GraphQLPubSubModule.forRoot(e.pubsub)]}}};l=r=e([i.Module({imports:[t.HapiModule.forRoot(a.server),p.GraphQLModule.forRoot(a.graphql),s.GraphQLPubSubModule.forRoot()]})],l),exports.CoreModule=l,o(require("graphql")),o(require("graphql-tools")),o(require("graphql-geojson")),o(require("graphql-subscriptions")),o(require("@rxdi/graphql-pubsub")),o(require("@rxdi/graphql")),o(require("@rxdi/hapi")),o(require("@rxdi/core"));
-},{}]},{},["7QCb"], null)
-//# sourceMappingURL=/index.map
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+var CoreModule_1;
+const hapi_1 = require("@rxdi/hapi");
+const graphql_1 = require("@rxdi/graphql");
+const graphql_pubsub_1 = require("@rxdi/graphql-pubsub");
+const core_1 = require("@rxdi/core");
+const DEFAULT_CONFIG = {
+    server: {
+        hapi: {
+            port: 9000
+        },
+    },
+    graphql: {
+        path: '/graphql',
+        openBrowser: true,
+        writeEffects: false,
+        graphiql: false,
+        graphiQlPlayground: true,
+        graphiQlPath: '/graphiql',
+        watcherPort: '',
+        graphiqlOptions: {
+            endpointURL: '/graphql',
+            subscriptionsEndpoint: `${process.env.GRAPHIQL_WS_SSH ? 'wss' : 'ws'}://${process.env.GRAPHIQL_WS_PATH || 'localhost'}${process.env.DEPLOY_PLATFORM === 'heroku'
+                ? ''
+                : `:${process.env.API_PORT ||
+                    process.env.PORT || 9000}`}/subscriptions`,
+            websocketConnectionParams: {
+                token: process.env.GRAPHIQL_TOKEN
+            }
+        },
+        graphqlOptions: {
+            schema: null
+        }
+    },
+};
+let CoreModule = CoreModule_1 = class CoreModule {
+    static forRoot(config) {
+        config = config || DEFAULT_CONFIG;
+        return {
+            module: CoreModule_1,
+            frameworkImports: [
+                hapi_1.HapiModule.forRoot(config.server),
+                graphql_1.GraphQLModule.forRoot(config.graphql),
+                graphql_pubsub_1.GraphQLPubSubModule.forRoot(config.pubsub)
+            ]
+        };
+    }
+};
+CoreModule = CoreModule_1 = __decorate([
+    core_1.Module({
+        imports: [
+            hapi_1.HapiModule.forRoot(DEFAULT_CONFIG.server),
+            graphql_1.GraphQLModule.forRoot(DEFAULT_CONFIG.graphql),
+            graphql_pubsub_1.GraphQLPubSubModule.forRoot()
+        ]
+    })
+], CoreModule);
+exports.CoreModule = CoreModule;
+__export(require("graphql"));
+__export(require("graphql-tools"));
+__export(require("graphql-geojson"));
+__export(require("graphql-subscriptions"));
+__export(require("@rxdi/graphql-pubsub"));
+__export(require("@rxdi/graphql"));
+__export(require("@rxdi/hapi"));
+__export(require("@rxdi/core"));

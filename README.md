@@ -116,11 +116,30 @@ export class AppModule { }
 BootstrapFramework(AppModule, [CoreModule]).subscribe()
 ```
 
+You need to create `tsconfig.json` with following content
+
+```json
+{
+    "compilerOptions": {
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true
+    }
+}
+```
+
 Execute
 
 ```bash
 ts-node index.ts
 ```
+
+Or execute the following command to set these options on runtime:
+
+```bash
+export TS_NODE_COMPILER_OPTIONS='{"experimentalDecorators": true, "emitDecoratorMetadata": true}' &&
+ts-node index.ts --compilerOptions $TS_NODE_COMPILER_OPTIONS
+```
+
 To add configuration click [here](#gapi-configuration)
 
 ## With CLI
@@ -703,6 +722,7 @@ export class AppModule {}
 
 
 (#gapi-configuration)
+
 ## Configuration
 > Since 1.0.0 version @gapi micrated to @rxdi there is a little changes which are with Configuration
 > @gapi now uses @rxdi/core infrastructure so it is a Framework created on top of it

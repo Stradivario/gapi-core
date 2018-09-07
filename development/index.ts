@@ -17,10 +17,10 @@ const DEFAULT_CONFIG = {
     },
     graphql: {
         path: '/graphql',
-        openBrowser: false,
+        openBrowser: true,
         writeEffects: false,
-        graphiql: true,
-        graphiQlPlayground: false,
+        graphiql: false,
+        graphiQlPlayground: true,
         graphiQlPath: '/graphiql',
         watcherPort: '',
         graphiqlOptions: {
@@ -31,7 +31,7 @@ const DEFAULT_CONFIG = {
                 process.env.DEPLOY_PLATFORM === 'heroku'
                     ? ''
                     : `:${process.env.API_PORT ||
-                    process.env.PORT}`
+                    process.env.PORT || 9000 }`
                 }/subscriptions`,
             websocketConnectionParams: {
                 token: process.env.GRAPHIQL_TOKEN
