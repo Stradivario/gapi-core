@@ -22,6 +22,7 @@ const DEFAULT_CONFIG = {
     },
     graphql: {
         path: '/graphql',
+        initQuery: true,
         openBrowser: true,
         writeEffects: false,
         graphiql: false,
