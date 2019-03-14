@@ -50,8 +50,8 @@ let CoreModule = CoreModule_1 = class CoreModule {
         return {
             module: CoreModule_1,
             frameworkImports: [
-                hapi_1.HapiModule.forRoot(Object.assign({}, config.server, DEFAULT_CONFIG.server)),
-                graphql_1.GraphQLModule.forRoot(Object.assign({}, config.graphql, DEFAULT_CONFIG.graphql)),
+                hapi_1.HapiModule.forRoot(Object.assign({}, DEFAULT_CONFIG.server, config.server)),
+                graphql_1.GraphQLModule.forRoot(Object.assign({}, DEFAULT_CONFIG.graphql, config.graphql)),
                 graphql_pubsub_1.GraphQLPubSubModule.forRoot(config.pubsub)
             ]
         };

@@ -57,8 +57,8 @@ export class CoreModule {
         return {
             module: CoreModule,
             frameworkImports: [
-                HapiModule.forRoot({...config.server, ...DEFAULT_CONFIG.server}),
-                GraphQLModule.forRoot({...config.graphql, ...DEFAULT_CONFIG.graphql}),
+                HapiModule.forRoot({ ...DEFAULT_CONFIG.server, ...config.server }),
+                GraphQLModule.forRoot({ ...DEFAULT_CONFIG.graphql, ...config.graphql }),
                 GraphQLPubSubModule.forRoot(config.pubsub)
             ]
         }
