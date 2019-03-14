@@ -22,7 +22,7 @@ const DEFAULT_CONFIG = {
         writeEffects: false,
         graphiql: false,
         graphiQlPlayground: true,
-        graphiQlPath: '/graphiql',
+        graphiQlPath: '/',
         watcherPort: '',
         graphiqlOptions: {
             endpointURL: '/graphql',
@@ -57,8 +57,8 @@ export class CoreModule {
         return {
             module: CoreModule,
             frameworkImports: [
-                HapiModule.forRoot(config.server),
-                GraphQLModule.forRoot(config.graphql),
+                HapiModule.forRoot({...config.server, ...DEFAULT_CONFIG.server}),
+                GraphQLModule.forRoot({...config.graphql, ...DEFAULT_CONFIG.graphql}),
                 GraphQLPubSubModule.forRoot(config.pubsub)
             ]
         }
