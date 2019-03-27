@@ -25,10 +25,10 @@
   "module": "index.js",
   "typings": "index.d.ts",
   "dependencies": {
-    "@rxdi/core": "^0.0.402",
-    "@rxdi/graphql": "^0.0.402",
-    "@rxdi/graphql-pubsub": "^0.0.402",
-    "@rxdi/hapi": "^0.0.402",
+    "@rxdi/core": "^0.0.404",
+    "@rxdi/graphql": "^0.0.404",
+    "@rxdi/graphql-pubsub": "^0.0.404",
+    "@rxdi/hapi": "^0.0.404",
     "graphql-geojson": "^1.0.0",
     "graphql-tools": "^3.0.2"
   },
