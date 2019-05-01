@@ -2,14 +2,17 @@ import { HapiModule, HapiConfigModel } from '@rxdi/hapi';
 import { GraphQLModule, GRAPHQL_PLUGIN_CONFIG } from '@rxdi/graphql';
 import { GraphQLPubSubModule, GRAPHQL_PUB_SUB_DI_CONFIG } from '@rxdi/graphql-pubsub';
 import { ModuleWithServices, Module } from '@rxdi/core';
+import { DaemonModule } from './modules/daemon/daemon.module';
+import { DaemonConfig } from './modules/daemon/daemon.interface';
 
 export interface CoreModuleConfig {
     server?: HapiConfigModel;
     graphql?: GRAPHQL_PLUGIN_CONFIG;
     pubsub?: GRAPHQL_PUB_SUB_DI_CONFIG;
+    daemon?: DaemonConfig;
 }
 
-const DEFAULT_CONFIG = {
+const DEFAULT_CONFIG: CoreModuleConfig = {
     server: {
         hapi: {
             port: 9000
@@ -42,6 +45,9 @@ const DEFAULT_CONFIG = {
             schema: null
         }
     },
+    daemon: {
+        activated: false
+    }
 };
 
 @Module({
@@ -59,7 +65,8 @@ export class CoreModule {
             frameworkImports: [
                 HapiModule.forRoot({ ...DEFAULT_CONFIG.server, ...config.server }),
                 GraphQLModule.forRoot({ ...DEFAULT_CONFIG.graphql, ...config.graphql }),
-                GraphQLPubSubModule.forRoot(config.pubsub)
+                GraphQLPubSubModule.forRoot(config.pubsub),
+                DaemonModule.forRoot(config.daemon)
             ]
         }
     }

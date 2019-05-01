@@ -14,6 +14,7 @@ const hapi_1 = require("@rxdi/hapi");
 const graphql_1 = require("@rxdi/graphql");
 const graphql_pubsub_1 = require("@rxdi/graphql-pubsub");
 const core_1 = require("@rxdi/core");
+const daemon_module_1 = require("./modules/daemon/daemon.module");
 const DEFAULT_CONFIG = {
     server: {
         hapi: {
@@ -43,6 +44,9 @@ const DEFAULT_CONFIG = {
             schema: null
         }
     },
+    daemon: {
+        activated: false
+    }
 };
 let CoreModule = CoreModule_1 = class CoreModule {
     static forRoot(config) {
@@ -52,7 +56,8 @@ let CoreModule = CoreModule_1 = class CoreModule {
             frameworkImports: [
                 hapi_1.HapiModule.forRoot(Object.assign({}, DEFAULT_CONFIG.server, config.server)),
                 graphql_1.GraphQLModule.forRoot(Object.assign({}, DEFAULT_CONFIG.graphql, config.graphql)),
-                graphql_pubsub_1.GraphQLPubSubModule.forRoot(config.pubsub)
+                graphql_pubsub_1.GraphQLPubSubModule.forRoot(config.pubsub),
+                daemon_module_1.DaemonModule.forRoot(config.daemon)
             ]
         };
     }

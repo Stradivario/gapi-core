@@ -2,10 +2,12 @@ import { HapiConfigModel } from '@rxdi/hapi';
 import { GRAPHQL_PLUGIN_CONFIG } from '@rxdi/graphql';
 import { GRAPHQL_PUB_SUB_DI_CONFIG } from '@rxdi/graphql-pubsub';
 import { ModuleWithServices } from '@rxdi/core';
+import { DaemonConfig } from './modules/daemon/daemon.interface';
 export interface CoreModuleConfig {
     server?: HapiConfigModel;
     graphql?: GRAPHQL_PLUGIN_CONFIG;
     pubsub?: GRAPHQL_PUB_SUB_DI_CONFIG;
+    daemon?: DaemonConfig;
 }
 export declare class CoreModule {
     static forRoot(config?: CoreModuleConfig): ModuleWithServices;
