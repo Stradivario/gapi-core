@@ -12,17 +12,17 @@ const daemon_interface_1 = require("./daemon.interface");
 const daemon_service_1 = require("./services/daemon.service");
 const after_start_service_1 = require("./services/after-start.service");
 let DaemonModule = DaemonModule_1 = class DaemonModule {
-    static forRoot({ activated, link }) {
+    static forRoot(options = {}) {
         return {
             module: DaemonModule_1,
             providers: [
-                ...(activated
+                ...(options.activated
                     ? [
                         daemon_service_1.DaemonService,
                         after_start_service_1.AfterStart,
                         {
                             provide: daemon_interface_1.DaemonLink,
-                            useValue: link || 'http://localhost:42000/graphql'
+                            useValue: options.link || 'http://localhost:42000/graphql'
                         }
                     ]
                     : [])

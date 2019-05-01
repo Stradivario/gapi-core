@@ -7,17 +7,17 @@ import { AfterStart } from './services/after-start.service';
   providers: []
 })
 export class DaemonModule {
-  public static forRoot({ activated, link }: DaemonConfig): ModuleWithServices {
+  public static forRoot(options: DaemonConfig = {} as any): ModuleWithServices {
     return {
       module: DaemonModule,
       providers: [
-        ...(activated
+        ...(options.activated
           ? [
               DaemonService,
               AfterStart,
               {
                 provide: DaemonLink,
-                useValue: link || 'http://localhost:42000/graphql'
+                useValue: options.link || 'http://localhost:42000/graphql'
               }
             ]
           : [])
