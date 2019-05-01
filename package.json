@@ -1,6 +1,6 @@
 {
   "name": "@gapi/core",
-  "version": "1.5.28",
+  "version": "1.5.29",
   "repository": {
     "type": "git",
     "url": "https://github.com/Stradivario/gapi.git"
