@@ -20,14 +20,7 @@
     "skipLibCheck": true,
     "types": []
   },
-  "angularCompilerOptions": {
-    "annotateForClosureCompiler": true,
-    "strictMetadataEmit": true,
-    "skipTemplateCodegen": true,
-    "flatModuleOutFile": "gapi.js",
-    "flatModuleId": "gapi"
-  },
   "files": [
-    "./development/index.ts"
+    "src/index.ts"
   ]
 }

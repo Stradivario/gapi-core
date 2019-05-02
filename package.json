@@ -59,6 +59,7 @@
   "description": "![Build Status](http://gitlab.youvolio.com/gapi/gapi-starter/badges/master/build.svg)",
   "main": "index.js",
   "devDependencies": {
+    "@types/hapi": "^18.0.2",
     "typescript": "^3.0.1"
   }
 }

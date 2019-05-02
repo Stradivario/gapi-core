@@ -35,7 +35,7 @@ config:
 
   schema:
     introspectionEndpoint: http://localhost:9000/graphql
-    introspectionOutputFolder: ./src/app/core/api-introspection
+    introspectionOutputFolder: ./src/api-introspection
 
 commands:
 
@@ -96,7 +96,7 @@ commands:
     core:
       - tsc
       - find . -not -path "./node_modules/*" -type f -iname \*.js -delete
-      - parcel build --target node development/index.ts
+      - parcel build --target node src/index.ts
       - cp -r dist/index.js index.js
       - gapi prepare clean
     clean:

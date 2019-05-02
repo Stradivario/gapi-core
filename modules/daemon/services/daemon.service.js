@@ -15,21 +15,30 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const graphql_1 = require("@rxdi/graphql");
 const core_1 = require("@rxdi/core");
 const daemon_interface_1 = require("../daemon.interface");
+const hapi_1 = require("@rxdi/hapi");
+const hapi_2 = require("hapi");
 let DaemonService = class DaemonService {
-    constructor(defaultDaemonLink) {
+    constructor(defaultDaemonLink, server) {
         this.defaultDaemonLink = defaultDaemonLink;
+        this.server = server;
     }
     notifyDaemon() {
         return graphql_1.sendRequest({
             query: `
-            mutation notifyDaemon($repoPath: String!) {
-              notifyDaemon(repoPath: $repoPath) {
+            mutation notifyDaemon($repoPath: String!, $serverMetadata: ServerMetadataInputType) {
+              notifyDaemon(repoPath: $repoPath, serverMetadata: $serverMetadata) {
                 repoPath
+                serverMetadata {
+                  port
+                }
               }
             }
             `,
             variables: {
-                repoPath: process.cwd()
+                repoPath: process.cwd(),
+                serverMetadata: {
+                    port: this.server.info.port
+                }
             }
         }, this.defaultDaemonLink);
     }
@@ -37,6 +46,7 @@ let DaemonService = class DaemonService {
 DaemonService = __decorate([
     core_1.Injectable(),
     __param(0, core_1.Inject(daemon_interface_1.DaemonLink)),
-    __metadata("design:paramtypes", [String])
+    __param(1, core_1.Inject(hapi_1.HAPI_SERVER)),
+    __metadata("design:paramtypes", [String, hapi_2.Server])
 ], DaemonService);
 exports.DaemonService = DaemonService;
