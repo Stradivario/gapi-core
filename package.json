@@ -11,7 +11,9 @@
     "lint": "echo",
     "pretest": "npm run lint",
     "test": "echo",
-    "ammend": "git add . && git commit --amend && git push -f && git push -f git@github.com:Stradivario/gapi-core.git"
+    "ammend": "git add . && git commit --amend && git push -f && git push -f git@github.com:Stradivario/gapi-core.git",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "keywords": [
     "graphql",
@@ -30,7 +32,8 @@
     "@rxdi/graphql-pubsub": "0.2.9",
     "@rxdi/hapi": "0.2.9",
     "graphql-geojson": "^1.0.0",
-    "graphql-tools": "^3.0.2"
+    "graphql-tools": "^3.0.2",
+    "snyk": "^1.161.1"
   },
   "jest": {
     "testEnvironment": "node",
@@ -61,5 +64,6 @@
   "devDependencies": {
     "@types/hapi": "^18.0.2",
     "typescript": "^3.0.1"
-  }
+  },
+  "snyk": true
 }
