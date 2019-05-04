@@ -1,6 +1,6 @@
 {
   "name": "@gapi/core",
-  "version": "1.6.16",
+  "version": "1.6.17",
   "repository": {
     "type": "git",
     "url": "https://github.com/Stradivario/gapi.git"
@@ -25,10 +25,10 @@
   "module": "index.js",
   "typings": "index.d.ts",
   "dependencies": {
-    "@rxdi/core": "0.2.18",
-    "@rxdi/graphql": "0.2.18",
+    "@rxdi/core": "0.2.20",
+    "@rxdi/graphql": "0.2.20",
     "@rxdi/graphql-pubsub": "git+https://github.com/rxdi/graphql-pubsub.git",
-    "@rxdi/hapi": "0.2.18",
+    "@rxdi/hapi": "0.2.20",
     "graphql-geojson": "^1.0.0",
     "graphql-tools": "^3.0.2"
   },
