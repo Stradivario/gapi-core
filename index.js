@@ -8,8 +8,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 var CoreModule_1;
+Object.defineProperty(exports, "__esModule", { value: true });
 const hapi_1 = require("@rxdi/hapi");
 const graphql_1 = require("@rxdi/graphql");
 const graphql_pubsub_1 = require("@rxdi/graphql-pubsub");
@@ -63,13 +63,7 @@ let CoreModule = CoreModule_1 = class CoreModule {
     }
 };
 CoreModule = CoreModule_1 = __decorate([
-    core_1.Module({
-        imports: [
-            hapi_1.HapiModule.forRoot(DEFAULT_CONFIG.server),
-            graphql_1.GraphQLModule.forRoot(DEFAULT_CONFIG.graphql),
-            graphql_pubsub_1.GraphQLPubSubModule.forRoot()
-        ]
-    })
+    core_1.Module()
 ], CoreModule);
 exports.CoreModule = CoreModule;
 __export(require("graphql"));

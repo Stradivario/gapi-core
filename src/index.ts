@@ -50,13 +50,7 @@ const DEFAULT_CONFIG: CoreModuleConfig = {
     }
 };
 
-@Module({
-    imports: [
-        HapiModule.forRoot(DEFAULT_CONFIG.server),
-        GraphQLModule.forRoot(DEFAULT_CONFIG.graphql),
-        GraphQLPubSubModule.forRoot()
-    ]
-})
+@Module()
 export class CoreModule {
     public static forRoot(config?: CoreModuleConfig): ModuleWithServices {
         config = config || DEFAULT_CONFIG;
@@ -68,7 +62,7 @@ export class CoreModule {
                 GraphQLPubSubModule.forRoot(config.pubsub),
                 DaemonModule.forRoot(config.daemon)
             ]
-        }
+        };
     }
 }
 
