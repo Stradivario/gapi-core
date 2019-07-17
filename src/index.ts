@@ -2,8 +2,7 @@ import { HapiModule, HapiConfigModel } from '@rxdi/hapi';
 import { GraphQLModule, GRAPHQL_PLUGIN_CONFIG } from '@rxdi/graphql';
 import { GraphQLPubSubModule, GRAPHQL_PUB_SUB_DI_CONFIG } from '@rxdi/graphql-pubsub';
 import { ModuleWithServices, Module } from '@rxdi/core';
-import { DaemonModule } from './modules/daemon/daemon.module';
-import { DaemonConfig } from './modules/daemon/daemon.interface';
+import { DaemonModule, DaemonConfig } from '@gapi/daemon';
 
 export interface CoreModuleConfig {
     server?: HapiConfigModel;
