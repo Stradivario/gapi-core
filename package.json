@@ -25,7 +25,7 @@
   "module": "index.js",
   "typings": "index.d.ts",
   "dependencies": {
-    "@gapi/daemon": "^1.7.9",
+    "@gapi/daemon": "^1.8.0",
     "@rxdi/core": "0.7.3",
     "@rxdi/graphql": "0.7.3",
     "@rxdi/graphql-pubsub": "0.2.23",
