@@ -26,10 +26,10 @@
   "typings": "index.d.ts",
   "dependencies": {
     "@gapi/daemon": "^1.8.10",
-    "@rxdi/core": "0.7.19",
-    "@rxdi/graphql": "0.7.19",
+    "@rxdi/core": "0.7.24",
+    "@rxdi/graphql": "0.7.24",
     "@rxdi/graphql-pubsub": "0.2.23",
-    "@rxdi/hapi": "0.7.19",
+    "@rxdi/hapi": "0.7.24",
     "graphql-geojson": "^1.0.0",
     "graphql-tools": "^3.0.2"
   },
